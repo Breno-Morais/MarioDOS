@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1584205420 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\main.c
+	<stdio.h>
+	<stdlib.h>
+
+1634418647 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\menu.c
+	"raylib.h"
+

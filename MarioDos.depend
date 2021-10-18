@@ -3,6 +3,23 @@
 	<stdio.h>
 	<stdlib.h>
 
-1634418647 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\menu.c
+1634418702 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\menu.c
 	"raylib.h"
+
+1634496379 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fontes\menu.c
+	"raylib.h"
+	"../headers/menu.h"
+
+1634494833 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fontes\main.c
+	<stdio.h>
+	"../headers/menu.h"
+
+1634520114 c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\headers\menu.h
+	"raylib.h"
+
+1634520058 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\main.c
+	"../headers/menu.h"
+
+1634520127 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\menu.c
+	"../headers/menu.h"
 

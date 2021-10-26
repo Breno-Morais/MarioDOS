@@ -14,12 +14,21 @@
 	<stdio.h>
 	"../headers/menu.h"
 
-1634520114 c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\headers\menu.h
+1635108587 c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\headers\menu.h
 	"raylib.h"
 
-1634520058 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\main.c
+1635290079 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\main.c
 	"../headers/menu.h"
 
-1634520127 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\menu.c
+1634940307 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\menu.c
 	"../headers/menu.h"
+
+1634616429 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\outros.c
+	"../headers/menu.h"
+
+1635108625 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\spreadsheet.c
+	"../headers/sprites.h"
+
+1635109249 c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\headers\sprites.h
+	"raylib.h"
 

@@ -31,9 +31,20 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="menu.c">
+		<Unit filename="arquivos_fonte/main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="arquivos_fonte/menu.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="arquivos_fonte/outros.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="arquivos_fonte/spreadsheet.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="headers/menu.h" />
+		<Unit filename="headers/sprites.h" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

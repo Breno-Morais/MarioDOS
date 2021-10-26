@@ -4,16 +4,18 @@ int main(void)
 {
     // Inicialização
     //--------------------------------------------------------------------------------------
-    Vector2 Tela = {1200, 700};
-    int i, prox_tela; // O prox_tela é o número será usado como o indicador do próximo passo
+    Vector2 Tela = {LARGURA_TELA, ALTURA_TELA};
+    int i, prox_tela=N_MENU; // O prox_tela é o número será usado como o indicador do próximo passo
+    bool flag_saida; // flag usada quando a opção sair for utilizada
 
     InitWindow(Tela.x, Tela.y, "MARIO DOS");
+
+    InitAudioDevice(); // Inicializa o audio
 
     // Inicialização e tratamento das variáveis do Menu
     //--------------------------------------------------------------------------------------
         // Carregar a logo em uma textura e cria o vetor com sua posição
         Texture2D textura_logo = LoadTexture("imagens/sprite_logo.png");        // Texture loading
-
         Vector2 posicao_logo = {Tela.x/2 - (textura_logo.width*4)/2, 1};
 
         //---------------------------------------------------------------------------------------
@@ -33,25 +35,67 @@ int main(void)
             posicao_opcoes[i].height = MeasureTextEx(fonte_mario, opcoes[i], TAM_FONTE, 2).y;
         }
 
+        //---------------------------------------------------------------------------------------
+        // Inicializa os sons do menu
+
+        Sound SomOpcaoMenu = LoadSound("som/seta_menu.wav");
+        Sound SomSelecinaOpcao = LoadSound("som/sel_menu.mp3");
+
     //---------------------------------------------------------------------------------------
     // Loop principal do jogo
     SetTargetFPS(30);
-    while (!WindowShouldClose())    // Detect window close button or ESC key
+    while (!WindowShouldClose() && !flag_saida)    // Detect window close button or ESC key
     {
         // Update
         //----------------------------------------------------------------------------------
-        UpdateMenu(cores_opcoes, posicao_opcoes, &prox_tela);
+        switch(prox_tela){
+            case N_MENU: UpdateMenu(cores_opcoes, posicao_opcoes, &prox_tela, SomOpcaoMenu, SomSelecinaOpcao);
+                            break;
+            case N_NOVO:
+    //                        break;
+            case N_CONTINUAR:
+    //                        break;
+            case N_CARREGAR_MAPA:
+    //                        break;
+            case N_RANKING:
+    //                        break;
+            case N_AJUDA:
+    //                        break;
+            case N_SOBRE:
+                            break;
+        }
+
         //----------------------------------------------------------------------------------
 
         // Desenhar
         //----------------------------------------------------------------------------------
-        DrawMenu(&textura_logo, &posicao_logo, &fonte_mario, opcoes, posicao_opcoes, cores_opcoes);
+        switch(prox_tela){
+            case N_MENU: DrawMenu(textura_logo, posicao_logo, fonte_mario, opcoes, posicao_opcoes, cores_opcoes);
+                            break;
+            case N_NOVO: InitSpread();
+                            break;
+            case N_CONTINUAR:
+            //                break;
+            case N_CARREGAR_MAPA:
+            //                break;
+            case N_RANKING:
+            //                break;
+            case N_AJUDA: DrawAjuda(fonte_mario);
+                            break;
+            case N_SOBRE:
+            //                break;
+            case N_SAIR: flag_saida=true; // Verifica se o botão saida foi apertado
+                            break;
+        }
     }
 
     // Deinicialização
     //--------------------------------------------------------------------------------------
-    UnloadTexture(textura_logo);       // Texture unloading
+    UnloadTexture(textura_logo);                   // Texture unloading
+    UnloadSound(SomOpcaoMenu);                    // Unload sound data
+    UnloadSound(SomSelecinaOpcao);               // Unload sound data
 
+    CloseAudioDevice();            // Close audio device
     CloseWindow();                // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 

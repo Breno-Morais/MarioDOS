@@ -41,6 +41,17 @@ int main(void)
         Sound SomOpcaoMenu = LoadSound("som/seta_menu.wav");
         Sound SomSelecinaOpcao = LoadSound("som/sel_menu.mp3");
 
+    //-----------------------------------------------------------------------------------
+    // Variáveis do Mário (colocar em um arquivo específico depois)
+    int marioX = 0;
+    int marioY = -ALTURA_TELA + 200;
+    int marioSpeed = 8;
+    bool isJumping = false;
+    bool isFalling = false;
+    int frameMax = 10;
+    int jumpFrameCurrent = 0;
+    int fallFrameCurrent = 0;
+    int jumpHighMax = 100;
     //---------------------------------------------------------------------------------------
     // Loop principal do jogo
     SetTargetFPS(30);
@@ -72,7 +83,35 @@ int main(void)
         switch(prox_tela){
             case N_MENU: DrawMenu(textura_logo, posicao_logo, fonte_mario, opcoes, posicao_opcoes, cores_opcoes);
                             break;
-            case N_NOVO: InitSpread();
+            case N_NOVO: InitSpread(marioX, marioY);
+        // Teste da lógica de movimentação do Mário
+                if(IsKeyDown(KEY_RIGHT)){
+                    marioX -= marioSpeed;
+                }
+                else if(IsKeyDown(KEY_LEFT)){
+                    marioX += marioSpeed;
+                }
+                if(IsKeyPressed(KEY_UP)){
+                    if(isFalling==false)
+                        isJumping = true;
+                }
+                if(isJumping==true){
+                    jumpFrameCurrent++;
+                    marioY += (int)(jumpHighMax/frameMax);
+                    if(jumpFrameCurrent>=frameMax){
+                        jumpFrameCurrent = 0;
+                        isJumping = false;
+                        isFalling = true;
+                    }
+                }
+                else if(isFalling==true){
+                    fallFrameCurrent++;
+                    marioY -= (int)(jumpHighMax/frameMax);
+                    if(fallFrameCurrent>=frameMax){
+                        fallFrameCurrent = 0;
+                        isFalling = false;
+                    }
+                }
                             break;
             case N_CONTINUAR:
             //                break;

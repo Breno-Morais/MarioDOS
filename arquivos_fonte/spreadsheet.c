@@ -1,6 +1,6 @@
 #include "../headers/sprites.h"
 
-void InitSpread(void){
+void InitSpread(int x, int y){
         Texture2D sheet  = LoadTexture("imagens/sprite_geral.png");
 
         BeginDrawing();
@@ -9,8 +9,8 @@ void InitSpread(void){
             ClearBackground(BLACK);
 
             // Sprite 1
-            DrawTexturePro(sheet, MarioSprite1.esq[0], MarioSprite1.esq[1], (Vector2){0,0}, 0, WHITE);
-            DrawRectangleLines(MarioSprite1.esq[1].x, MarioSprite1.esq[1].y, MarioSprite1.esq[1].width, MarioSprite1.esq[1].height, RED);
+            DrawTexturePro(sheet, MarioSprite1.dir[0], MarioSprite1.dir[1], (Vector2){x,y}, 0, WHITE);
+            DrawRectangleLines(MarioSprite1.dir[1].x, MarioSprite1.dir[1].y, MarioSprite1.dir[1].width, MarioSprite1.dir[1].height, RED);
 
 
         EndDrawing();
@@ -18,3 +18,5 @@ void InitSpread(void){
 
         UnloadTexture(sheet);
 }
+
+//void DrawMario()

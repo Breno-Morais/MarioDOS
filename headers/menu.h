@@ -19,6 +19,6 @@
 void UpdateMenu(Color cores_opcoes[], Rectangle posicao_opcoes[], int *prox, Sound SomOpcaoMenu, Sound SomSelecinaOpcao);
 void DrawMenu(Texture textura_logo, Vector2 posicao_logo, Font fonte, const char *opcoes[], Rectangle posicao_opcoes[], Color cores_opcoes[]);
 void DrawAjuda(Font fonte);
-void InitSpread(void);
+void InitSpread(int x, int y);
 
 #endif // MENU_H

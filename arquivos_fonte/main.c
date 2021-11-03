@@ -1,3 +1,23 @@
+/*
+O objetivo desse programa é rodar o jogo Mario Bros
+O programa é organizado da seguinte maneira:
+    1- A declaração das variáveis e o loop principal do jogo ocorre no arquivo principal main.c
+    2- Todas as funções usadas para atualizar variáveis ou desenhar artefatos na tela está divido entre
+        os outros arquivos fontes com menu.c, spritesheet.c, etc.
+
+Todas as constantes são guardadas nos arquivos .h
+
+Especificamente, o arquivo main.c está divido em 3 partes, a primeira é a inicialização de tudo, isso inclui
+a declaração de variáveis, inicializar a tela, abrir texturas e sons, calcular posições, etc.
+A segunda e terceira parte fazem parte da mesma etapa, o loop principal do jogo.
+
+O loop principal do jogo envolve tudo que tem que ser atualizado 1 vez por frame, então posições de elementos,
+colisões, etc. O loop é divido em 2, a segunda e terceira etapa do main.c.
+
+A segunda etapa do main envolve a atualização de variáveis, aqui ocorre a parte de verificar as teclas digitadas,
+a colisões de elementos e o movimento de tudo. Já a terceira etapa envolve mostrar isso na tela.
+*/
+
 #include "../headers/menu.h"
 
 int main(void)
@@ -5,8 +25,8 @@ int main(void)
     // Inicialização
     //--------------------------------------------------------------------------------------
     Vector2 Tela = {LARGURA_TELA, ALTURA_TELA};
-    int i, prox_tela=N_MENU; // O prox_tela é o número será usado como o indicador do próximo passo
-    bool flag_saida; // flag usada quando a opção sair for utilizada
+    int i, prox_tela=N_MENU; // O prox_tela é o número que será usado como o indicador do próximo passo
+    bool flag_saida; // flag usada quando a opção sair for utilizada e quando for necessário abrir o arquivo highscores.bin
 
     InitWindow(Tela.x, Tela.y, "MARIO DOS");
 
@@ -18,6 +38,8 @@ int main(void)
         Texture2D textura_logo = LoadTexture("imagens/sprite_logo.png");        // Texture loading
         Vector2 posicao_logo = {Tela.x/2 - (textura_logo.width*4)/2, 1};
 
+    //--------------------------------------------------------------------------------------
+    Texture2D sheet  = LoadTexture("imagens/sprite_geral.png");
         //---------------------------------------------------------------------------------------
         // Inicialização da fonte, das opções e suas respectivas posições e cores
         Font fonte_mario = LoadFont("fontes_texto/SuperMario256.ttf");
@@ -41,9 +63,16 @@ int main(void)
         Sound SomOpcaoMenu = LoadSound("som/seta_menu.wav");
         Sound SomSelecinaOpcao = LoadSound("som/sel_menu.mp3");
 
+<<<<<<< Updated upstream
+=======
+    //-----------------------------------------------------------------------------------
+    // Variáveis do Mário (colocar em um arquivo específico depois)
+    PLAYER Jog_Princ = {"Breno", 5000, 3};
+
+>>>>>>> Stashed changes
     //---------------------------------------------------------------------------------------
     // Loop principal do jogo
-    SetTargetFPS(30);
+    SetTargetFPS(24);
     while (!WindowShouldClose() && !flag_saida)    // Detect window close button or ESC key
     {
         // Update
@@ -58,10 +87,8 @@ int main(void)
             case N_CARREGAR_MAPA:
     //                        break;
             case N_RANKING:
-    //                        break;
             case N_AJUDA:
-    //                        break;
-            case N_SOBRE:
+            case N_SOBRE: UpdateVoltar(&prox_tela);
                             break;
         }
 
@@ -72,7 +99,12 @@ int main(void)
         switch(prox_tela){
             case N_MENU: DrawMenu(textura_logo, posicao_logo, fonte_mario, opcoes, posicao_opcoes, cores_opcoes);
                             break;
+<<<<<<< Updated upstream
             case N_NOVO: InitSpread();
+=======
+            case N_NOVO: DrawTela(Jog_Princ, sheet);
+            //              InitSpread(sheet);
+>>>>>>> Stashed changes
                             break;
             case N_CONTINUAR:
             //                break;
@@ -82,8 +114,8 @@ int main(void)
             //                break;
             case N_AJUDA: DrawAjuda(fonte_mario);
                             break;
-            case N_SOBRE:
-            //                break;
+            case N_SOBRE: DrawSobre(fonte_mario);
+                            break;
             case N_SAIR: flag_saida=true; // Verifica se o botão saida foi apertado
                             break;
         }
@@ -91,7 +123,8 @@ int main(void)
 
     // Deinicialização
     //--------------------------------------------------------------------------------------
-    UnloadTexture(textura_logo);                   // Texture unloading
+    UnloadTexture(textura_logo);                    // Texture unloading
+    UnloadTexture(sheet);                          // Texture unloading
     UnloadSound(SomOpcaoMenu);                    // Unload sound data
     UnloadSound(SomSelecinaOpcao);               // Unload sound data
 

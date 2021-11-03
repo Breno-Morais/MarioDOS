@@ -2,6 +2,7 @@
 #define MENU_H
 
 #include "raylib.h"
+#include <stdio.h>
 #define ALTURA_TELA 700
 #define LARGURA_TELA 1200
 #define NUM_OPCOES 7
@@ -15,10 +16,24 @@
 #define N_SOBRE 5
 #define N_SAIR 6
 
+// Definição Jogador
+typedef struct stc_player{
+    char nome[10];
+    int pontuacao;
+    int vidas;
+} PLAYER;
+
 // Definição de Funções
 void UpdateMenu(Color cores_opcoes[], Rectangle posicao_opcoes[], int *prox, Sound SomOpcaoMenu, Sound SomSelecinaOpcao);
 void DrawMenu(Texture textura_logo, Vector2 posicao_logo, Font fonte, const char *opcoes[], Rectangle posicao_opcoes[], Color cores_opcoes[]);
 void DrawAjuda(Font fonte);
+<<<<<<< Updated upstream
 void InitSpread(void);
+=======
+void DrawSobre(Font fonte);
+void DrawTela(PLAYER jogador, Texture sheet);
+void UpdateVoltar(int *prox);
+void InitSpread(Texture2D sheet);
+>>>>>>> Stashed changes
 
 #endif // MENU_H

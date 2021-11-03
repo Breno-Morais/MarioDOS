@@ -21,8 +21,7 @@ void DrawAjuda(Font fonte){
         //----------------------------------------------------------------------------------
 }
 
-/*
-void DrawSobre(){
+void DrawSobre(Font fonte){
         char *texto_base="Texto base apenas para eu saber como ficara formatado";
         Vector2 posicao_texto;
         posicao_texto.x = (LARGURA_TELA - MeasureTextEx(fonte, texto_base, 20, 2).x)/2;
@@ -39,4 +38,9 @@ void DrawSobre(){
         EndDrawing();
         //----------------------------------------------------------------------------------
 }
-*/
+
+void UpdateVoltar(int *prox){
+    if(IsKeyPressed(KEY_BACKSPACE)){
+        *prox = N_MENU;
+    }
+}

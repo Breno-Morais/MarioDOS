@@ -27,13 +27,9 @@ typedef struct stc_player{
 void UpdateMenu(Color cores_opcoes[], Rectangle posicao_opcoes[], int *prox, Sound SomOpcaoMenu, Sound SomSelecinaOpcao);
 void DrawMenu(Texture textura_logo, Vector2 posicao_logo, Font fonte, const char *opcoes[], Rectangle posicao_opcoes[], Color cores_opcoes[]);
 void DrawAjuda(Font fonte);
-<<<<<<< Updated upstream
-void InitSpread(void);
-=======
 void DrawSobre(Font fonte);
 void DrawTela(PLAYER jogador, Texture sheet);
 void UpdateVoltar(int *prox);
 void InitSpread(Texture2D sheet);
->>>>>>> Stashed changes
 
 #endif // MENU_H

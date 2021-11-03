@@ -63,13 +63,10 @@ int main(void)
         Sound SomOpcaoMenu = LoadSound("som/seta_menu.wav");
         Sound SomSelecinaOpcao = LoadSound("som/sel_menu.mp3");
 
-<<<<<<< Updated upstream
-=======
     //-----------------------------------------------------------------------------------
     // Variáveis do Mário (colocar em um arquivo específico depois)
     PLAYER Jog_Princ = {"Breno", 5000, 3};
 
->>>>>>> Stashed changes
     //---------------------------------------------------------------------------------------
     // Loop principal do jogo
     SetTargetFPS(24);
@@ -99,12 +96,8 @@ int main(void)
         switch(prox_tela){
             case N_MENU: DrawMenu(textura_logo, posicao_logo, fonte_mario, opcoes, posicao_opcoes, cores_opcoes);
                             break;
-<<<<<<< Updated upstream
-            case N_NOVO: InitSpread();
-=======
             case N_NOVO: DrawTela(Jog_Princ, sheet);
             //              InitSpread(sheet);
->>>>>>> Stashed changes
                             break;
             case N_CONTINUAR:
             //                break;

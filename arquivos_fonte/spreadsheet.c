@@ -22,7 +22,7 @@ void InitSpread(Texture2D sheet){
 void DrawTela(PLAYER jogador, Texture sheet, Rectangle Plts[10], int n_plt, Vector2 botao_pos, Font fonte, Vector2 mario_pos, Vector3 cano_pos[5]){
         int i;
 
-        BeginDrawing();
+        //BeginDrawing();
         //----------------------------------------------------------------------------------
 
             // Limpa o background e coloque ele preto
@@ -49,6 +49,6 @@ void DrawTela(PLAYER jogador, Texture sheet, Rectangle Plts[10], int n_plt, Vect
             DrawTexturePro(sheet, Chao.src, Chao.pos, origem, 0, WHITE);
 
 
-        EndDrawing();
+        //EndDrawing();
         //----------------------------------------------------------------------------------
 }

@@ -65,8 +65,39 @@ int main(void)
         Sound SomSelecinaOpcao = LoadSound("som/sel_menu.mp3");
 
     //-----------------------------------------------------------------------------------
+<<<<<<< Updated upstream
+    // Variáveis do Mário
+    int marioHeight = 20*4;
+    int marioWidth = 16*4;
+    int marioX = 0;
+    int marioY = ALTURA_TELA-(2*marioHeight);
+=======
     // Variáveis do Mário (colocar em um arquivo específico depois)
+    int marioHeight = 20*4;
+    int marioWidth = 16*4;
+    int marioX = 0;
+    int marioY = ALTURA_TELA-marioHeight;
+>>>>>>> Stashed changes
+    int marioSpeed = 8;
+    bool isJumping = false;
+    bool isFalling = false;
+    int frameMax = 10;
+    int jumpFrameCurrent = 0;
+    int fallFrameCurrent = 0;
+    int jumpHighMax = 150;
+<<<<<<< Updated upstream
+    // Funções do Mário
+
+    //-------------------------------------------------------------------------------------
     PLAYER Jog_Princ = {"Breno", 5000, 3};
+=======
+    /*C_SPRITE mario;
+    mario.pos.x = marioX;
+    mario.pos.y = marioY;
+    mario.pos.height = marioHeight;
+    mario.pos.width = marioWidth;*/
+    //PLAYER Jog_Princ = {"Breno", 5000, 3};
+>>>>>>> Stashed changes
 
     //-----------------------------------------------------------------------------------
     // Variáveis dos Arquivos
@@ -97,14 +128,73 @@ int main(void)
                     //printf("plat.pos[0].x: %lf\n", plat.pos[0].x);
                     flag_nivel = true;
             }
+                if(IsKeyDown(KEY_RIGHT)){
+                    marioX += marioSpeed;
+                }
+                else if(IsKeyDown(KEY_LEFT)){
+                    marioX -= marioSpeed;
+                }
+                if(IsKeyPressed(KEY_UP)){
+                    if(isFalling==false)
+                        isJumping = true;
+                }
+                if(isJumping==true){
+                    jumpFrameCurrent++;
+                    marioY -= (int)(jumpHighMax/frameMax);
+                    if(jumpFrameCurrent>=frameMax){
+                        jumpFrameCurrent = 0;
+                        isJumping = false;
+                        isFalling = true;
+                    }
+                }
+                else if(isFalling==true){
+                    fallFrameCurrent++;
+                    marioY += (int)(jumpHighMax/frameMax);
+                    if(fallFrameCurrent>=frameMax){
+                        fallFrameCurrent = 0;
+                        isFalling = false;
+                    }
+                }
                             break;
+<<<<<<< Updated upstream
+=======
+            case N_NOVO:
+                if(IsKeyDown(KEY_RIGHT)){
+                    marioX += marioSpeed;
+                }
+                else if(IsKeyDown(KEY_LEFT)){
+                    marioX -= marioSpeed;
+                }
+                if(IsKeyPressed(KEY_UP)){
+                    if(isFalling==false)
+                        isJumping = true;
+                }
+                if(isJumping==true){
+                    jumpFrameCurrent++;
+                    marioY -= (int)(jumpHighMax/frameMax);
+                    if(jumpFrameCurrent>=frameMax){
+                        jumpFrameCurrent = 0;
+                        isJumping = false;
+                        isFalling = true;
+                    }
+                }
+                else if(isFalling==true){
+                    fallFrameCurrent++;
+                    marioY += (int)(jumpHighMax/frameMax);
+                    if(fallFrameCurrent>=frameMax){
+                        fallFrameCurrent = 0;
+                        isFalling = false;
+                    }
+                }
+    //                        break;
+>>>>>>> Stashed changes
             case N_CONTINUAR:
     //                        break;
             case N_CARREGAR_MAPA:
     //                        break;
             case N_RANKING: Highscores(scores, melhores, &flag_arq);
             case N_AJUDA:
-            case N_SOBRE: UpdateVoltar(&prox_tela);
+            case N_SOBRE: //UpdateVoltar(&prox_tela);
                             break;
         }
 
@@ -115,9 +205,23 @@ int main(void)
         switch(prox_tela){
             case N_MENU: DrawMenu(textura_logo, posicao_logo, fonte_mario, opcoes, posicao_opcoes, cores_opcoes);
                             break;
-            case N_NOVO: DrawTela(Jog_Princ, sheet, Plts, n_plt, botao_pos, fonte_mario, mario_pos, cano_pos);
-                         //InitSpread(sheet);
+<<<<<<< Updated upstream
+            case N_NOVO: BeginDrawing();
+                DrawTela(Jog_Princ, sheet, Plts, n_plt, botao_pos, fonte_mario, mario_pos, cano_pos);
+                //InitSpread(sheet);
+                DrawRectangle(marioX, marioY, marioWidth, marioHeight, RED);
+                EndDrawing();
                         break;
+=======
+            case N_NOVO: //DrawTela(Jog_Princ, sheet);
+            //              InitSpread(sheet);
+                BeginDrawing();
+                ClearBackground(BLACK);
+                DrawRectangle(marioX, marioY, marioWidth, marioHeight, RED);
+               // DrawTexturePro(sheet, mario.src, mario.pos, origem, 0, WHITE);
+                EndDrawing();
+                            break;
+>>>>>>> Stashed changes
             case N_CONTINUAR:
             //                break;
             case N_CARREGAR_MAPA:
@@ -126,7 +230,7 @@ int main(void)
                             break;
             case N_AJUDA: DrawAjuda(fonte_mario);
                             break;
-            case N_SOBRE: DrawSobre(fonte_mario);
+            case N_SOBRE: //DrawSobre(fonte_mario);
                             break;
             case N_SAIR: flag_saida=true; // Verifica se o botão saida foi apertado
                             break;

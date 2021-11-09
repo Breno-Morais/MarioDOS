@@ -19,6 +19,7 @@ typedef struct stc_c_sprite{
     Rectangle src; // O retângulo que representa a posição do sprite no spritesheet
     Rectangle pos; // A posição do sprite na tela
 } C_SPRITE;
+
 //--------------------------------------------------------------------------------------
 
 // Definição dos sprites do Mario
@@ -46,9 +47,9 @@ Rectangle Cano_Curvo_dir = {51, 203, 36, 30};
 Rectangle Cano_Curvo_esq = {63, 246, 36, 30};
 
 // Definição dos Sprites do Botão Pow
-Rectangle Bota_POW1 = {133, 243, 16, 16};
-Rectangle Bota_POW2 = {153, 246, 16, 13};
-Rectangle Bota_POW3 = {173, 250, 16, 9};
+Rectangle Botao_POW1 = {133, 243, 16, 16};
+Rectangle Botao_POW2 = {153, 246, 16, 13};
+Rectangle Botao_POW3 = {173, 250, 16, 9};
 
 // Tipos de Plataformas
 Rectangle Plt_Azul = {112, 274, 7, 8};

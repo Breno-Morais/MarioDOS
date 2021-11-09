@@ -43,6 +43,7 @@ int main(void)
         //---------------------------------------------------------------------------------------
         // Inicialização da fonte, das opções e suas respectivas posições e cores
         Font fonte_mario = LoadFont("fontes_texto/SuperMario256.ttf");
+        Font fonte_pixel = LoadFont("fontes_texto/Pixel.ttf");
 
         const char *opcoes[NUM_OPCOES] = {"NOVO JOGO", "CONTINUAR", "CARREGAR MAPA", "RANKING", "AJUDA", "SOBRE", " SAIR "};
         Color cores_opcoes[NUM_OPCOES] = {WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE};
@@ -67,23 +68,41 @@ int main(void)
     // Variáveis do Mário (colocar em um arquivo específico depois)
     PLAYER Jog_Princ = {"Breno", 5000, 3};
 
+    //-----------------------------------------------------------------------------------
+    // Variáveis dos Arquivos
+    FILE *scores;
+    PLAYER melhores[5];
+    bool flag_arq = false; // Essa flag é usada para que a abertura do arquivo .bin seja feita apenas uma vez
+
+    // Variáveis do Nível
+    bool flag_nivel = false; // Essa flag é usada para que o arquivo .txt seja feita apenas uma vez
+    Vector2 mario_pos, botao_pos;
+    Vector3 cano_pos[9];
+    Rectangle Plts[10];
+    int n_fase = 1, n_plt;
+
     //---------------------------------------------------------------------------------------
     // Loop principal do jogo
-    SetTargetFPS(24);
+    SetTargetFPS(30);
     while (!WindowShouldClose() && !flag_saida)    // Detect window close button or ESC key
     {
         // Update
         //----------------------------------------------------------------------------------
+        if(prox_tela == N_MENU) UpdateMenu(cores_opcoes, posicao_opcoes, &prox_tela, SomOpcaoMenu, SomSelecinaOpcao);
         switch(prox_tela){
-            case N_MENU: UpdateMenu(cores_opcoes, posicao_opcoes, &prox_tela, SomOpcaoMenu, SomSelecinaOpcao);
+            /*case N_MENU: UpdateMenu(cores_opcoes, posicao_opcoes, &prox_tela, SomOpcaoMenu, SomSelecinaOpcao);
+                            break;*/
+            case N_NOVO: if(!flag_nivel){
+                    n_plt = CarregaFase(n_fase, &mario_pos, &botao_pos, cano_pos, Plts);
+                    //printf("plat.pos[0].x: %lf\n", plat.pos[0].x);
+                    flag_nivel = true;
+            }
                             break;
-            case N_NOVO:
-    //                        break;
             case N_CONTINUAR:
     //                        break;
             case N_CARREGAR_MAPA:
     //                        break;
-            case N_RANKING:
+            case N_RANKING: Highscores(scores, melhores, &flag_arq);
             case N_AJUDA:
             case N_SOBRE: UpdateVoltar(&prox_tela);
                             break;
@@ -96,15 +115,15 @@ int main(void)
         switch(prox_tela){
             case N_MENU: DrawMenu(textura_logo, posicao_logo, fonte_mario, opcoes, posicao_opcoes, cores_opcoes);
                             break;
-            case N_NOVO: DrawTela(Jog_Princ, sheet);
-            //              InitSpread(sheet);
-                            break;
+            case N_NOVO: DrawTela(Jog_Princ, sheet, Plts, n_plt, botao_pos, fonte_mario, mario_pos, cano_pos);
+                         //InitSpread(sheet);
+                        break;
             case N_CONTINUAR:
             //                break;
             case N_CARREGAR_MAPA:
             //                break;
-            case N_RANKING:
-            //                break;
+            case N_RANKING: DrawScores(melhores, fonte_pixel);
+                            break;
             case N_AJUDA: DrawAjuda(fonte_mario);
                             break;
             case N_SOBRE: DrawSobre(fonte_mario);

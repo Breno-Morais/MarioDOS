@@ -38,13 +38,13 @@ Rectangle Mario_Vida = {6, 591, 10, 8};
 //--------------------------------------------------------------------------------------
 
 // Definição dos Sprites do Nivel
-C_SPRITE Chao = {{4, 292, 260, 20}, {-5, 616, 260*5, 20*5}};
+C_SPRITE Chao = {{4, 292, 260, 20}, {-5, 616+(50), 1300, 100}};
 
 // Definição dos Sprites com posições variáveis
-Rectangle Cano_Reto_esq = {11, 215, 32, 18};
-Rectangle Cano_Reto_dir = {11, 258, 32, 18};
-Rectangle Cano_Curvo_dir = {51, 203, 36, 30};
-Rectangle Cano_Curvo_esq = {63, 246, 36, 30};
+Rectangle Cano_Reto_dir = {11, 215, 32, 18};
+Rectangle Cano_Reto_esq = {11, 258, 32, 18};
+Rectangle Cano_Curvo_esq = {51, 203, 49, 30};
+Rectangle Cano_Curvo_dir = {50, 246, 49, 30};
 
 // Definição dos Sprites do Botão Pow
 Rectangle Botao_POW1 = {133, 243, 16, 16};

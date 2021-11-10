@@ -66,10 +66,8 @@ int main(void)
 
     //-----------------------------------------------------------------------------------
     // Variáveis do Mário
-    int marioHeight = 20*4;
-    int marioWidth = 16*4;
-    int marioX = 0;
-    int marioY = ALTURA_TELA-(2*marioHeight);
+    Rectangle Mario = {0, 0, 16*4, 20*4};
+
     int marioSpeed = 8;
     bool isJumping = false;
     bool isFalling = false;
@@ -77,6 +75,7 @@ int main(void)
     int jumpFrameCurrent = 0;
     int fallFrameCurrent = 0;
     int jumpHighMax = 150;
+    bool lado = true;
     // Funções do Mário
 
     //-------------------------------------------------------------------------------------
@@ -90,10 +89,11 @@ int main(void)
 
     // Variáveis do Nível
     bool flag_nivel = false; // Essa flag é usada para que o arquivo .txt seja feita apenas uma vez
-    Vector2 mario_pos, botao_pos;
+    Rectangle Botao;
     Vector3 cano_pos[9];
+    Vector2 n_ind; // E um vector que contém a quantidade de canos e plataformas na fase, nessa ordem
     Rectangle Plts[10];
-    int n_fase = 1, n_plt;
+    int n_fase = 1;
 
     //---------------------------------------------------------------------------------------
     // Loop principal do jogo
@@ -107,32 +107,34 @@ int main(void)
             /*case N_MENU: UpdateMenu(cores_opcoes, posicao_opcoes, &prox_tela, SomOpcaoMenu, SomSelecinaOpcao);
                             break;*/
             case N_NOVO: if(!flag_nivel){
-                    n_plt = CarregaFase(n_fase, &mario_pos, &botao_pos, cano_pos, Plts);
+                    n_ind = CarregaFase(n_fase, &Mario, &Botao, cano_pos, Plts);
                     //printf("plat.pos[0].x: %lf\n", plat.pos[0].x);
                     flag_nivel = true;
             }
                 if(IsKeyDown(KEY_RIGHT)){
-                    marioX += marioSpeed;
+                    Mario.x += marioSpeed;
+                    lado = true;
                 }
                 else if(IsKeyDown(KEY_LEFT)){
-                    marioX -= marioSpeed;
+                    Mario.x -= marioSpeed;
+                    lado = false;
                 }
                 if(IsKeyPressed(KEY_UP)){
                     if(isFalling==false)
                         isJumping = true;
                 }
-                if(isJumping==true){
+                if(isJumping){
                     jumpFrameCurrent++;
-                    marioY -= (int)(jumpHighMax/frameMax);
+                    Mario.y -= (int)(jumpHighMax/frameMax);
                     if(jumpFrameCurrent>=frameMax){
                         jumpFrameCurrent = 0;
                         isJumping = false;
                         isFalling = true;
                     }
                 }
-                else if(isFalling==true){
+                else if(isFalling){
                     fallFrameCurrent++;
-                    marioY += (int)(jumpHighMax/frameMax);
+                    Mario.y += (int)(jumpHighMax/frameMax);
                     if(fallFrameCurrent>=frameMax){
                         fallFrameCurrent = 0;
                         isFalling = false;
@@ -156,11 +158,8 @@ int main(void)
         switch(prox_tela){
             case N_MENU: DrawMenu(textura_logo, posicao_logo, fonte_mario, opcoes, posicao_opcoes, cores_opcoes);
                             break;
-            case N_NOVO: BeginDrawing();
-                DrawTela(Jog_Princ, sheet, Plts, n_plt, botao_pos, fonte_mario, mario_pos, cano_pos);
+            case N_NOVO: DrawTela(Jog_Princ, sheet, Plts, n_ind, Botao, fonte_mario, cano_pos, Mario, lado, n_fase);
                 //InitSpread(sheet);
-                DrawRectangle(marioX, marioY, marioWidth, marioHeight, RED);
-                EndDrawing();
                         break;
             case N_CONTINUAR:
             //                break;

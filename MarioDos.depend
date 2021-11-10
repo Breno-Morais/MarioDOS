@@ -14,73 +14,63 @@
 	<stdio.h>
 	"../headers/menu.h"
 
-1636403244 c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\headers\menu.h
+1636576358 c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\headers\menu.h
 	"raylib.h"
 	<unistd.h>
 	<stdio.h>
 
-1636401707 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\main.c
+1636576358 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\main.c
 	"../headers/menu.h"
 
 1635298890 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\menu.c
 	"../headers/menu.h"
 
-1636059581 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\outros.c
+1636500766 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\outros.c
 	"../headers/menu.h"
 
-1636401826 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\spreadsheet.c
+1636576423 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\spreadsheet.c
 	"../headers/sprites.h"
 	"../headers/menu.h"
 
-1636403264 c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\headers\sprites.h
+1636571170 c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\headers\sprites.h
 	"raylib.h"
 
-<<<<<<< Updated upstream
-1636401775 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\fase.c
+1636403264 ated upstream
+
+1636570284 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\fase.c
 	"../headers/menu.h"
 
 1636498200 source:c:\users\user\documents\github\mariodos\arquivos_fonte\fase.c
 	"../headers/menu.h"
 
-1636498200 c:\users\user\documents\github\mariodos\headers\menu.h
+1636496841 c:\users\user\documents\github\mariodos\headers\menu.h
 	"raylib.h"
 	<unistd.h>
 	<stdio.h>
-
-1635458372 source:c:\users\user\documents\github\mariodos\arquivos_fonte\menu.c
-	"../headers/menu.h"
-
-1636498200 source:c:\users\user\documents\github\mariodos\arquivos_fonte\outros.c
-	"../headers/menu.h"
-
-1636499106 source:c:\users\user\documents\github\mariodos\arquivos_fonte\spreadsheet.c
-	"../headers/sprites.h"
-	"../headers/menu.h"
-
-1636498200 c:\users\user\documents\github\mariodos\headers\sprites.h
-	"raylib.h"
-
-1636499323 source:c:\users\user\documents\github\mariodos\arquivos_fonte\main.c
-=======
-1635458372 source:c:\users\user\documents\github\mariodos\arquivos_fonte\menu.c
-	"../headers/menu.h"
-
-1636496841 c:\users\user\documents\github\mariodos\headers\menu.h
 	"raylib.h"
 	<stdio.h>
 
-1636496736 source:c:\users\user\documents\github\mariodos\arquivos_fonte\outros.c
+1635458372 source:c:\users\user\documents\github\mariodos\arquivos_fonte\menu.c
+	"../headers/menu.h"
 	"../headers/menu.h"
 
-1636496841 source:c:\users\user\documents\github\mariodos\arquivos_fonte\main.c
+1636496736 source:c:\users\user\documents\github\mariodos\arquivos_fonte\outros.c
+	"../headers/menu.h"
+	"../headers/menu.h"
+
+1636496841 source:c:\users\user\documents\github\mariodos\arquivos_fonte\spreadsheet.c
+	"../headers/sprites.h"
 	"../headers/menu.h"
 	"../headers/sprites.h"
 
 1636496736 c:\users\user\documents\github\mariodos\headers\sprites.h
 	"raylib.h"
+	"raylib.h"
 
-1636496841 source:c:\users\user\documents\github\mariodos\arquivos_fonte\spreadsheet.c
+1636496841 source:c:\users\user\documents\github\mariodos\arquivos_fonte\main.c
+	"../headers/menu.h"
 	"../headers/sprites.h"
->>>>>>> Stashed changes
+
+1636496841 shed changes
 	"../headers/menu.h"
 

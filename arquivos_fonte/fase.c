@@ -1,6 +1,6 @@
 #include "../headers/menu.h"
 
-int CarregaFase(int n_fase, Vector2 *mario_pos, Vector2 *botao_pos, Vector3 cano_pos[9], Rectangle Plts[10]){
+Vector2 CarregaFase(int n_fase, Rectangle *Mario, Rectangle *Botao, Vector3 cano_pos[9], Rectangle Plts[10]){
     FILE *fase;
     char fase_atual[16];
     char linha_atual[120];
@@ -29,22 +29,24 @@ int CarregaFase(int n_fase, Vector2 *mario_pos, Vector2 *botao_pos, Vector3 cano
                 switch(linha_atual[coluna]){
                     // Se o caractere for igual a M, guarda as coordenadas como a posição do mario
                     case 'm':
-                        mario_pos->x = x;
-                        mario_pos->y = y;
+                        Mario->x = x;
+                        Mario->y = y;
                                 break;
 
                     // Se o caractere for igual a C, guarda as coordenadas como a posição do cano, número n_cano
                     case 'c':
-                        cano_pos[n_cano].x = x;
-                        cano_pos[n_cano].y = y;
+                        cano_pos[n_cano].x = x+10;
+                        cano_pos[n_cano].y = y+25;
                         cano_pos[n_cano].z = 0;
                         n_cano++;
                                 break;
 
                     // Se o caractere for igual a B, guarda as coordenadas como a posição do botão
                     case 'b':
-                        botao_pos->x = x;
-                        botao_pos->y = y;
+                        Botao->x = x-32;
+                        Botao->y = y-32;
+                        Botao->width = 64;
+                        Botao->height = 64;
                                 break;
 
                     // Se o caractere for igual a um número entre 1-9,
@@ -98,5 +100,5 @@ int CarregaFase(int n_fase, Vector2 *mario_pos, Vector2 *botao_pos, Vector3 cano
         fclose(fase);
     }
 
-    return n_plt;
+    return (Vector2){n_cano, n_plt};
 }

@@ -35,6 +35,6 @@ void InitSpread(Texture2D sheet);
 void Highscores(FILE *arq, PLAYER melhores[5], bool *flag);
 void DrawScores(PLAYER melhores[5], Font fonte);
 Vector2 CarregaFase(int n_fase, Rectangle *Mario, Rectangle *Botao, Vector3 cano_pos[5], Rectangle Plts[10]);
-void Jump();
+void UpdateMario(Rectangle Plts[10], Vector2 n_ind, Rectangle *Mario, float frameMax, float *marioSpeedLeft, float *marioSpeedRight, bool *isJumping, bool *isFalling, float *jumpFrameCurrent, bool *lado, Rectangle Chao, Rectangle Botao);
 
 #endif // MENU_H

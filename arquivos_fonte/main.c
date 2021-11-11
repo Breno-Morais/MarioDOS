@@ -70,17 +70,12 @@ int main(void)
 
     float marioSpeedLeft = 8;
     float marioSpeedRight = 8;
-    bool isCollidingGround = false;
     bool isJumping = false;
     bool isFalling = true;
     float frameMax = 10;
     float jumpFrameCurrent = 0;
-    float fallFrameCurrent = 0;
     float jumpHighMax = 200;
     bool lado = true;
-    Vector2 startBottom = {Mario.x, Mario.y+Mario.height};
-    Vector2 endBottom = {Mario.x+Mario.width, Mario.y+Mario.height};
-    Vector2 *pontoContato;
     // Funções do Mário
     //-------------------------------------------------------------------------------------
     PLAYER Jog_Princ = {"Breno", 5000, 3};
@@ -98,6 +93,7 @@ int main(void)
     Vector2 n_ind; // E um vector que contém a quantidade de canos e plataformas na fase, nessa ordem
     Rectangle Plts[10];
     int n_fase = 1;
+    Rectangle Chao = {0, 666, 1300, 100};
 
     //---------------------------------------------------------------------------------------
     // Loop principal do jogo
@@ -115,22 +111,32 @@ int main(void)
                     //printf("plat.pos[0].x: %lf\n", plat.pos[0].x);
                     flag_nivel = true;
                 }
+                UpdateMario(Plts, n_ind, &Mario, frameMax, &marioSpeedLeft, &marioSpeedRight, &isJumping, &isFalling, &jumpFrameCurrent, &lado, Chao, Botao);
+/*
                 isFalling = true;
                 marioSpeedLeft = 8;
                 marioSpeedRight = 8;
 
-                //Testa colisão com o chão
+                //Testa colisão com o chão e base da plataforma
+                if(CheckCollisionPointRec((Vector2){Mario.x+1, Mario.y+Mario.height}, Chao) || CheckCollisionPointRec((Vector2){Mario.x+Mario.width-1, Mario.y+Mario.height}, Chao)){
+                    isFalling = false;
+                    Mario.y = Chao.y-Mario.height+5;
+                }
                 for(int i = 0; i<n_ind.y; i++){
                     if(CheckCollisionPointRec((Vector2){Mario.x+1, Mario.y+Mario.height}, Plts[i]) || CheckCollisionPointRec((Vector2){Mario.x+Mario.width-1, Mario.y+Mario.height}, Plts[i])){
                         isFalling = false;
                         Mario.y = Plts[i].y-Mario.height;
                     }
                 }
-                //Testa Colisão com o teto
+                //Testa colisão com o teto
                 for(int i = 0; i<n_ind.y; i++){
                     if(CheckCollisionPointRec((Vector2){(Mario.x+Mario.width), Mario.y}, Plts[i]) || CheckCollisionPointRec((Vector2){Mario.x, Mario.y}, Plts[i])){
                         isJumping = false;
                     }
+                }
+                //Testa colisão com o botão por baixo
+                if(CheckCollisionPointRec((Vector2){(Mario.x+Mario.width), Mario.y}, Botao) || CheckCollisionPointRec((Vector2){Mario.x, Mario.y}, Botao)){
+                    isJumping = false;
                 }
 
                 //Testa colisão com a parede pela esquerda. Se colidir, não pode ir pra esquerda
@@ -139,11 +145,19 @@ int main(void)
                         marioSpeedLeft = 0;
                     }
                 }
-                //Testa colisão com a parede pela direita. Se colidir, não pode ir pra direita
+                //Testa colisão com o botão pela esquerda. Se colidir, não pode ir pra esquerda.
+                if(!lado && CheckCollisionPointRec((Vector2){Mario.x, Mario.y}, Botao) || CheckCollisionPointRec((Vector2){Mario.x, Mario.y+Mario.height}, Botao) || CheckCollisionPointRec((Vector2){Mario.x, Mario.y+(Mario.height/2)}, Botao)){
+                    marioSpeedLeft = 0;
+                }
+                //Testa colisão com a parede pela direita. Se colidir, não pode ir pra direita.
                 for(int i = 0; i<n_ind.y; i++){
                     if(lado && CheckCollisionPointRec((Vector2){Plts[i].x, Plts[i].y+1}, Mario) || CheckCollisionPointRec((Vector2){Plts[i].x, Plts[i].y+Plts[i].height-1}, Mario)){
                         marioSpeedRight = 0;
                     }
+                }
+                //Testa colisão com o botão pela direita. Se colidir, não pode ir pra direita.
+                if(lado && CheckCollisionPointRec((Vector2){Mario.x+Mario.width, Mario.y}, Botao) || CheckCollisionPointRec((Vector2){Mario.x+Mario.width, Mario.y+Mario.height}, Botao) || CheckCollisionPointRec((Vector2){Mario.x+Mario.width, Mario.y+(Mario.height/2)}, Botao)){
+                    marioSpeedRight = 0;
                 }
 
                 //Se aperta a seta direita, vai pra direita
@@ -174,7 +188,7 @@ int main(void)
                 //Queda do Mario
                 else if(isFalling){
                     jumpFrameCurrent = 0;
-                    Mario.y+=8;
+                    Mario.y+=10;
                 }
 
                 //Mario passa da direita pra esquerda da tela
@@ -184,7 +198,7 @@ int main(void)
                 //Mario passa da esquerda pra direita da tela
                 if(Mario.x+(Mario.width/2)<0){
                     Mario.x = LARGURA_TELA-(Mario.width/2);
-                }
+                }*/
                             break;
             case N_CONTINUAR:
     //                        break;

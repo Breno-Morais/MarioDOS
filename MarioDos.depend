@@ -43,7 +43,7 @@
 1636584341 source:c:\users\user\documents\github\mariodos\arquivos_fonte\fase.c
 	"../headers/menu.h"
 
-1636650603 c:\users\user\documents\github\mariodos\headers\menu.h
+1636664477 c:\users\user\documents\github\mariodos\headers\menu.h
 	"raylib.h"
 	<unistd.h>
 	<stdio.h>
@@ -62,12 +62,12 @@
 1636584341 c:\users\user\documents\github\mariodos\headers\sprites.h
 	"raylib.h"
 
-1636649244 source:c:\users\user\documents\github\mariodos\arquivos_fonte\main.c
+1636664477 source:c:\users\user\documents\github\mariodos\arquivos_fonte\main.c
 	"../headers/menu.h"
 
 1636496841 shed changes
 	"../headers/menu.h"
 
-1636651157 source:c:\users\user\documents\github\mariodos\arquivos_fonte\logica.c
+1636664023 source:c:\users\user\documents\github\mariodos\arquivos_fonte\logica.c
 	"../headers/menu.h"
 

@@ -74,26 +74,33 @@ int main(void)
     bool isFalling = true;
     float frameMax = 10;
     float jumpFrameCurrent = 0;
-    float jumpHighMax = 200;
     bool lado = true;
-    // Funções do Mário
+
     //-------------------------------------------------------------------------------------
     PLAYER Jog_Princ = {"Breno", 5000, 3};
 
     //-----------------------------------------------------------------------------------
     // Variáveis dos Arquivos
-    FILE *scores;
     PLAYER melhores[5];
     bool flag_arq = false; // Essa flag é usada para que a abertura do arquivo .bin seja feita apenas uma vez
 
     // Variáveis do Nível
     bool flag_nivel = false; // Essa flag é usada para que o arquivo .txt seja feita apenas uma vez
+    bool apertado = false; // Essa variável é usada para saber se o botão POW foi apertado
     Rectangle Botao;
     Vector3 cano_pos[9];
+    Rectangle Canos[9];
     Vector2 n_ind; // E um vector que contém a quantidade de canos e plataformas na fase, nessa ordem
     Rectangle Plts[10];
     int n_fase = 1;
     Rectangle Chao = {0, 666, 1300, 100};
+    int ind_animaMa = 0;
+    int ind_animaBo = 0;
+    int framesCounter = 0;
+
+    // Inicializa sons da fase
+    Sound SomInicia = LoadSound("som/inicio.wav");
+    Sound SomPulo = LoadSound("som/pulo.wav");
 
     //---------------------------------------------------------------------------------------
     // Loop principal do jogo
@@ -107,104 +114,24 @@ int main(void)
             /*case N_MENU: UpdateMenu(cores_opcoes, posicao_opcoes, &prox_tela, SomOpcaoMenu, SomSelecinaOpcao);
                             break;*/
             case N_NOVO: if(!flag_nivel){
-                    n_ind = CarregaFase(n_fase, &Mario, &Botao, cano_pos, Plts);
-                    //printf("plat.pos[0].x: %lf\n", plat.pos[0].x);
+                    n_ind = CarregaFase(n_fase, &Mario, &Botao, cano_pos, Plts, Canos);
+                    PlaySound(SomInicia);
                     flag_nivel = true;
                 }
-                UpdateMario(Plts, n_ind, &Mario, frameMax, &marioSpeedLeft, &marioSpeedRight, &isJumping, &isFalling, &jumpFrameCurrent, &lado, Chao, Botao);
-/*
-                isFalling = true;
-                marioSpeedLeft = 8;
-                marioSpeedRight = 8;
-
-                //Testa colisão com o chão e base da plataforma
-                if(CheckCollisionPointRec((Vector2){Mario.x+1, Mario.y+Mario.height}, Chao) || CheckCollisionPointRec((Vector2){Mario.x+Mario.width-1, Mario.y+Mario.height}, Chao)){
-                    isFalling = false;
-                    Mario.y = Chao.y-Mario.height+5;
-                }
-                for(int i = 0; i<n_ind.y; i++){
-                    if(CheckCollisionPointRec((Vector2){Mario.x+1, Mario.y+Mario.height}, Plts[i]) || CheckCollisionPointRec((Vector2){Mario.x+Mario.width-1, Mario.y+Mario.height}, Plts[i])){
-                        isFalling = false;
-                        Mario.y = Plts[i].y-Mario.height;
-                    }
-                }
-                //Testa colisão com o teto
-                for(int i = 0; i<n_ind.y; i++){
-                    if(CheckCollisionPointRec((Vector2){(Mario.x+Mario.width), Mario.y}, Plts[i]) || CheckCollisionPointRec((Vector2){Mario.x, Mario.y}, Plts[i])){
-                        isJumping = false;
-                    }
-                }
-                //Testa colisão com o botão por baixo
-                if(CheckCollisionPointRec((Vector2){(Mario.x+Mario.width), Mario.y}, Botao) || CheckCollisionPointRec((Vector2){Mario.x, Mario.y}, Botao)){
-                    isJumping = false;
-                }
-
-                //Testa colisão com a parede pela esquerda. Se colidir, não pode ir pra esquerda
-                for(int i = 0; i<n_ind.y; i++){
-                    if(!lado && CheckCollisionPointRec((Vector2){Plts[i].x+Plts[i].width, Plts[i].y+1}, Mario) || CheckCollisionPointRec((Vector2){Plts[i].x+Plts[i].width, Plts[i].y+Plts[i].height-1}, Mario)){
-                        marioSpeedLeft = 0;
-                    }
-                }
-                //Testa colisão com o botão pela esquerda. Se colidir, não pode ir pra esquerda.
-                if(!lado && CheckCollisionPointRec((Vector2){Mario.x, Mario.y}, Botao) || CheckCollisionPointRec((Vector2){Mario.x, Mario.y+Mario.height}, Botao) || CheckCollisionPointRec((Vector2){Mario.x, Mario.y+(Mario.height/2)}, Botao)){
-                    marioSpeedLeft = 0;
-                }
-                //Testa colisão com a parede pela direita. Se colidir, não pode ir pra direita.
-                for(int i = 0; i<n_ind.y; i++){
-                    if(lado && CheckCollisionPointRec((Vector2){Plts[i].x, Plts[i].y+1}, Mario) || CheckCollisionPointRec((Vector2){Plts[i].x, Plts[i].y+Plts[i].height-1}, Mario)){
-                        marioSpeedRight = 0;
-                    }
-                }
-                //Testa colisão com o botão pela direita. Se colidir, não pode ir pra direita.
-                if(lado && CheckCollisionPointRec((Vector2){Mario.x+Mario.width, Mario.y}, Botao) || CheckCollisionPointRec((Vector2){Mario.x+Mario.width, Mario.y+Mario.height}, Botao) || CheckCollisionPointRec((Vector2){Mario.x+Mario.width, Mario.y+(Mario.height/2)}, Botao)){
-                    marioSpeedRight = 0;
-                }
-
-                //Se aperta a seta direita, vai pra direita
-                if(IsKeyDown(KEY_RIGHT)){
-                    Mario.x += marioSpeedRight;
-                    lado = true;
-                }
-                //Se aperta a seta esquerda, vai pra esquerda
-                else if(IsKeyDown(KEY_LEFT)){
-                    Mario.x -= marioSpeedLeft;
-                    lado = false;
-                }
-                //Se aperta a seta de cima e não tiver caindo, pula
-                if(IsKeyPressed(KEY_UP)){
-                    if(isFalling==false)
-                        isJumping = true;
-                }
-                //Pulo do Mario
-                if(isJumping){
-                    jumpFrameCurrent++;
-                    Mario.y -= 20;
-                    if(jumpFrameCurrent>=frameMax){
-                        jumpFrameCurrent = 0;
-                        isJumping = false;
-                        isFalling = true;
-                    }
-                }
-                //Queda do Mario
-                else if(isFalling){
-                    jumpFrameCurrent = 0;
-                    Mario.y+=10;
-                }
-
-                //Mario passa da direita pra esquerda da tela
-                if(Mario.x+(Mario.width/2)>=LARGURA_TELA){
-                    Mario.x = 0-(Mario.width/2);
-                }
-                //Mario passa da esquerda pra direita da tela
-                if(Mario.x+(Mario.width/2)<0){
-                    Mario.x = LARGURA_TELA-(Mario.width/2);
-                }*/
-                            break;
-            case N_CONTINUAR:
     //                        break;
+            case N_CONTINUAR: if(!flag_nivel){
+                    n_ind = CarregaSave(&Mario, &Botao, cano_pos, Plts, Canos, &Jog_Princ);
+                    PlaySound(SomInicia);
+                    flag_nivel = true;
+                }
+                UpdateMario(Plts, n_ind, &Mario, frameMax, &marioSpeedLeft, &marioSpeedRight, &isJumping, &isFalling, &jumpFrameCurrent, &lado, Chao, Botao, &apertado, SomPulo);
+                Anima(&framesCounter, &ind_animaMa, &ind_animaBo, isFalling, isJumping);
+                UpdateVoltar(&prox_tela);
+                SalvarJogo(n_fase, Mario, Jog_Princ);
+                            break;
             case N_CARREGAR_MAPA:
     //                        break;
-            case N_RANKING: Highscores(scores, melhores, &flag_arq);
+            case N_RANKING: Highscores(melhores, &flag_arq);
             case N_AJUDA:
             case N_SOBRE: UpdateVoltar(&prox_tela);
                             break;
@@ -217,11 +144,10 @@ int main(void)
         switch(prox_tela){
             case N_MENU: DrawMenu(textura_logo, posicao_logo, fonte_mario, opcoes, posicao_opcoes, cores_opcoes);
                             break;
-            case N_NOVO: DrawTela(Jog_Princ, sheet, Plts, n_ind, Botao, fonte_mario, cano_pos, Mario, lado, n_fase);
-                //InitSpread(sheet);
-                        break;
-            case N_CONTINUAR:
-            //                break;
+            case N_NOVO:
+            //            break;
+            case N_CONTINUAR: DrawTela(Jog_Princ, sheet, Plts, n_ind, Botao, fonte_mario, cano_pos, &Mario, lado, n_fase, Canos, ind_animaMa, ind_animaBo);
+                            break;
             case N_CARREGAR_MAPA:
             //                break;
             case N_RANKING: DrawScores(melhores, fonte_pixel);
@@ -241,6 +167,8 @@ int main(void)
     UnloadTexture(sheet);                          // Texture unloading
     UnloadSound(SomOpcaoMenu);                    // Unload sound data
     UnloadSound(SomSelecinaOpcao);               // Unload sound data
+    UnloadSound(SomInicia);
+    UnloadSound(SomPulo);
 
     CloseAudioDevice();            // Close audio device
     CloseWindow();                // Close window and OpenGL context

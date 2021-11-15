@@ -1,13 +1,13 @@
 #include "../headers/menu.h"
 
-Vector2 CarregaFase(int n_fase, Rectangle *Mario, Rectangle *Botao, Vector3 cano_pos[9], Rectangle Plts[10]){
+Vector2 CarregaFase(int n_fase, Rectangle *Mario, Rectangle *Botao, Vector3 cano_pos[9], Rectangle Plts[10], Rectangle Canos[9]){
     FILE *fase;
     char fase_atual[16];
     char linha_atual[120];
-    int coluna, n_linha, x, y, n_cano=0, n_plt=0;
+    int coluna, n_linha, x, y, i, n_cano=0, n_plt=0;
     bool flag_stream=false;
 
-    // Faz a formatação do nome do arquivo da fase atual
+    // Faz a formataÃ§Ã£o do nome do arquivo da fase atual
     sprintf(fase_atual, "fases/fase%d.txt", n_fase);
 
     if(!(fase = fopen(fase_atual,"r"))) // abre para leitura
@@ -16,7 +16,7 @@ Vector2 CarregaFase(int n_fase, Rectangle *Mario, Rectangle *Botao, Vector3 cano
     else{
         // Carrega linha por linha do arquivo fase.txt
         for(n_linha=0; n_linha<28; n_linha++){
-            // Guarda a linha inteira na variável linha_atual
+            // Guarda a linha inteira na variÃ¡vel linha_atual
             fscanf(fase,"%s\n", linha_atual);
 
             // Passa caractere por caractere da linha, analisando
@@ -25,15 +25,15 @@ Vector2 CarregaFase(int n_fase, Rectangle *Mario, Rectangle *Botao, Vector3 cano
                 x = coluna*10;
                 y = n_linha*25;
 
-                // Verifica qual é o caractere
+                // Verifica qual Ã© o caractere
                 switch(linha_atual[coluna]){
-                    // Se o caractere for igual a M, guarda as coordenadas como a posição do mario
+                    // Se o caractere for igual a M, guarda as coordenadas como a posiÃ§Ã£o do mario
                     case 'm':
                         Mario->x = x;
                         Mario->y = y;
                                 break;
 
-                    // Se o caractere for igual a C, guarda as coordenadas como a posição do cano, número n_cano
+                    // Se o caractere for igual a C, guarda as coordenadas como a posiÃ§Ã£o do cano, nÃºmero n_cano
                     case 'c':
                         cano_pos[n_cano].x = x+10;
                         cano_pos[n_cano].y = y+25;
@@ -41,7 +41,7 @@ Vector2 CarregaFase(int n_fase, Rectangle *Mario, Rectangle *Botao, Vector3 cano
                         n_cano++;
                                 break;
 
-                    // Se o caractere for igual a B, guarda as coordenadas como a posição do botão
+                    // Se o caractere for igual a B, guarda as coordenadas como a posiÃ§Ã£o do botÃ£o
                     case 'b':
                         Botao->x = x-32;
                         Botao->y = y-32;
@@ -49,8 +49,8 @@ Vector2 CarregaFase(int n_fase, Rectangle *Mario, Rectangle *Botao, Vector3 cano
                         Botao->height = 64;
                                 break;
 
-                    // Se o caractere for igual a um número entre 1-9,
-                    // guarda as coordenadas como a posição do cano, número n_cano, e sinaliza que é um cano de retorno
+                    // Se o caractere for igual a um nÃºmero entre 1-9,
+                    // guarda as coordenadas como a posiÃ§Ã£o do cano, nÃºmero n_cano, e sinaliza que Ã© um cano de retorno
                         case '1':
                         case '2':
                         case '3':
@@ -68,12 +68,12 @@ Vector2 CarregaFase(int n_fase, Rectangle *Mario, Rectangle *Botao, Vector3 cano
 
                     // Se o caractere for igual a P,
                     case 'p':
-                    // primeiro ele verifica se o char atual faz parte de um sequência de P's
+                    // primeiro ele verifica se o char atual faz parte de um sequÃªncia de P's
                         if(!flag_stream){
-                            // Se não, ele sinaliza que uma sequência de P's se inicializpu
+                            // Se nÃ£o, ele sinaliza que uma sequÃªncia de P's se inicializpu
                             flag_stream = true;
 
-                            // E então ele guarda as coordenas da nº plataforma
+                            // E entÃ£o ele guarda as coordenas da nÂº plataforma
                             Plts[n_plt].x = x;
                             Plts[n_plt].y = y;
 
@@ -86,7 +86,7 @@ Vector2 CarregaFase(int n_fase, Rectangle *Mario, Rectangle *Botao, Vector3 cano
                         }
                         break;
                     case '-':
-                        // Se o caractere for igual a -, verifica se uma sequência de P's está ligada
+                        // Se o caractere for igual a -, verifica se uma sequÃªncia de P's estÃ¡ ligada
                         if(flag_stream){
                         // Se tiver, sinaliza que uma plataforma acabou
                             n_plt++;
@@ -97,8 +97,42 @@ Vector2 CarregaFase(int n_fase, Rectangle *Mario, Rectangle *Botao, Vector3 cano
             }
         }
 
-        fclose(fase);
     }
+
+    // Cria o retÃ¢ngulo de cada cano
+    for(i=0; i<n_cano; i++){
+    // Passa por cada cano e verifica de que lado ele estÃ¡
+        if(cano_pos[i].x >= 600){
+                        // Se o cano estiver na direita, verifica se ele Ã© um cano de saï¿½da ou de retorno
+                        if(cano_pos[i].z == 0){
+                                // Aqui ele desenha o cano de saÃ­da virado para esquerda
+                                Canos[i] = (Rectangle){cano_pos[i].x-10, cano_pos[i].y-60, 196, 120};
+                        } else {
+                                // Aqui ele desenha o cano de entrada virado pra esquerca
+                                Canos[i] = (Rectangle){cano_pos[i].x, cano_pos[i].y, 128, 72};
+                        }
+
+                    } else {
+                        // Se o cano estiver na esquerda, verifica se ele Ã© um cano de saï¿½da ou de retorno
+                        if (cano_pos[i].z == 0){
+                                // Aqui ele desenha o cano de saÃ­da virado para direita
+                                Canos[i] = (Rectangle){cano_pos[i].x-196, cano_pos[i].y-60, 196, 120};
+                        } else {
+                                // Aqui ele desenha o cano de entrada virado para direita
+                                Canos[i] = (Rectangle){cano_pos[i].x-118, cano_pos[i].y, 128, 72};
+                        }
+        }
+
+    }
+
+    // Ajusta a posiÃ§Ã£o do mario no inÃ­cio, para evitar que ele nasÃ§a dentro da plataforma
+    for(i=0;i<n_plt;i++){
+        if(CheckCollisionRecs(*Mario, Plts[i])){
+            Mario->y -= GetCollisionRec(*Mario, Plts[i]).height+5;
+        }
+    }
+
+    fclose(fase);
 
     return (Vector2){n_cano, n_plt};
 }

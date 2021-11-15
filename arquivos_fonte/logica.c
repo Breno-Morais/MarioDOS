@@ -1,9 +1,29 @@
 #include "../headers/menu.h"
 
-void UpdateMario(Rectangle Plts[10], Vector2 n_ind, Rectangle *Mario, float frameMax, float *marioSpeedLeft, float *marioSpeedRight, bool *isJumping, bool *isFalling, float *jumpFrameCurrent, bool *lado, Rectangle Chao, Rectangle Botao){
+void Anima(int *framesCounter, int *ind_animaMa, int *ind_animaBo, bool isFalling, bool isJumping){
+    *framesCounter+=1;
+
+    if(isJumping){
+        *ind_animaMa = 6;
+    }
+    else if(isFalling){
+        *ind_animaMa = 7;
+    } else if(IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_LEFT)){
+        if(*framesCounter >= (30/10)){
+            *framesCounter = 0;
+            *ind_animaMa+=1;
+
+            if(*ind_animaMa == 5 || *ind_animaMa >= 7) *ind_animaMa = 0;
+            if(*ind_animaMa == 2) *ind_animaMa = 3;
+        }
+    } else *ind_animaMa=0;
+}
+
+void UpdateMario(Rectangle Plts[10], Vector2 n_ind, Rectangle *Mario, float frameMax, float *marioSpeedLeft, float *marioSpeedRight, bool *isJumping, bool *isFalling, float *jumpFrameCurrent, bool *lado, Rectangle Chao, Rectangle Botao, bool *apertado, Sound SomPulo){
     *isFalling = true;
     *marioSpeedLeft = 8;
     *marioSpeedRight = 8;
+    bool PuloAnterior = *isJumping;
 
     //Testa colisão com o chão e base da plataforma
     if(CheckCollisionPointRec((Vector2){(*Mario).x+1, (*Mario).y+(*Mario).height}, Chao) || CheckCollisionPointRec((Vector2){(*Mario).x+(*Mario).width-1, (*Mario).y+(*Mario).height}, Chao)){
@@ -25,11 +45,12 @@ void UpdateMario(Rectangle Plts[10], Vector2 n_ind, Rectangle *Mario, float fram
     //Testa colisão com o botão por baixo
     if(CheckCollisionPointRec((Vector2){(*Mario).x+(*Mario).width, (*Mario).y}, Botao) || CheckCollisionPointRec((Vector2){(*Mario).x, (*Mario).y}, Botao)){
         *isJumping = false;
+        *apertado = true;
     }
 
     //Testa colisão com a parede pela esquerda. Se colidir, não pode ir pra esquerda
     for(int i = 0; i<n_ind.y; i++){
-        if(!(*lado) && CheckCollisionPointRec((Vector2){Plts[i].x+Plts[i].width, Plts[i].y+1}, *Mario) || CheckCollisionPointRec((Vector2){Plts[i].x+Plts[i].width, Plts[i].y+Plts[i].height-1}, *Mario)){
+        if(((!(*lado)) && (CheckCollisionPointRec((Vector2){Plts[i].x+Plts[i].width, Plts[i].y+1}, *Mario))) || (CheckCollisionPointRec((Vector2){Plts[i].x+Plts[i].width, Plts[i].y+Plts[i].height-1}, *Mario))){
             *marioSpeedLeft = 0;
         }
     }
@@ -63,6 +84,11 @@ void UpdateMario(Rectangle Plts[10], Vector2 n_ind, Rectangle *Mario, float fram
         if(*isFalling==false)
             *isJumping = true;
     }
+
+    if(*isJumping != PuloAnterior){
+        PlaySound(SomPulo);
+    }
+
     //Pulo do Mario
     if(*isJumping){
         *jumpFrameCurrent = *jumpFrameCurrent+1;

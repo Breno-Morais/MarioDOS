@@ -19,7 +19,7 @@ void InitSpread(Texture2D sheet){
 }
 
 
-void DrawTela(PLAYER jogador, Texture sheet, Rectangle Plts[10], Vector2 n_ind, Rectangle Botao, Font fonte, Vector3 cano_pos[9], Rectangle Mario, bool lado, int n_fase){
+void DrawTela(PLAYER jogador, Texture sheet, Rectangle Plts[10], Vector2 n_ind, Rectangle Botao, Font fonte, Vector3 cano_pos[9], Rectangle *Mario, bool lado, int n_fase, Rectangle Canos[9], int ind_animaMa, int ind_animaBo){
         int i;
 
         //BeginDrawing();
@@ -33,7 +33,7 @@ void DrawTela(PLAYER jogador, Texture sheet, Rectangle Plts[10], Vector2 n_ind, 
                     DrawTexturePro(sheet, Mario_Vida, (Rectangle){10+(Mario_Vida.width*escala)*i, 10, Mario_Vida.width*escala, Mario_Vida.height*escala}, origem, 0, WHITE);
                 }
 
-            // Desenha a pontuação e a fase
+            // Desenha a pontuaÃ§Ã£o e a fase
                 const char *pont = TextFormat("Pontos: %d", jogador.pontuacao);
                 DrawTextEx(fonte, pont, (Vector2){150, 10}, 30, 1, GREEN);
 
@@ -45,45 +45,55 @@ void DrawTela(PLAYER jogador, Texture sheet, Rectangle Plts[10], Vector2 n_ind, 
                     DrawTextureTiled(sheet, Plt_Marrom, Plts[i], origem, 0, 3.125, WHITE);
                 }
 
-            // Desenha o botão power
-                DrawTexturePro(sheet, Botao_POW1, Botao, origem, 0, WHITE);
+            // Desenha o botÃ£o power
+                DrawTexturePro(sheet, Aperta_POW[ind_animaBo], Botao, origem, 0, WHITE);
 
-            // Desenha o Chão
+            // Desenha o ChÃ£o
                 DrawTexturePro(sheet, Chao.src, Chao.pos, origem, 0, WHITE);
 
             // Desenha Mario
                 Rectangle mario_atual;
-                if(lado){
-                    mario_atual = MarioSprite1.dir;
-                } else mario_atual = MarioSprite1.esq;
 
-                DrawTexturePro(sheet, mario_atual, Mario, origem, 0, WHITE);
+                if(ind_animaMa<6){
+                    if(lado){
+                        mario_atual = M_And_Dir[ind_animaMa];
+                    } else mario_atual = M_And_Esq[ind_animaMa];
+                } else if(ind_animaMa == 6){
+                    if(lado){
+                        mario_atual = MarioSprite6.dir;
+                    } else mario_atual = MarioSprite6.esq;
+                } else {
+                    if(lado){
+                        mario_atual = MarioSprite5.dir;
+                    } else mario_atual = MarioSprite5.esq;
+                }
+
+                *Mario = (Rectangle){Mario->x, Mario->y, mario_atual.width*escala, mario_atual.height*escala};
+                DrawTexturePro(sheet, mario_atual, *Mario, origem, 0, WHITE);
+
+                //DrawRectangleLines(Mario->x, Mario->y, Mario->width, Mario->height, RED); // Desenha a colisÃ£o
 
             // Desenha os Canos
                 for(i=0; i<n_ind.x; i++){
-                    // Passa por cada cano e verifica de que lado ele está
+                    // Passa por cada cano e verifica de que lado ele estÃ¡
                     if(cano_pos[i].x >= 600){
-                        // Se o cano estiver na direita, verifica se ele é um cano de saída ou de retorno
+                        // Se o cano estiver na direita, verifica se ele Ã© um cano de saï¿½da ou de retorno
                         if(cano_pos[i].z == 0){
-                                // Aqui ele desenha o cano de saída virado para esquerda
-                                Rectangle Cano = {cano_pos[i].x-10, cano_pos[i].y-45, Cano_Curvo_esq.width*escala,  Cano_Curvo_esq.height*escala};
-                                DrawTexturePro(sheet, Cano_Curvo_esq, Cano, origem, 0, WHITE);
+                                // Aqui ele desenha o cano de saï¿½da virado para esquerda
+                                DrawTexturePro(sheet, Cano_Curvo_esq, Canos[i], origem, 0, WHITE);
                         } else {
                                 // Aqui ele desenha o cano de entrada virado pra esquerca
-                                Rectangle Cano = {cano_pos[i].x, cano_pos[i].y, Cano_Reto_esq.width*escala,  Cano_Reto_esq.height*escala};
-                                DrawTexturePro(sheet, Cano_Reto_esq, Cano, origem, 0, WHITE);
+                                DrawTexturePro(sheet, Cano_Reto_esq, Canos[i], origem, 0, WHITE);
                         }
 
                     } else
-                        // Se o cano estiver na esquerda, verifica se ele é um cano de saída ou de retorno
+                        // Se o cano estiver na esquerda, verifica se ele ï¿½ um cano de saï¿½da ou de retorno
                         if (cano_pos[i].z == 0){
-                                // Aqui ele desenha o cano de saída virado para direita
-                                Rectangle Cano = {cano_pos[i].x-196, cano_pos[i].y-45, Cano_Curvo_dir.width*escala,  Cano_Curvo_dir.height*escala};
-                                DrawTexturePro(sheet, Cano_Curvo_dir, Cano, origem, 0, WHITE);
+                                // Aqui ele desenha o cano de saï¿½da virado para direita
+                                DrawTexturePro(sheet, Cano_Curvo_dir, Canos[i], origem, 0, WHITE);
                         } else {
                                 // Aqui ele desenha o cano de entrada virado para direita
-                                Rectangle Cano = {cano_pos[i].x-118, cano_pos[i].y, Cano_Reto_dir.width*escala,  Cano_Reto_dir.height*escala};
-                                DrawTexturePro(sheet, Cano_Reto_dir, Cano, origem, 0, WHITE);
+                                DrawTexturePro(sheet, Cano_Reto_dir, Canos[i], origem, 0, WHITE);
                     }
                 }
 

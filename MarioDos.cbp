@@ -34,6 +34,9 @@
 		<Unit filename="arquivos_fonte/fase.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="arquivos_fonte/logica.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="arquivos_fonte/main.c">
 			<Option compilerVar="CC" />
 		</Unit>

@@ -29,12 +29,15 @@ void UpdateMenu(Color cores_opcoes[], Rectangle posicao_opcoes[], int *prox, Sou
 void DrawMenu(Texture textura_logo, Vector2 posicao_logo, Font fonte, const char *opcoes[], Rectangle posicao_opcoes[], Color cores_opcoes[]);
 void DrawAjuda(Font fonte);
 void DrawSobre(Font fonte);
-void DrawTela(PLAYER jogador, Texture sheet, Rectangle Plts[10], Vector2 n_ind, Rectangle Botao, Font fonte, Vector3 cano_pos[5], Rectangle Mario, bool lado, int n_fase);
+void DrawTela(PLAYER jogador, Texture sheet, Rectangle Plts[10], Vector2 n_ind, Rectangle Botao, Font fonte, Vector3 cano_pos[9], Rectangle *Mario,bool lado, int n_fase, Rectangle Canos[9], int ind_animaMa, int ind_animaBo);
 void UpdateVoltar(int *prox);
 void InitSpread(Texture2D sheet);
-void Highscores(FILE *arq, PLAYER melhores[5], bool *flag);
+void Highscores(PLAYER melhores[5], bool *flag);
 void DrawScores(PLAYER melhores[5], Font fonte);
-Vector2 CarregaFase(int n_fase, Rectangle *Mario, Rectangle *Botao, Vector3 cano_pos[5], Rectangle Plts[10]);
-void UpdateMario(Rectangle Plts[10], Vector2 n_ind, Rectangle *Mario, float frameMax, float *marioSpeedLeft, float *marioSpeedRight, bool *isJumping, bool *isFalling, float *jumpFrameCurrent, bool *lado, Rectangle Chao, Rectangle Botao);
+Vector2 CarregaFase(int n_fase, Rectangle *Mario, Rectangle *Botao, Vector3 cano_pos[9], Rectangle Plts[10], Rectangle Canos[9]);
+void UpdateMario(Rectangle Plts[10], Vector2 n_ind, Rectangle *Mario, float frameMax, float *marioSpeedLeft, float *marioSpeedRight, bool *isJumping, bool *isFalling, float *jumpFrameCurrent, bool *lado, Rectangle Chao, Rectangle Botao, bool *apertado, Sound SomPulo);
+void Anima(int *framesCounter, int *ind_animaMa, int *ind_animaBo, bool isFalling, bool isJumping);
+void SalvarJogo(int n_fase, Rectangle Mario, PLAYER jogador);
+Vector2 CarregaSave(Rectangle *Mario, Rectangle *Botao, Vector3 cano_pos[9], Rectangle Plts[10], Rectangle Canos[9], PLAYER *jogador);
 
 #endif // MENU_H

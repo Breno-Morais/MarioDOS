@@ -6,23 +6,23 @@
 Vector2 origem = {0,0};
 int escala = 4;
 
-// Definição de Estruturas
+// DefiniÃ§Ã£o de Estruturas
 //--------------------------------------------------------------------------------------
-// Sprites do Mario e da Tartaruga, usam o retângulo usado na lógica do jogo
+// Sprites do Mario e da Tartaruga, usam o retÃ¢ngulo usado na lÃ³gica do jogo
 typedef struct stc_a_sprite{
-    Rectangle esq; // O retângulo representa a posição do sprite no spritesheet
-    Rectangle dir; // O retângulo representa a posição do sprite no spritesheet
+    Rectangle esq; // O retÃ¢ngulo representa a posiÃ§Ã£o do sprite no spritesheet
+    Rectangle dir; // O retÃ¢ngulo representa a posiÃ§Ã£o do sprite no spritesheet
 } A_SPRITE;
 
-// Sprites das contantes do jogo, como o chão e as vidas.
+// Sprites das contantes do jogo, como o chÃ£o e as vidas.
 typedef struct stc_c_sprite{
-    Rectangle src; // O retângulo que representa a posição do sprite no spritesheet
-    Rectangle pos; // A posição do sprite na tela
+    Rectangle src; // O retÃ¢ngulo que representa a posiÃ§Ã£o do sprite no spritesheet
+    Rectangle pos; // A posiÃ§Ã£o do sprite na tela
 } C_SPRITE;
 
 //--------------------------------------------------------------------------------------
 
-// Definição dos sprites do Mario
+// DefiniÃ§Ã£o dos sprites do Mario
 A_SPRITE MarioSprite1 = {{3, 604, 16, 20}, {3, 634, 16, 20}};
 A_SPRITE MarioSprite2 = {{22, 604, 12, 20}, {22, 634, 12, 20}};
 A_SPRITE MarioSprite3 = {{36, 604, 14, 20}, {36, 634, 14, 20}};
@@ -35,21 +35,27 @@ A_SPRITE MarioSprite8 = {{129, 604, 15, 20}, {129, 634, 15, 20}};
 // Simbolo de vida
 Rectangle Mario_Vida = {6, 591, 10, 8};
 
+// Definiï¿½ï¿½o Lista de Animaï¿½ï¿½o
+Rectangle M_And_Esq[6] = {{3, 604, 16, 20}, {22, 604, 12, 20}, {36, 604, 14, 20}, {53, 604, 14, 20}, {36, 604, 14, 20}};
+Rectangle M_And_Dir[6] = {{3, 634, 16, 20}, {22, 634, 12, 20}, {36, 634, 14, 20}, {53, 634, 14, 20}, {36, 634, 14, 20}};
+
 //--------------------------------------------------------------------------------------
 
-// Definição dos Sprites do Nivel
+// DefiniÃ§Ã£o dos Sprites do Nivel
 C_SPRITE Chao = {{4, 292, 260, 20}, {-5, 616+(50), 1300, 100}};
 
-// Definição dos Sprites com posições variáveis
+// DefiniÃ§Ã£o dos Sprites com posiÃ§Ãµes variÃ¡veis
 Rectangle Cano_Reto_dir = {11, 215, 32, 18};
 Rectangle Cano_Reto_esq = {11, 258, 32, 18};
 Rectangle Cano_Curvo_esq = {51, 203, 49, 30};
 Rectangle Cano_Curvo_dir = {50, 246, 49, 30};
 
-// Definição dos Sprites do Botão Pow
+// DefiniÃ§Ã£o dos Sprites do BotÃ£o Pow
 Rectangle Botao_POW1 = {133, 243, 16, 16};
 Rectangle Botao_POW2 = {153, 246, 16, 13};
 Rectangle Botao_POW3 = {173, 250, 16, 9};
+
+Rectangle Aperta_POW[3] = {{133, 243, 16, 16}, {153, 246, 16, 13}, {173, 250, 16, 9}};
 
 // Tipos de Plataformas
 Rectangle Plt_Azul = {112, 274, 7, 8};
@@ -63,7 +69,7 @@ Rectangle Moeda_3 = {169, 138, 8, 11};
 // Tela de Game Over
 Rectangle GAME_OVER = {67, 150, 73, 9};
 
-// Definição Inimigos
+// DefiniÃ§Ã£o Inimigos
 //--------------------------------------------------------------------------------------
 // Sprites da Tartaruga andando
 A_SPRITE TartA_1 = {{7, 332, 16, 16}, {7, 352, 16, 16}};

@@ -41,36 +41,40 @@
 1637010555 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\fase.c
 	"../headers/menu.h"
 
-1636584341 source:c:\users\user\documents\github\mariodos\arquivos_fonte\fase.c
+1637265448 source:c:\users\user\documents\github\mariodos\arquivos_fonte\fase.c
 	"../headers/menu.h"
+	<stdlib.h>
 
-1636664477 c:\users\user\documents\github\mariodos\headers\menu.h
+1637278782 c:\users\user\documents\github\mariodos\headers\menu.h
 	"raylib.h"
 	<unistd.h>
 	<stdio.h>
+	<time.h>
 
 1635458372 source:c:\users\user\documents\github\mariodos\arquivos_fonte\menu.c
 	"../headers/menu.h"
 	"../headers/menu.h"
 
-1636498200 source:c:\users\user\documents\github\mariodos\arquivos_fonte\outros.c
+1637083223 source:c:\users\user\documents\github\mariodos\arquivos_fonte\outros.c
 	"../headers/menu.h"
+	<stdlib.h>
 
-1636584341 source:c:\users\user\documents\github\mariodos\arquivos_fonte\spreadsheet.c
+1637201054 source:c:\users\user\documents\github\mariodos\arquivos_fonte\spreadsheet.c
 	"../headers/sprites.h"
 	"../headers/menu.h"
 
-1636584341 c:\users\user\documents\github\mariodos\headers\sprites.h
+1637083223 c:\users\user\documents\github\mariodos\headers\sprites.h
 	"raylib.h"
 
-1636664477 source:c:\users\user\documents\github\mariodos\arquivos_fonte\main.c
+1637279090 source:c:\users\user\documents\github\mariodos\arquivos_fonte\main.c
 	"../headers/menu.h"
 
 1636496841 shed changes
 	"../headers/menu.h"
 
-1636664023 source:c:\users\user\documents\github\mariodos\arquivos_fonte\logica.c
+1637279090 source:c:\users\user\documents\github\mariodos\arquivos_fonte\logica.c
 	"../headers/menu.h"
+	<time.h>
 
 1636856596 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\logica.c
 	"../headers/menu.h"

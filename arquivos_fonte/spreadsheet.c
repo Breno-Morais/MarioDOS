@@ -19,7 +19,7 @@ void InitSpread(Texture2D sheet){
 }
 
 
-void DrawTela(PLAYER jogador, Texture sheet, Rectangle Plts[10], Vector2 n_ind, Rectangle Botao, Font fonte, Vector3 cano_pos[9], Rectangle *Mario, bool lado, int n_fase, Rectangle Canos[9], int ind_animaMa, int ind_animaBo){
+void DrawTela(TURTLE turtle[10],int n_turtle, PLAYER jogador, Texture sheet, Rectangle Plts[10], Vector2 n_ind, Rectangle Botao, Font fonte, Vector3 cano_pos[9], Rectangle *Mario, bool lado, int n_fase, Rectangle Canos[9], int ind_animaMa, int ind_animaBo){
         int i;
 
         //BeginDrawing();
@@ -70,6 +70,12 @@ void DrawTela(PLAYER jogador, Texture sheet, Rectangle Plts[10], Vector2 n_ind, 
 
                 *Mario = (Rectangle){Mario->x, Mario->y, mario_atual.width*escala, mario_atual.height*escala};
                 DrawTexturePro(sheet, mario_atual, *Mario, origem, 0, WHITE);
+
+                //Desenha as tartarugas
+                for(int i=0; i<n_turtle; i++){
+                    if(turtle[i].isThere==true)
+                        DrawRectangleRec(turtle[i].turtleRec, WHITE);
+                }
 
                 //DrawRectangleLines(Mario->x, Mario->y, Mario->width, Mario->height, RED); // Desenha a colisão
 

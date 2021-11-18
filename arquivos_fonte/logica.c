@@ -1,4 +1,5 @@
 #include "../headers/menu.h"
+#include <time.h>
 
 void Anima(int *framesCounter, int *ind_animaMa, int *ind_animaBo, bool isFalling, bool isJumping){
     *framesCounter+=1;
@@ -19,7 +20,7 @@ void Anima(int *framesCounter, int *ind_animaMa, int *ind_animaBo, bool isFallin
     } else *ind_animaMa=0;
 }
 
-void UpdateMario(Rectangle Plts[10], Vector2 n_ind, Rectangle *Mario, float frameMax, float *marioSpeedLeft, float *marioSpeedRight, bool *isJumping, bool *isFalling, float *jumpFrameCurrent, bool *lado, Rectangle Chao, Rectangle Botao, bool *apertado, Sound SomPulo){
+void UpdateMario(Vector3 cano_pos[9], Rectangle Canos[9], Rectangle Plts[10], Vector2 n_ind, Rectangle *Mario, float frameMax, float *marioSpeedLeft, float *marioSpeedRight, bool *isJumping, bool *isFalling, float *jumpFrameCurrent, bool *lado, Rectangle Chao, Rectangle Botao, bool *apertado, Sound SomPulo){
     *isFalling = true;
     *marioSpeedLeft = 8;
     *marioSpeedRight = 8;
@@ -58,6 +59,32 @@ void UpdateMario(Rectangle Plts[10], Vector2 n_ind, Rectangle *Mario, float fram
     if(!(*lado) && CheckCollisionPointRec((Vector2){(*Mario).x, (*Mario).y}, Botao) || CheckCollisionPointRec((Vector2){(*Mario).x, (*Mario).y+(*Mario).height}, Botao) || CheckCollisionPointRec((Vector2){(*Mario).x, (*Mario).y+((*Mario).height/2)}, Botao)){
         *marioSpeedLeft = 0;
     }
+    //Testa colisão com os canos pela esquerda
+    for(int i=0; i<n_ind.x; i++){
+        if(cano_pos[i].z==0){
+            if(!(*lado) && CheckCollisionRecs((Rectangle){Canos[i].x,0,Canos[i].width,Canos[i].y+Canos[i].height}, *Mario)){
+                *marioSpeedLeft = 0;
+            }
+        }
+        else{
+            if(!(*lado) && CheckCollisionRecs(Canos[i], *Mario)){
+                *marioSpeedLeft = 0;
+            }
+        }
+    }
+    //Testa colisão com os canos pela direita
+    for(int i=0; i<n_ind.x; i++){
+        if(cano_pos[i].z==0){
+            if((*lado) && CheckCollisionRecs((Rectangle){Canos[i].x,0,Canos[i].width,Canos[i].y+Canos[i].height}, *Mario)){
+                *marioSpeedRight = 0;
+            }
+        }
+        else{
+            if((*lado) && CheckCollisionRecs(Canos[i], *Mario)){
+                *marioSpeedRight = 0;
+            }
+        }
+    }
     //Testa colisão com a parede pela direita. Se colidir, não pode ir pra direita.
     for(int i = 0; i<n_ind.y; i++){
         if(*lado && CheckCollisionPointRec((Vector2){Plts[i].x, Plts[i].y+1}, *Mario) || CheckCollisionPointRec((Vector2){Plts[i].x, Plts[i].y+Plts[i].height-1}, *Mario)){
@@ -79,8 +106,8 @@ void UpdateMario(Rectangle Plts[10], Vector2 n_ind, Rectangle *Mario, float fram
         (*Mario).x -= *marioSpeedLeft;
         *lado = false;
     }
-    //Se aperta a seta de cima e não tiver caindo, pula
-    if(IsKeyPressed(KEY_UP)){
+    //Se aperta D e não tiver caindo, pula
+    if(IsKeyPressed(KEY_D)){
         if(*isFalling==false)
             *isJumping = true;
     }
@@ -113,4 +140,127 @@ void UpdateMario(Rectangle Plts[10], Vector2 n_ind, Rectangle *Mario, float fram
     if((*Mario).x+((*Mario).width/2)<0){
         (*Mario).x = LARGURA_TELA-((*Mario).width/2);
     }
+}
+
+void InitTurtle(int *turtle_atual, int n_turtle, TURTLE turtle[10], bool *flag_cano, int *cano_atual, Vector2 n_ind, Vector3 cano_pos[9], Rectangle Canos[9]){
+    if(*turtle_atual<n_turtle)
+        *turtle_atual = 1;
+    for(int i=0; i<n_turtle; i++){
+        turtle[i].turtleRec.width = 48;
+        turtle[i].turtleRec.height = 48;
+        while(!(*flag_cano)){
+            *cano_atual = 0 + (rand() % ((int)n_ind.x - 0 + 1));
+            if(cano_pos[(int)*cano_atual].z==0){
+                if(Canos[(int)*cano_atual].x<LARGURA_TELA/2){
+                    turtle[i].turtleRec.x = Canos[0].x+Canos[0].width;
+                    turtle[i].turtleRec.y = Canos[0].y+15;
+                    turtle[i].sentido = 1;
+                }
+                else{
+                    turtle[i].turtleRec.x = Canos[1].x-turtle[i].turtleRec.width;
+                    turtle[i].turtleRec.y = Canos[1].y+15;
+                    turtle[i].sentido = -1;
+                }
+                *flag_cano = true;
+            }
+        }
+        *flag_cano = false;
+
+        turtle[i].estado = 0;
+        turtle[i].isThere = false;
+        turtle[i].fall = false;
+    }
+}
+
+void UpdateTurtle(int *turtle_atual, int n_turtle, int tempo_espera, int *tempo_atual, TURTLE turtle[10], Vector2 n_ind, Rectangle Canos[9], Vector3 cano_pos[9],Rectangle Plts[10], Rectangle Mario, Rectangle Chao){
+    if(*turtle_atual<n_turtle){
+        if((*tempo_atual)<30*tempo_espera){
+            *tempo_atual = (*tempo_atual)+1;
+        }
+        else{
+            *turtle_atual = (*turtle_atual)+1;
+            *tempo_atual = 0;
+        }
+    }
+
+    for(int i=0; i<*turtle_atual; i++){
+            DrawText(TextFormat("%d", (int)n_ind.x), 600, 100, 30, RED);
+            //atualiza o turtleRec.x
+            turtle[i].turtleRec.x = turtle[i].turtleRec.x + (turtle[i].speed*turtle[i].sentido);
+            //logica dos canos de retorno
+            for(int j=0;j<(int)n_ind.x;j++){
+                if(CheckCollisionRecs(Canos[j], turtle[i].turtleRec) && cano_pos[j].z!=0){
+                    if(cano_pos[j].x<600){
+                        turtle[i].turtleRec.x = Canos[0].x+Canos[0].width;
+                        turtle[i].turtleRec.y = Canos[0].y+15;
+                    }
+                    else{
+                        turtle[i].turtleRec.x = Canos[1].x-turtle[i].turtleRec.width;
+                        turtle[i].turtleRec.y = Canos[1].y+15;
+                    }
+                    if(turtle[i].sentido==1)
+                        turtle[i].sentido=-1;
+                    else if(turtle[i].sentido==-1)
+                        turtle[i].sentido=1;
+                }
+            }
+            //rebate nos inimigos e muda de direção
+            for(int j=0;j<*turtle_atual;j++){
+                if(CheckCollisionRecs(turtle[i].turtleRec, turtle[j].turtleRec) && i!=j){
+                    if(turtle[i].sentido==1){
+                        turtle[i].turtleRec.x = turtle[i].turtleRec.x-4;
+                        turtle[i].sentido=-1;
+                        turtle[j].sentido=1;
+                    }
+                    else if(turtle[i].sentido==-1){
+                        turtle[i].turtleRec.x = turtle[i].turtleRec.x+4;
+                        turtle[i].sentido=1;
+                        turtle[j].sentido=-1;
+                    }
+                }
+            }
+            //passando da direita pra esquerda
+            if(turtle[i].turtleRec.x+(turtle[i].turtleRec.width/2)>=LARGURA_TELA){
+                turtle[i].turtleRec.x = 0-(turtle[i].turtleRec.width/2);
+            }//passando da esquerda pra direita
+            else if(turtle[i].turtleRec.x+(turtle[i].turtleRec.width/2)<0){
+                turtle[i].turtleRec.x = LARGURA_TELA-(turtle[i].turtleRec.width/2);
+            }
+            //atualiza o turtleRec.y
+            if(turtle[i].fall==true){
+                turtle[i].turtleRec.y = turtle[i].turtleRec.y+4;
+            }
+            turtle[i].estado = 0;
+            turtle[i].isThere = true;
+            //atualiza o turtle.fall
+            turtle[i].fall = true;
+            for(int j=0; j<n_ind.y;j++){
+                if(CheckCollisionRecs(turtle[i].turtleRec, Plts[j])){
+                    turtle[i].fall = false;
+                    //atualiza o turtle.estado
+                    if(CheckCollisionPointRec((Vector2){Mario.x+(Mario.width/2), Mario.y-20}, turtle[i].turtleRec)){
+                        turtle[i].estado = turtle[i].estado+1;
+                    }
+                }
+            }
+            if(CheckCollisionRecs(turtle[i].turtleRec, Chao)){
+                turtle[i].fall = false;
+            }
+
+            if(turtle[i].estado==0){ //ESTADO INVULNERAVEL
+                turtle[i].speed = 2;
+                if(CheckCollisionRecs(Mario, turtle[i].turtleRec)){
+                    //MARIO PERDE VIDA
+                }
+            }
+            else if(turtle[i].estado==1){//ESTADO VULNERAVEL
+                if(CheckCollisionRecs(Mario, turtle[i].turtleRec)){
+                    turtle[i].estado++;
+                    turtle[i].speed = 0;
+                }
+            }
+            else if(turtle[i].estado==2){//ESTADO MORTO
+                turtle[i].isThere = false;
+            }
+        }
 }

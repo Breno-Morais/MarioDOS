@@ -4,6 +4,7 @@
 #include "raylib.h"
 #include <unistd.h>
 #include <stdio.h>
+#include <time.h>
 #define ALTURA_TELA 700
 #define LARGURA_TELA 1200
 #define NUM_OPCOES 7
@@ -24,18 +25,35 @@ typedef struct stc_player{
     int vidas;
 } PLAYER;
 
+//Definição Tartaruga
+typedef struct stc_turtle{
+        Rectangle turtleRec;
+        int sentido, estado, level; //estado:1-inativo; 2-invulneravel; 3-vulneravel; 4-morto.
+        float speed;
+        bool fall, isThere;
+}TURTLE;
+
+//Definição Carangueijo
+typedef struct stc_crab{
+    int sentido, estado, level;
+    float speed;
+    bool fall;
+}CRAB;
+
 // Definição de Funções
 void UpdateMenu(Color cores_opcoes[], Rectangle posicao_opcoes[], int *prox, Sound SomOpcaoMenu, Sound SomSelecinaOpcao);
 void DrawMenu(Texture textura_logo, Vector2 posicao_logo, Font fonte, const char *opcoes[], Rectangle posicao_opcoes[], Color cores_opcoes[]);
 void DrawAjuda(Font fonte);
 void DrawSobre(Font fonte);
-void DrawTela(PLAYER jogador, Texture sheet, Rectangle Plts[10], Vector2 n_ind, Rectangle Botao, Font fonte, Vector3 cano_pos[9], Rectangle *Mario,bool lado, int n_fase, Rectangle Canos[9], int ind_animaMa, int ind_animaBo);
+void DrawTela(TURTLE turtle[10], int n_turtle, PLAYER jogador, Texture sheet, Rectangle Plts[10], Vector2 n_ind, Rectangle Botao, Font fonte, Vector3 cano_pos[9], Rectangle *Mario,bool lado, int n_fase, Rectangle Canos[9], int ind_animaMa, int ind_animaBo);
 void UpdateVoltar(int *prox);
 void InitSpread(Texture2D sheet);
 void Highscores(PLAYER melhores[5], bool *flag);
 void DrawScores(PLAYER melhores[5], Font fonte);
-Vector2 CarregaFase(int n_fase, Rectangle *Mario, Rectangle *Botao, Vector3 cano_pos[9], Rectangle Plts[10], Rectangle Canos[9]);
-void UpdateMario(Rectangle Plts[10], Vector2 n_ind, Rectangle *Mario, float frameMax, float *marioSpeedLeft, float *marioSpeedRight, bool *isJumping, bool *isFalling, float *jumpFrameCurrent, bool *lado, Rectangle Chao, Rectangle Botao, bool *apertado, Sound SomPulo);
+Vector2 CarregaFase(int *n_turtle,int *n_crab, int *tempo_espera, int n_fase, Rectangle *Mario, Rectangle *Botao, Vector3 cano_pos[9], Rectangle Plts[10], Rectangle Canos[9]);
+void UpdateMario(Vector3 cano_pos[9], Rectangle Canos[9], Rectangle Plts[10], Vector2 n_ind, Rectangle *Mario, float frameMax, float *marioSpeedLeft, float *marioSpeedRight, bool *isJumping, bool *isFalling, float *jumpFrameCurrent, bool *lado, Rectangle Chao, Rectangle Botao, bool *apertado, Sound SomPulo);
+void InitTurtle(int *turtle_atual, int n_turtle, TURTLE turtle[10], bool *flag_cano, int *cano_atual, Vector2 n_ind, Vector3 cano_pos[9], Rectangle Canos[9]);
+void UpdateTurtle(int *turtle_atual, int n_turtle, int tempo_espera, int *tempo_atual, TURTLE turtle[10], Vector2 n_ind, Rectangle Canos[9], Vector3 cano_pos[9],Rectangle Plts[10], Rectangle Mario, Rectangle Chao);
 void Anima(int *framesCounter, int *ind_animaMa, int *ind_animaBo, bool isFalling, bool isJumping);
 void SalvarJogo(int n_fase, Rectangle Mario, PLAYER jogador);
 Vector2 CarregaSave(Rectangle *Mario, Rectangle *Botao, Vector3 cano_pos[9], Rectangle Plts[10], Rectangle Canos[9], PLAYER *jogador);

@@ -1,5 +1,5 @@
 #include "../headers/menu.h"
-#include <stdlib.h>
+#include <math.h>
 
 void DrawAjuda(Font fonte){
         char *texto_base="Texto base apenas para eu saber como ficara formatado";
@@ -140,12 +140,12 @@ void SalvarJogo(int n_fase, Rectangle Mario, PLAYER jogador){
             // Inicialização das variáveis
             //----------------------------------------------------------------------------------
             FILE *fase, *save;
-            char fase_atual[16];
+            char fase_atual[19];
             char linha_atual[120];
             int coluna, n_linha, x, y;
 
             // Faz a formatação do nome do arquivo da fase atual
-            sprintf(fase_atual, "fases/fase%d.txt", n_fase);
+            sprintf(fase_atual, "niveis/nivel%d.txt", n_fase);
 
             //----------------------------------------------------------------------------------
                 // Abre os arquivos da fase e do save
@@ -344,3 +344,86 @@ Vector2 CarregaSave(Rectangle *Mario, Rectangle *Botao, Vector3 cano_pos[9], Rec
 
     return (Vector2){n_cano, n_plt};
 }
+
+bool Entrada(PLAYER *jogador, char *nome, int *letterCount){
+    bool flag_retorno = false;
+
+            // Pega o caractere pressionado da fila
+            int key = GetCharPressed();
+
+            // Verifica se tem mais caracteres pressionados no mesmo frame
+            while (key > 0)
+            {
+                // NOTE: Apenas deixar os caracteres entre 32 e 125
+                if ((key >= 32) && (key <= 125) && (*letterCount < 15))
+                {
+                    nome[*letterCount] = (char)key;
+                    nome[*letterCount+1] = '\0'; // Adiciona a terminação da string no final.
+                    *letterCount+=1;
+                }
+
+                key = GetCharPressed();  // Verifica próximo caractere na fila
+            }
+
+            if (IsKeyPressed(KEY_BACKSPACE))
+            {
+                *letterCount-=1;
+                if (*letterCount < 0) *letterCount = 0;
+                nome[*letterCount] = '\0';
+            }
+
+            if (IsKeyPressed(KEY_ENTER) && *letterCount != 15)
+            {
+                flag_retorno = true;
+                strcpy(jogador->nome, nome);
+            }
+
+
+        return flag_retorno;
+}
+
+void UpdateMenuCarregar(Rectangle opcoes[6], bool *flag, int *n_arq, Color opcoes_cores[6], int *n_fase, int *prox, Sound SomSelecinaOpcao){
+    int i;
+    char nivel[19];
+
+    if(!*flag){
+        for(i=1;i<=6;i++){
+            sprintf(nivel, "niveis/nivel%d.txt", i);
+            if(access(nivel, F_OK) == 0){
+                *n_arq+=1;
+            }
+        }
+
+        for(i=0;i<*n_arq;i++){
+            if(i<= 1){
+                opcoes[i] = (Rectangle){(550 - (100 * pow(-1, i))), 200, 100, 50};
+            } else if(i<=3){
+                opcoes[i] = (Rectangle){(550 - (100 * pow(-1, i))), 300, 100, 50};
+            } else if(i<=5){
+                opcoes[i] = (Rectangle){(550 - (100 * pow(-1, i))), 400, 100, 50};
+            }
+        }
+
+        *flag = true;
+    }
+
+    Vector2 mouse = GetMousePosition();
+
+    for(i=0;i<*n_arq;i++){
+        if(CheckCollisionPointRec(mouse, opcoes[i])){
+            opcoes_cores[i] = GOLD;
+
+            // Se o mouse clicar na opção
+            if(IsMouseButtonDown(0)){
+                opcoes_cores[i] = LIGHTGRAY;
+                // Devolva qual foi a opção escolhida
+                *n_fase = i+1;
+                *prox = N_NOVO;
+                PlaySound(SomSelecinaOpcao);
+            }
+
+        } else opcoes_cores[i] = BLACK;
+    }
+
+}
+

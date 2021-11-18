@@ -2,13 +2,13 @@
 
 Vector2 CarregaFase(int n_fase, Rectangle *Mario, Rectangle *Botao, Vector3 cano_pos[9], Rectangle Plts[10], Rectangle Canos[9]){
     FILE *fase;
-    char fase_atual[16];
+    char fase_atual[19];
     char linha_atual[120];
     int coluna, n_linha, x, y, i, n_cano=0, n_plt=0;
     bool flag_stream=false;
 
     // Faz a formatação do nome do arquivo da fase atual
-    sprintf(fase_atual, "fases/fase%d.txt", n_fase);
+    sprintf(fase_atual, "niveis/nivel%d.txt", n_fase);
 
     if(!(fase = fopen(fase_atual,"r"))) // abre para leitura
         // Imprime se ocorreu algum erro

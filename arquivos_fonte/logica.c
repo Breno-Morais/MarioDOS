@@ -1,25 +1,39 @@
 #include "../headers/menu.h"
 
-void Anima(int *framesCounter, int *ind_animaMa, int *ind_animaBo, bool isFalling, bool isJumping){
-    *framesCounter+=1;
+void Anima(Vector2 *var_animaMa, Vector2 *var_animaBo, bool isFalling, bool isJumping, bool *apertado){
+    var_animaMa->y+=1;
+    var_animaBo->y+=1;
 
     if(isJumping){
-        *ind_animaMa = 6;
+        var_animaMa->x = 6;
     }
     else if(isFalling){
-        *ind_animaMa = 7;
+        var_animaMa->x = 7;
     } else if(IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_LEFT)){
-        if(*framesCounter >= (30/10)){
-            *framesCounter = 0;
-            *ind_animaMa+=1;
+        if(var_animaMa->y >= (30/10)){
+            var_animaMa->y = 0;
+            var_animaMa->x+=1;
 
-            if(*ind_animaMa == 5 || *ind_animaMa >= 7) *ind_animaMa = 0;
-            if(*ind_animaMa == 2) *ind_animaMa = 3;
+            if(var_animaMa->x == 5 || var_animaMa->x >= 7) var_animaMa->x = 0;
+            if(var_animaMa->x == 2) var_animaMa->x = 3;
         }
-    } else *ind_animaMa=0;
+    } else var_animaMa->x=0;
+
+    if(*apertado){
+        if(var_animaBo->y >= 2){
+            var_animaBo->y = 0;
+            var_animaBo->x += 1;
+
+            if(var_animaBo->x >= 4){
+                    var_animaBo->x = 0;
+                    *apertado = false;
+            }
+        }
+    }
 }
 
-void UpdateMario(Rectangle Plts[10], Vector2 n_ind, Rectangle *Mario, float frameMax, float *marioSpeedLeft, float *marioSpeedRight, bool *isJumping, bool *isFalling, float *jumpFrameCurrent, bool *lado, Rectangle Chao, Rectangle Botao, bool *apertado, Sound SomPulo){
+void UpdateMario(Rectangle Plts[10], Vector2 n_ind, Rectangle *Mario, float frameMax, float *marioSpeedLeft, float *marioSpeedRight, bool *isJumping, bool *isFalling, float *jumpFrameCurrent, bool *lado, Rectangle Botao, bool *apertado, Sound SomPulo){
+    Rectangle Chao = {0, 666, 1300, 100};
     *isFalling = true;
     *marioSpeedLeft = 8;
     *marioSpeedRight = 8;
@@ -43,7 +57,7 @@ void UpdateMario(Rectangle Plts[10], Vector2 n_ind, Rectangle *Mario, float fram
         }
     }
     //Testa colisão com o botão por baixo
-    if(CheckCollisionPointRec((Vector2){(*Mario).x+(*Mario).width, (*Mario).y}, Botao) || CheckCollisionPointRec((Vector2){(*Mario).x, (*Mario).y}, Botao)){
+    if(CheckCollisionPointRec((Vector2){(*Mario).x+(*Mario).width-5, (*Mario).y}, Botao) || CheckCollisionPointRec((Vector2){(*Mario).x+5, (*Mario).y}, Botao)){
         *isJumping = false;
         *apertado = true;
     }

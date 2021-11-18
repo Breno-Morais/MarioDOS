@@ -77,30 +77,55 @@ int main(void)
     bool lado = true;
 
     //-------------------------------------------------------------------------------------
-    PLAYER Jog_Princ = {"Breno", 5000, 3};
+    PLAYER Jog_Princ = {"", 0, 3};
 
     //-----------------------------------------------------------------------------------
     // Variáveis dos Arquivos
     PLAYER melhores[5];
     bool flag_arq = false; // Essa flag é usada para que a abertura do arquivo .bin seja feita apenas uma vez
 
+    //-----------------------------------------------------------------------------------
     // Variáveis do Nível
     bool flag_nivel = false; // Essa flag é usada para que o arquivo .txt seja feita apenas uma vez
-    bool apertado = false; // Essa variável é usada para saber se o botão POW foi apertado
+    bool flag_som = false;
     Rectangle Botao;
     Vector3 cano_pos[9];
     Rectangle Canos[9];
     Vector2 n_ind; // E um vector que contém a quantidade de canos e plataformas na fase, nessa ordem
     Rectangle Plts[10];
     int n_fase = 1;
-    Rectangle Chao = {0, 666, 1300, 100};
-    int ind_animaMa = 0;
-    int ind_animaBo = 0;
-    int framesCounter = 0;
 
+        // Escolha da Plataforma
+    srand(time(NULL));
+    int n_plat = rand()%2;
+
+    //-----------------------------------------------------------------------------------
+    // Variáveis da Animação
+    Vector2 var_animaMa = {0,0};
+    Vector2 var_animaBo = {0,0};
+    bool apertado = false; // Essa variável é usada para saber se o botão POW foi apertado
+    bool apert_anterior = false;
+    int n_apertos = 0; // O número de vezes que o Botao POW foi apertado
+
+    //-----------------------------------------------------------------------------------
+    // Variáveis da Tela de Entrada
+    bool flag_entrada = false;
+    char nome[16] = "\0";
+    int letterCount = 0;
+
+    //-----------------------------------------------------------------------------------
     // Inicializa sons da fase
     Sound SomInicia = LoadSound("som/inicio.wav");
     Sound SomPulo = LoadSound("som/pulo.wav");
+    Sound SomDano= LoadSound("som/dano.wav");
+    Sound SomMoeda = LoadSound("som/smb_coin.wav");
+
+    //-----------------------------------------------------------------------------------
+    // Variáveis Menu Carregar Mapa
+    Rectangle opcoes_Mapas[6];
+    bool flag_n_txts = false;
+    int n_arq = 0;
+    Color opcoes_cores[6] = {BLACK, BLACK, BLACK, BLACK, BLACK, BLACK};
 
     //---------------------------------------------------------------------------------------
     // Loop principal do jogo
@@ -111,26 +136,50 @@ int main(void)
         //----------------------------------------------------------------------------------
         if(prox_tela == N_MENU) UpdateMenu(cores_opcoes, posicao_opcoes, &prox_tela, SomOpcaoMenu, SomSelecinaOpcao);
         switch(prox_tela){
-            /*case N_MENU: UpdateMenu(cores_opcoes, posicao_opcoes, &prox_tela, SomOpcaoMenu, SomSelecinaOpcao);
-                            break;*/
-            case N_NOVO: if(!flag_nivel){
+            case N_NOVO:
+                // Verifica se a fase já foi carregada
+                if(!flag_nivel){
                     n_ind = CarregaFase(n_fase, &Mario, &Botao, cano_pos, Plts, Canos);
-                    PlaySound(SomInicia);
                     flag_nivel = true;
                 }
+
+                // Verifica se o nome já foi inserido
+                if(!flag_entrada){
+                    flag_entrada = Entrada(&Jog_Princ, nome, &letterCount);
+                    break;
+                } else if(!flag_som){
+                    PlaySound(SomInicia);
+                    flag_som = true;
+                }
     //                        break;
-            case N_CONTINUAR: if(!flag_nivel){
+            case N_CONTINUAR:
+                // Verifica se o save já foi carrefado
+                if(!flag_nivel){
                     n_ind = CarregaSave(&Mario, &Botao, cano_pos, Plts, Canos, &Jog_Princ);
                     PlaySound(SomInicia);
                     flag_nivel = true;
                 }
-                UpdateMario(Plts, n_ind, &Mario, frameMax, &marioSpeedLeft, &marioSpeedRight, &isJumping, &isFalling, &jumpFrameCurrent, &lado, Chao, Botao, &apertado, SomPulo);
-                Anima(&framesCounter, &ind_animaMa, &ind_animaBo, isFalling, isJumping);
-                UpdateVoltar(&prox_tela);
+
+                // Atualiza o Mario e suas colisões
+                    apert_anterior = apertado;
+                UpdateMario(Plts, n_ind, &Mario, frameMax, &marioSpeedLeft, &marioSpeedRight, &isJumping, &isFalling, &jumpFrameCurrent, &lado, Botao, &apertado, SomPulo);
+
+                // Atualizaos sprites da animação
+                Anima(&var_animaMa, &var_animaBo, isFalling, isJumping, &apertado);
+                    // Verifica se a animação do botão acabou
+                    if(!apert_anterior && apertado){
+                        PlaySound(SomDano);
+                        PlaySound(SomMoeda);
+                        n_apertos++;
+                    }
+
+                // Salva o jogo se a tecla A for apertada
                 SalvarJogo(n_fase, Mario, Jog_Princ);
                             break;
-            case N_CARREGAR_MAPA:
-    //                        break;
+
+            case N_CARREGAR_MAPA: UpdateMenuCarregar(opcoes_Mapas, &flag_n_txts, &n_arq, opcoes_cores, &n_fase, &prox_tela, SomSelecinaOpcao);
+                            break;
+
             case N_RANKING: Highscores(melhores, &flag_arq);
             case N_AJUDA:
             case N_SOBRE: UpdateVoltar(&prox_tela);
@@ -144,18 +193,29 @@ int main(void)
         switch(prox_tela){
             case N_MENU: DrawMenu(textura_logo, posicao_logo, fonte_mario, opcoes, posicao_opcoes, cores_opcoes);
                             break;
+
             case N_NOVO:
+                if(!flag_entrada){
+                        DrawEntrada(nome, letterCount);
+                        break;
+                }
             //            break;
-            case N_CONTINUAR: DrawTela(Jog_Princ, sheet, Plts, n_ind, Botao, fonte_mario, cano_pos, &Mario, lado, n_fase, Canos, ind_animaMa, ind_animaBo);
+
+            case N_CONTINUAR: DrawTela(Jog_Princ, sheet, Plts, n_ind, Botao, fonte_mario, cano_pos, &Mario, lado, n_fase, Canos, var_animaMa.x, var_animaBo.x, n_plat);
                             break;
-            case N_CARREGAR_MAPA:
-            //                break;
+
+            case N_CARREGAR_MAPA: DrawCarregar(opcoes_Mapas, n_arq, opcoes_cores);
+                            break;
+
             case N_RANKING: DrawScores(melhores, fonte_pixel);
                             break;
+
             case N_AJUDA: DrawAjuda(fonte_mario);
                             break;
+
             case N_SOBRE: DrawSobre(fonte_mario);
                             break;
+
             case N_SAIR: flag_saida=true; // Verifica se o botão saida foi apertado
                             break;
         }
@@ -169,6 +229,8 @@ int main(void)
     UnloadSound(SomSelecinaOpcao);               // Unload sound data
     UnloadSound(SomInicia);
     UnloadSound(SomPulo);
+    UnloadSound(SomDano);
+    UnloadSound(SomMoeda);
 
     CloseAudioDevice();            // Close audio device
     CloseWindow();                // Close window and OpenGL context

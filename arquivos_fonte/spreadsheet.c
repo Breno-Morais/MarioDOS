@@ -18,11 +18,10 @@ void InitSpread(Texture2D sheet){
         //----------------------------------------------------------------------------------
 }
 
-
-void DrawTela(PLAYER jogador, Texture sheet, Rectangle Plts[10], Vector2 n_ind, Rectangle Botao, Font fonte, Vector3 cano_pos[9], Rectangle *Mario, bool lado, int n_fase, Rectangle Canos[9], int ind_animaMa, int ind_animaBo){
+void DrawTela(PLAYER jogador, Texture sheet, Rectangle Plts[10], Vector2 n_ind, Rectangle Botao, Font fonte, Vector3 cano_pos[9], Rectangle *Mario, bool lado, int n_fase, Rectangle Canos[9], int ind_animaMa, int ind_animaBo, int n_plat){
         int i;
 
-        //BeginDrawing();
+        BeginDrawing();
         //----------------------------------------------------------------------------------
 
             // Limpa o background e coloque ele preto
@@ -42,11 +41,20 @@ void DrawTela(PLAYER jogador, Texture sheet, Rectangle Plts[10], Vector2 n_ind, 
 
             // Desenha as plataformas
                 for(i=0; i<n_ind.y; i++){
-                    DrawTextureTiled(sheet, Plt_Marrom, Plts[i], origem, 0, 3.125, WHITE);
+                    DrawTextureTiled(sheet, Plts_A_M[n_plat], Plts[i], origem, 0, 3.125, WHITE);
                 }
 
             // Desenha o botão power
-                DrawTexturePro(sheet, Aperta_POW[ind_animaBo], Botao, origem, 0, WHITE);
+                if(ind_animaBo == 0){
+                    DrawTexturePro(sheet, Aperta_POW[0], Botao, origem, 0, WHITE);
+
+                } else if(ind_animaBo == 1 || ind_animaBo == 3){
+                    DrawTexturePro(sheet, Aperta_POW[1], (Rectangle){Botao.x, Botao.y+6, Aperta_POW[1].width*4, Aperta_POW[1].height*4}, origem, 0, WHITE);
+
+                } else if(ind_animaBo == 2){
+                    DrawTexturePro(sheet, Aperta_POW[2], (Rectangle){Botao.x, Botao.y+14, Aperta_POW[2].width*4, Aperta_POW[2].height*4}, origem, 0, WHITE);
+
+                }
 
             // Desenha o Chão
                 DrawTexturePro(sheet, Chao.src, Chao.pos, origem, 0, WHITE);
@@ -97,6 +105,54 @@ void DrawTela(PLAYER jogador, Texture sheet, Rectangle Plts[10], Vector2 n_ind, 
                     }
                 }
 
+
+        EndDrawing();
+        //----------------------------------------------------------------------------------
+}
+
+void DrawEntrada(char nome[16], int letterCount){
+    Vector2 larg = {MeasureText(TextFormat("Número de Letras: %i/15", letterCount), 30), MeasureText("Aperte BACKSPACE para deletar uma letra...", 30)};
+
+        BeginDrawing();
+        //----------------------------------------------------------------------------------
+
+            ClearBackground(BLACK);
+
+            DrawText("Insira o seu Nome:", 232, 15, 80, WHITE);
+
+            DrawRectangleLines(297, 280, 604, 70, BLUE);
+
+            DrawText(nome, 302, 288, 60, BLUE);
+
+            if(letterCount==15){
+                DrawText(TextFormat("Número de Letras: %i/15", letterCount), (600 - (larg.x)/2), 357, 30, RED);
+            } else {
+                DrawText(TextFormat("Número de Letras: %i/15", letterCount), (600 - (larg.x)/2), 357, 30, DARKGRAY);
+            }
+
+            if (letterCount >= 15) DrawText("Aperte BACKSPACE para deletar uma letra...", (600 - (larg.y)/2), 397, 30, RED);
+
+
+        EndDrawing();
+        //----------------------------------------------------------------------------------
+}
+
+void DrawCarregar(Rectangle opcoes[6], int n_arq, Color opcoes_cores[6]){
+    int i;
+        //----------------------------------------------------------------------------------
+        BeginDrawing();
+
+            // Limpa o background e coloque ele preto
+            ClearBackground(BLACK);
+
+            DrawText("Escolha uma Fase", 420, 20, 40, WHITE);
+
+            for(i=0;i<n_arq;i++){
+                DrawRectangleRounded(opcoes[i], 0.5, 200, WHITE);
+                DrawRectangleRoundedLines(opcoes[i], 0.5, 200, 5, GRAY);
+
+                DrawText(TextFormat("Nível %d", i+1), opcoes[i].x+10, opcoes[i].y+12, 25, opcoes_cores[i]);
+            }
 
         EndDrawing();
         //----------------------------------------------------------------------------------

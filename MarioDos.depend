@@ -14,31 +14,33 @@
 	<stdio.h>
 	"../headers/menu.h"
 
-1637010592 c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\headers\menu.h
+1637266433 c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\headers\menu.h
 	"raylib.h"
 	<unistd.h>
 	<stdio.h>
-
-1637010343 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\main.c
-	"../headers/menu.h"
-
-1635298890 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\menu.c
-	"../headers/menu.h"
-
-1637010343 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\outros.c
-	"../headers/menu.h"
 	<stdlib.h>
+	<time.h>
 
-1636851922 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\spreadsheet.c
+1637267402 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\main.c
+	"../headers/menu.h"
+
+1637266394 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\menu.c
+	"../headers/menu.h"
+
+1637266394 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\outros.c
+	"../headers/menu.h"
+	<math.h>
+
+1637266394 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\spreadsheet.c
 	"../headers/sprites.h"
 	"../headers/menu.h"
 
-1636851439 c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\headers\sprites.h
+1637261741 c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\headers\sprites.h
 	"raylib.h"
 
 1636403264 ated upstream
 
-1637010555 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\fase.c
+1637256985 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\fase.c
 	"../headers/menu.h"
 
 1636584341 source:c:\users\user\documents\github\mariodos\arquivos_fonte\fase.c
@@ -72,6 +74,6 @@
 1636664023 source:c:\users\user\documents\github\mariodos\arquivos_fonte\logica.c
 	"../headers/menu.h"
 
-1636856596 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\logica.c
+1637260844 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\logica.c
 	"../headers/menu.h"
 

@@ -55,11 +55,13 @@ Rectangle Botao_POW1 = {133, 243, 16, 16};
 Rectangle Botao_POW2 = {153, 246, 16, 13};
 Rectangle Botao_POW3 = {173, 250, 16, 9};
 
-Rectangle Aperta_POW[3] = {{133, 243, 16, 16}, {153, 246, 16, 13}, {173, 250, 16, 9}};
+Rectangle Aperta_POW[4] = {{133, 243, 16, 16}, {153, 246, 16, 13}, {173, 250, 16, 9}, {153, 246, 16, 13}};
 
 // Tipos de Plataformas
 Rectangle Plt_Azul = {112, 274, 7, 8};
 Rectangle Plt_Marrom = {133, 266, 8, 8};
+
+Rectangle Plts_A_M[2] = {{112, 274, 7, 8}, {133, 266, 8, 8}};
 
 // Moedas
 Rectangle Moeda_1 = {154, 138, 1, 11};

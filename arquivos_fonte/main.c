@@ -96,6 +96,7 @@ int main(void)
     // Variáveis do Nível
     bool flag_nivel = false; // Essa flag é usada para que o arquivo .txt seja feita apenas uma vez
     bool apertado = false; // Essa variável é usada para saber se o botão POW foi apertado
+    int botao_current = 0;
     Rectangle Botao;
     Vector3 cano_pos[9];
     Rectangle Canos[9];
@@ -138,11 +139,11 @@ int main(void)
                     PlaySound(SomInicia);
                     flag_nivel = true;
                 }
-                UpdateMario(cano_pos, Canos, Plts, n_ind, &Mario, frameMax, &marioSpeedLeft, &marioSpeedRight, &isJumping, &isFalling, &jumpFrameCurrent, &lado, Chao, Botao, &apertado, SomPulo);
+                UpdateMario(&hit_cooldown_current, hit_cooldown_max, &botao_current, cano_pos, Canos, Plts, n_ind, &Mario, frameMax, &marioSpeedLeft, &marioSpeedRight, &isJumping, &isFalling, &jumpFrameCurrent, &lado, Chao, Botao, &apertado, SomPulo);
                 Anima(&framesCounter, &ind_animaMa, &ind_animaBo, isFalling, isJumping);
                 UpdateVoltar(&prox_tela);
                 SalvarJogo(n_fase, Mario, Jog_Princ);
-                UpdateTurtle(apertado, &hit_cooldown_current, hit_cooldown_max, &turtle_atual, n_turtle, tempo_espera, &tempo_atual, &turtle, n_ind, Canos, cano_pos, Plts, Mario, Chao);
+                UpdateTurtle(&apertado, &hit_cooldown_current, hit_cooldown_max, &turtle_atual, n_turtle, tempo_espera, &tempo_atual, &turtle, n_ind, Canos, cano_pos, Plts, Mario, Chao);
                             break;
             case N_CARREGAR_MAPA:
     //                        break;

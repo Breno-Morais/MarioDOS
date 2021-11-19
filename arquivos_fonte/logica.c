@@ -20,7 +20,7 @@ void Anima(int *framesCounter, int *ind_animaMa, int *ind_animaBo, bool isFallin
     } else *ind_animaMa=0;
 }
 
-void UpdateMario(Vector3 cano_pos[9], Rectangle Canos[9], Rectangle Plts[10], Vector2 n_ind, Rectangle *Mario, float frameMax, float *marioSpeedLeft, float *marioSpeedRight, bool *isJumping, bool *isFalling, float *jumpFrameCurrent, bool *lado, Rectangle Chao, Rectangle Botao, bool *apertado, Sound SomPulo){
+void UpdateMario(int *hit_cooldown_current, int hit_cooldown_max, int *botao_current, Vector3 cano_pos[9], Rectangle Canos[9], Rectangle Plts[10], Vector2 n_ind, Rectangle *Mario, float frameMax, float *marioSpeedLeft, float *marioSpeedRight, bool *isJumping, bool *isFalling, float *jumpFrameCurrent, bool *lado, Rectangle Chao, Rectangle Botao, bool *apertado, Sound SomPulo){
     *isFalling = true;
     *marioSpeedLeft = 8;
     *marioSpeedRight = 8;
@@ -44,9 +44,13 @@ void UpdateMario(Vector3 cano_pos[9], Rectangle Canos[9], Rectangle Plts[10], Ve
         }
     }
     //Testa colisão com o botão por baixo
-    if(CheckCollisionPointRec((Vector2){(*Mario).x+(*Mario).width, (*Mario).y}, Botao) || CheckCollisionPointRec((Vector2){(*Mario).x, (*Mario).y}, Botao)){
+    if(CheckCollisionPointRec((Vector2){(*Mario).x+(*Mario).width-5, (*Mario).y}, Botao) || CheckCollisionPointRec((Vector2){(*Mario).x+5, (*Mario).y}, Botao)){
         *isJumping = false;
-        *apertado = true;
+        if((*botao_current)<3 && (*hit_cooldown_current)>=hit_cooldown_max){
+            *hit_cooldown_current = 0;
+            *apertado = true;
+            *botao_current += 1;
+        }
     }
 
     //Testa colisão com a parede pela esquerda. Se colidir, não pode ir pra esquerda
@@ -172,7 +176,7 @@ void InitTurtle(int *turtle_atual, int n_turtle, TURTLE turtle[20], bool *flag_c
     }
 }
 
-void UpdateTurtle(bool apertado, int *hit_cooldown_current, int hit_cooldown_max, int *turtle_atual, int n_turtle, int tempo_espera, int *tempo_atual, TURTLE turtle[20], Vector2 n_ind, Rectangle Canos[9], Vector3 cano_pos[9],Rectangle Plts[10], Rectangle Mario, Rectangle Chao){
+void UpdateTurtle(bool *apertado, int *hit_cooldown_current, int hit_cooldown_max, int *turtle_atual, int n_turtle, int tempo_espera, int *tempo_atual, TURTLE turtle[20], Vector2 n_ind, Rectangle Canos[9], Vector3 cano_pos[9],Rectangle Plts[10], Rectangle Mario, Rectangle Chao){
 
     //vai spawnando os inimigos a cada "tempo_espera" segundos (ou a cada 30 frames, como foi escrito)
     if(*turtle_atual<n_turtle){
@@ -246,7 +250,7 @@ void UpdateTurtle(bool apertado, int *hit_cooldown_current, int hit_cooldown_max
                         }
                     }
                 }
-            }
+            }//atualiza o turtle.fall
             if(CheckCollisionRecs(turtle[i].turtleRec, Chao)){
                 turtle[i].fall = false;
             }
@@ -257,18 +261,28 @@ void UpdateTurtle(bool apertado, int *hit_cooldown_current, int hit_cooldown_max
                 if(CheckCollisionRecs(Mario, turtle[i].turtleRec)){
                     //MARIO PERDE VIDA
                 }
+                if(*apertado && turtle[i].isThere){
+                    turtle[i].estado += 1;
+                }
             }
             else if(turtle[i].estado==1){//ESTADO VULNERAVEL
                 turtle[i].isThere = true;
                 turtle[i].speed = 0;
                 if(CheckCollisionRecs(Mario, turtle[i].turtleRec)){
-                    turtle[i].estado++;
+                    turtle[i].estado += 1;
+                }
+                if(*apertado && turtle[i].isThere){
+                    turtle[i].estado += 1;
                 }
             }
             else if(turtle[i].estado==2){//ESTADO MORTO
                 turtle[i].isThere = false;//para de desenhar o inimigo
                 turtle[i].turtleRec.y = ALTURA_TELA;//joga ele pra fora da tela (embaixo)
             }
+            else{
+                turtle[i].estado = 2;
+            }
         }
+        *apertado = false;
         *hit_cooldown_current = *hit_cooldown_current+1;
 }

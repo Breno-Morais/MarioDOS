@@ -45,7 +45,7 @@
 	"../headers/menu.h"
 	<stdlib.h>
 
-1637336675 c:\users\user\documents\github\mariodos\headers\menu.h
+1637344957 c:\users\user\documents\github\mariodos\headers\menu.h
 	"raylib.h"
 	<unistd.h>
 	<stdio.h>
@@ -66,7 +66,7 @@
 1637332040 c:\users\user\documents\github\mariodos\headers\sprites.h
 	"raylib.h"
 
-1637335613 source:c:\users\user\documents\github\mariodos\arquivos_fonte\main.c
+1637344957 source:c:\users\user\documents\github\mariodos\arquivos_fonte\main.c
 	"../headers/menu.h"
 
 1636496841 shed changes

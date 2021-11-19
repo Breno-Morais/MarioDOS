@@ -142,7 +142,7 @@ void UpdateMario(Vector3 cano_pos[9], Rectangle Canos[9], Rectangle Plts[10], Ve
     }
 }
 
-void InitTurtle(int *turtle_atual, int n_turtle, TURTLE turtle[10], bool *flag_cano, int *cano_atual, Vector2 n_ind, Vector3 cano_pos[9], Rectangle Canos[9]){
+void InitTurtle(int *turtle_atual, int n_turtle, TURTLE turtle[20], bool *flag_cano, int *cano_atual, Vector2 n_ind, Vector3 cano_pos[9], Rectangle Canos[9]){
     if(*turtle_atual<n_turtle)
         *turtle_atual = 1;
     for(int i=0; i<n_turtle; i++){
@@ -172,7 +172,9 @@ void InitTurtle(int *turtle_atual, int n_turtle, TURTLE turtle[10], bool *flag_c
     }
 }
 
-void UpdateTurtle(int *turtle_atual, int n_turtle, int tempo_espera, int *tempo_atual, TURTLE turtle[10], Vector2 n_ind, Rectangle Canos[9], Vector3 cano_pos[9],Rectangle Plts[10], Rectangle Mario, Rectangle Chao){
+void UpdateTurtle(bool apertado, int *hit_cooldown_current, int hit_cooldown_max, int *turtle_atual, int n_turtle, int tempo_espera, int *tempo_atual, TURTLE turtle[20], Vector2 n_ind, Rectangle Canos[9], Vector3 cano_pos[9],Rectangle Plts[10], Rectangle Mario, Rectangle Chao){
+
+    //vai spawnando os inimigos a cada "tempo_espera" segundos (ou a cada 30 frames, como foi escrito)
     if(*turtle_atual<n_turtle){
         if((*tempo_atual)<30*tempo_espera){
             *tempo_atual = (*tempo_atual)+1;
@@ -184,7 +186,7 @@ void UpdateTurtle(int *turtle_atual, int n_turtle, int tempo_espera, int *tempo_
     }
 
     for(int i=0; i<*turtle_atual; i++){
-            DrawText(TextFormat("%d", (int)n_ind.x), 600, 100, 30, RED);
+            //DrawText(TextFormat("%d", (int)n_ind.x), 600, 100, 30, RED);
             //atualiza o turtleRec.x
             turtle[i].turtleRec.x = turtle[i].turtleRec.x + (turtle[i].speed*turtle[i].sentido);
             //logica dos canos de retorno
@@ -230,8 +232,7 @@ void UpdateTurtle(int *turtle_atual, int n_turtle, int tempo_espera, int *tempo_
             if(turtle[i].fall==true){
                 turtle[i].turtleRec.y = turtle[i].turtleRec.y+4;
             }
-            turtle[i].estado = 0;
-            turtle[i].isThere = true;
+
             //atualiza o turtle.fall
             turtle[i].fall = true;
             for(int j=0; j<n_ind.y;j++){
@@ -239,7 +240,10 @@ void UpdateTurtle(int *turtle_atual, int n_turtle, int tempo_espera, int *tempo_
                     turtle[i].fall = false;
                     //atualiza o turtle.estado
                     if(CheckCollisionPointRec((Vector2){Mario.x+(Mario.width/2), Mario.y-20}, turtle[i].turtleRec)){
-                        turtle[i].estado = turtle[i].estado+1;
+                        if((*hit_cooldown_current)>=hit_cooldown_max){
+                            turtle[i].estado = turtle[i].estado+1;
+                            *hit_cooldown_current = 0;
+                        }
                     }
                 }
             }
@@ -249,18 +253,22 @@ void UpdateTurtle(int *turtle_atual, int n_turtle, int tempo_espera, int *tempo_
 
             if(turtle[i].estado==0){ //ESTADO INVULNERAVEL
                 turtle[i].speed = 2;
+                turtle[i].isThere = true;
                 if(CheckCollisionRecs(Mario, turtle[i].turtleRec)){
                     //MARIO PERDE VIDA
                 }
             }
             else if(turtle[i].estado==1){//ESTADO VULNERAVEL
+                turtle[i].isThere = true;
+                turtle[i].speed = 0;
                 if(CheckCollisionRecs(Mario, turtle[i].turtleRec)){
                     turtle[i].estado++;
-                    turtle[i].speed = 0;
                 }
             }
             else if(turtle[i].estado==2){//ESTADO MORTO
-                turtle[i].isThere = false;
+                turtle[i].isThere = false;//para de desenhar o inimigo
+                turtle[i].turtleRec.y = ALTURA_TELA;//joga ele pra fora da tela (embaixo)
             }
         }
+        *hit_cooldown_current = *hit_cooldown_current+1;
 }

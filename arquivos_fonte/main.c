@@ -80,9 +80,9 @@ int main(void)
     int n_turtle, turtle_atual=0;
     int n_crab;
     int tempo_espera, tempo_atual=0;
-    float sentidoTurtle[10];
+    int hit_cooldown_current = 0, hit_cooldown_max = 10;
 
-    TURTLE turtle[10];
+    TURTLE turtle[20];
     CRAB crab[10];
 
     //-------------------------------------------------------------------------------------
@@ -130,34 +130,6 @@ int main(void)
                     PlaySound(SomInicia);
                     flag_nivel = true;
                     InitTurtle(&turtle_atual, n_turtle, turtle, &flag_cano, &cano_atual, n_ind, cano_pos, Canos);
-                    /*
-                    if(turtle_atual<n_turtle)
-                        turtle_atual = 1;
-                    for(int i=0; i<n_turtle; i++){
-                        turtle[i].turtleRec.width = 48;
-                        turtle[i].turtleRec.height = 48;
-                        while(!flag_cano){
-                            cano_atual = 0 + (rand() % ((int)n_ind.x - 0 + 1));
-                            if(cano_pos[(int)cano_atual].z==0){
-                                if(Canos[(int)cano_atual].x<LARGURA_TELA/2){
-                                    turtle[i].turtleRec.x = Canos[0].x+Canos[0].width;
-                                    turtle[i].turtleRec.y = Canos[0].y+15;
-                                    turtle[i].sentido = 1;
-                                }
-                                else{
-                                    turtle[i].turtleRec.x = Canos[1].x-turtle[i].turtleRec.width;
-                                    turtle[i].turtleRec.y = Canos[1].y+15;
-                                    turtle[i].sentido = -1;
-                                }
-                                flag_cano = true;
-                            }
-                        }
-                        flag_cano = false;
-
-                        turtle[i].estado = 0;
-                        turtle[i].isThere = false;
-                        turtle[i].fall = false;
-                    }*/
             }
 
     //                        break;
@@ -170,99 +142,7 @@ int main(void)
                 Anima(&framesCounter, &ind_animaMa, &ind_animaBo, isFalling, isJumping);
                 UpdateVoltar(&prox_tela);
                 SalvarJogo(n_fase, Mario, Jog_Princ);
-                UpdateTurtle(&turtle_atual, n_turtle, tempo_espera, &tempo_atual, &turtle, n_ind, Canos, cano_pos, Plts, Mario, Chao);
-
-                /*if(turtle_atual<n_turtle){
-                    if(tempo_atual<30*tempo_espera){
-                        tempo_atual++;
-                    }
-                    else{
-                        turtle_atual++;
-                        tempo_atual = 0;
-                    }
-                }
-
-                for(int i=0; i<turtle_atual; i++){
-                        DrawText(TextFormat("%d", (int)n_ind.x), 600, 100, 30, RED);
-                        //atualiza o turtleRec.x
-                        turtle[i].turtleRec.x = turtle[i].turtleRec.x + (turtle[i].speed*turtle[i].sentido);
-                        //logica dos canos de retorno
-                        for(int j=0;j<n_ind.x;j++){
-                            if(CheckCollisionRecs(Canos[j], turtle[i].turtleRec) && cano_pos[j].z!=0){
-                                if(cano_pos[j].x<600){
-                                    turtle[i].turtleRec.x = Canos[0].x+Canos[0].width;
-                                    turtle[i].turtleRec.y = Canos[0].y+15;
-                                }
-                                else{
-                                    turtle[i].turtleRec.x = Canos[1].x-turtle[i].turtleRec.width;
-                                    turtle[i].turtleRec.y = Canos[1].y+15;
-                                }
-                                if(turtle[i].sentido==1)
-                                    turtle[i].sentido=-1;
-                                else if(turtle[i].sentido==-1)
-                                    turtle[i].sentido=1;
-                            }
-                        }
-                        //rebate nos inimigos e muda de direção
-                        for(int j=0;j<turtle_atual;j++){
-                            if(CheckCollisionRecs(turtle[i].turtleRec, turtle[j].turtleRec) && i!=j){
-                                if(turtle[i].sentido==1){
-                                    turtle[i].turtleRec.x = turtle[i].turtleRec.x-4;
-                                    turtle[i].sentido=-1;
-                                    turtle[j].sentido=1;
-                                }
-                                else if(turtle[i].sentido==-1){
-                                    turtle[i].turtleRec.x = turtle[i].turtleRec.x+4;
-                                    turtle[i].sentido=1;
-                                    turtle[j].sentido=-1;
-                                }
-                            }
-                        }
-                        //passando da direita pra esquerda
-                        if(turtle[i].turtleRec.x+(turtle[i].turtleRec.width/2)>=LARGURA_TELA){
-                            turtle[i].turtleRec.x = 0-(turtle[i].turtleRec.width/2);
-                        }//passando da esquerda pra direita
-                        else if(turtle[i].turtleRec.x+(turtle[i].turtleRec.width/2)<0){
-                            turtle[i].turtleRec.x = LARGURA_TELA-(turtle[i].turtleRec.width/2);
-                        }
-                        //atualiza o turtleRec.y
-                        if(turtle[i].fall==true){
-                            turtle[i].turtleRec.y = turtle[i].turtleRec.y+4;
-                        }
-                        turtle[i].estado = 0;
-                        turtle[i].isThere = true;
-                        //atualiza o turtle.fall
-                        turtle[i].fall = true;
-                        for(int j=0; j<n_ind.y;j++){
-                            if(CheckCollisionRecs(turtle[i].turtleRec, Plts[j])){
-                                turtle[i].fall = false;
-                                //atualiza o turtle.estado
-                                if(CheckCollisionPointRec((Vector2){Mario.x+(Mario.width/2), Mario.y-20}, turtle[i].turtleRec)){
-                                    turtle[i].estado = turtle[i].estado+1;
-                                }
-                            }
-                        }
-                        if(CheckCollisionRecs(turtle[i].turtleRec, Chao)){
-                            turtle[i].fall = false;
-                        }
-
-                        if(turtle[i].estado==0){ //ESTADO INVULNERAVEL
-                            turtle[i].speed = 2;
-                            if(CheckCollisionRecs(Mario, turtle[i].turtleRec)){
-                                //MARIO PERDE VIDA
-                            }
-                        }
-                        else if(turtle[i].estado==1){//ESTADO VULNERAVEL
-                            if(CheckCollisionRecs(Mario, turtle[i].turtleRec)){
-                                turtle[i].estado++;
-                                turtle[i].speed = 0;
-                            }
-                        }
-                        else if(turtle[i].estado==2){//ESTADO MORTO
-                            turtle[i].isThere = false;
-                        }
-                    }*/
-
+                UpdateTurtle(apertado, &hit_cooldown_current, hit_cooldown_max, &turtle_atual, n_turtle, tempo_espera, &tempo_atual, &turtle, n_ind, Canos, cano_pos, Plts, Mario, Chao);
                             break;
             case N_CARREGAR_MAPA:
     //                        break;

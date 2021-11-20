@@ -1,47 +1,47 @@
 /*
-O objetivo desse programa é rodar o jogo Mario Bros
-O programa é organizado da seguinte maneira:
-    1- A declaração das variáveis e o loop principal do jogo ocorre no arquivo principal main.c
-    2- Todas as funções usadas para atualizar variáveis ou desenhar artefatos na tela está divido entre
+O objetivo desse programa ï¿½ rodar o jogo Mario Bros
+O programa ï¿½ organizado da seguinte maneira:
+    1- A declaraï¿½ï¿½o das variï¿½veis e o loop principal do jogo ocorre no arquivo principal main.c
+    2- Todas as funï¿½ï¿½es usadas para atualizar variï¿½veis ou desenhar artefatos na tela estï¿½ divido entre
         os outros arquivos fontes com menu.c, spritesheet.c, etc.
 
-Todas as constantes são guardadas nos arquivos .h
+Todas as constantes sï¿½o guardadas nos arquivos .h
 
-Especificamente, o arquivo main.c está divido em 3 partes, a primeira é a inicialização de tudo, isso inclui
-a declaração de variáveis, inicializar a tela, abrir texturas e sons, calcular posições, etc.
+Especificamente, o arquivo main.c estï¿½ divido em 3 partes, a primeira ï¿½ a inicializaï¿½ï¿½o de tudo, isso inclui
+a declaraï¿½ï¿½o de variï¿½veis, inicializar a tela, abrir texturas e sons, calcular posiï¿½ï¿½es, etc.
 A segunda e terceira parte fazem parte da mesma etapa, o loop principal do jogo.
 
-O loop principal do jogo envolve tudo que tem que ser atualizado 1 vez por frame, então posições de elementos,
-colisões, etc. O loop é divido em 2, a segunda e terceira etapa do main.c.
+O loop principal do jogo envolve tudo que tem que ser atualizado 1 vez por frame, entï¿½o posiï¿½ï¿½es de elementos,
+colisï¿½es, etc. O loop ï¿½ divido em 2, a segunda e terceira etapa do main.c.
 
-A segunda etapa do main envolve a atualização de variáveis, aqui ocorre a parte de verificar as teclas digitadas,
-a colisões de elementos e o movimento de tudo. Já a terceira etapa envolve mostrar isso na tela.
+A segunda etapa do main envolve a atualizaï¿½ï¿½o de variï¿½veis, aqui ocorre a parte de verificar as teclas digitadas,
+a colisï¿½es de elementos e o movimento de tudo. Jï¿½ a terceira etapa envolve mostrar isso na tela.
 */
 
 #include "../headers/menu.h"
 
 int main(void)
 {
-    // Inicialização
+    // Inicializaï¿½ï¿½o
     //--------------------------------------------------------------------------------------
     Vector2 Tela = {LARGURA_TELA, ALTURA_TELA};
-    int i, prox_tela=N_MENU; // O prox_tela é o número que será usado como o indicador do próximo passo
-    bool flag_saida; // flag usada quando a opção sair for utilizada e quando for necessário abrir o arquivo highscores.bin
+    int i, prox_tela=N_MENU; // O prox_tela ï¿½ o nï¿½mero que serï¿½ usado como o indicador do prï¿½ximo passo
+    bool flag_saida; // flag usada quando a opï¿½ï¿½o sair for utilizada e quando for necessï¿½rio abrir o arquivo highscores.bin
 
     InitWindow(Tela.x, Tela.y, "MARIO DOS");
 
     InitAudioDevice(); // Inicializa o audio
 
-    // Inicialização e tratamento das variáveis do Menu
+    // Inicializaï¿½ï¿½o e tratamento das variï¿½veis do Menu
     //--------------------------------------------------------------------------------------
-        // Carregar a logo em uma textura e cria o vetor com sua posição
+        // Carregar a logo em uma textura e cria o vetor com sua posiï¿½ï¿½o
         Texture2D textura_logo = LoadTexture("imagens/sprite_logo.png");        // Texture loading
         Vector2 posicao_logo = {Tela.x/2 - (textura_logo.width*4)/2, 1};
 
     //--------------------------------------------------------------------------------------
     Texture2D sheet  = LoadTexture("imagens/sprite_geral.png");
         //---------------------------------------------------------------------------------------
-        // Inicialização da fonte, das opções e suas respectivas posições e cores
+        // Inicializaï¿½ï¿½o da fonte, das opï¿½ï¿½es e suas respectivas posiï¿½ï¿½es e cores
         Font fonte_mario = LoadFont("fontes_texto/SuperMario256.ttf");
         Font fonte_pixel = LoadFont("fontes_texto/Pixel.ttf");
 
@@ -50,10 +50,10 @@ int main(void)
 
         Rectangle posicao_opcoes[NUM_OPCOES];
 
-        for(i=0; i<NUM_OPCOES; i++){ // Ajusta a distância entre as opções
+        for(i=0; i<NUM_OPCOES; i++){ // Ajusta a distï¿½ncia entre as opï¿½ï¿½es
             posicao_opcoes[i].x = Tela.x/2 - MeasureTextEx(fonte_mario, opcoes[i], TAM_FONTE, 2).x/2;
             posicao_opcoes[i].y = (textura_logo.height*4) + TAM_FONTE + 5 + 45*i;
-                // Soma (no eixo y) da logo, do tamanho da fonte e das opções anteriores
+                // Soma (no eixo y) da logo, do tamanho da fonte e das opï¿½ï¿½es anteriores
             posicao_opcoes[i].width = MeasureTextEx(fonte_mario, opcoes[i], TAM_FONTE, 2).x;
             posicao_opcoes[i].height = MeasureTextEx(fonte_mario, opcoes[i], TAM_FONTE, 2).y;
         }
@@ -65,7 +65,7 @@ int main(void)
         Sound SomSelecinaOpcao = LoadSound("som/sel_menu.mp3");
 
     //-----------------------------------------------------------------------------------
-    // Variáveis do Mário
+    // Variï¿½veis do Mï¿½rio
     Rectangle Mario = {0, 0, 16*4, 20*4};
 
     float marioSpeedLeft = 8;
@@ -76,39 +76,55 @@ int main(void)
     float jumpFrameCurrent = 0;
     bool lado = true;
 
+    //Variï¿½veis dos inimigos
+    int n_turtle, turtle_atual=0;
+    int n_crab;
+    int tempo_espera, tempo_atual=0;
+    int hit_cooldown_current = 0, hit_cooldown_max = 10;
+
+    TURTLE turtle[20];
+    CRAB crab[10];
+
     //-------------------------------------------------------------------------------------
     PLAYER Jog_Princ = {"", 0, 3};
 
     //-----------------------------------------------------------------------------------
-    // Variáveis dos Arquivos
+    // Variï¿½veis dos Arquivos
     PLAYER melhores[5];
-    bool flag_arq = false; // Essa flag é usada para que a abertura do arquivo .bin seja feita apenas uma vez
+    bool flag_arq = false; // Essa flag ï¿½ usada para que a abertura do arquivo .bin seja feita apenas uma vez
 
     //-----------------------------------------------------------------------------------
-    // Variáveis do Nível
-    bool flag_nivel = false; // Essa flag é usada para que o arquivo .txt seja feita apenas uma vez
+    // Variï¿½veis do Nï¿½vel
+    bool flag_nivel = false; // Essa flag ï¿½ usada para que o arquivo .txt seja feita apenas uma vez
     bool flag_som = false;
+    bool apertado = false; // Essa variï¿½vel ï¿½ usada para saber se o botï¿½o POW foi apertado
+    int botao_current = 0;
     Rectangle Botao;
     Vector3 cano_pos[9];
     Rectangle Canos[9];
-    Vector2 n_ind; // E um vector que contém a quantidade de canos e plataformas na fase, nessa ordem
+    bool flag_cano = false;
+    int cano_atual;
+    Vector2 n_ind; // E um vector que contï¿½m a quantidade de canos e plataformas na fase, nessa ordem
     Rectangle Plts[10];
     int n_fase = 1;
+    int ind_animaMa = 0;
+    int ind_animaBo = 0;
+    int framesCounter = 0;
 
-        // Escolha da Plataforma
+    // Escolha da Plataforma
     srand(time(NULL));
     int n_plat = rand()%2;
 
     //-----------------------------------------------------------------------------------
-    // Variáveis da Animação
+    // Variï¿½veis da Animaï¿½ï¿½o
     Vector2 var_animaMa = {0,0};
     Vector2 var_animaBo = {0,0};
-    bool apertado = false; // Essa variável é usada para saber se o botão POW foi apertado
+    bool apertado = false; // Essa variï¿½vel ï¿½ usada para saber se o botï¿½o POW foi apertado
     bool apert_anterior = false;
-    int n_apertos = 0; // O número de vezes que o Botao POW foi apertado
+    int n_apertos = 0; // O nï¿½mero de vezes que o Botao POW foi apertado
 
     //-----------------------------------------------------------------------------------
-    // Variáveis da Tela de Entrada
+    // Variï¿½veis da Tela de Entrada
     bool flag_entrada = false;
     char nome[16] = "\0";
     int letterCount = 0;
@@ -121,7 +137,7 @@ int main(void)
     Sound SomMoeda = LoadSound("som/smb_coin.wav");
 
     //-----------------------------------------------------------------------------------
-    // Variáveis Menu Carregar Mapa
+    // Variï¿½veis Menu Carregar Mapa
     Rectangle opcoes_Mapas[6];
     bool flag_n_txts = false;
     int n_arq = 0;
@@ -137,13 +153,14 @@ int main(void)
         if(prox_tela == N_MENU) UpdateMenu(cores_opcoes, posicao_opcoes, &prox_tela, SomOpcaoMenu, SomSelecinaOpcao);
         switch(prox_tela){
             case N_NOVO:
-                // Verifica se a fase já foi carregada
+                // Verifica se a fase jï¿½ foi carregada
                 if(!flag_nivel){
-                    n_ind = CarregaFase(n_fase, &Mario, &Botao, cano_pos, Plts, Canos);
+                    n_ind = CarregaFase(&n_turtle, &n_crab, &tempo_espera, n_fase, &Mario, &Botao, cano_pos, Plts, Canos);
                     flag_nivel = true;
+                    InitTurtle(&turtle_atual, n_turtle, turtle, &flag_cano, &cano_atual, n_ind, cano_pos, Canos);
                 }
 
-                // Verifica se o nome já foi inserido
+                // Verifica se o nome jï¿½ foi inserido
                 if(!flag_entrada){
                     flag_entrada = Entrada(&Jog_Princ, nome, &letterCount);
                     break;
@@ -152,21 +169,22 @@ int main(void)
                     flag_som = true;
                 }
     //                        break;
+    
             case N_CONTINUAR:
-                // Verifica se o save já foi carrefado
+                // Verifica se o save jï¿½ foi carrefado
                 if(!flag_nivel){
                     n_ind = CarregaSave(&Mario, &Botao, cano_pos, Plts, Canos, &Jog_Princ);
                     PlaySound(SomInicia);
                     flag_nivel = true;
                 }
 
-                // Atualiza o Mario e suas colisões
+                // Atualiza o Mario e suas colisï¿½es
                     apert_anterior = apertado;
-                UpdateMario(Plts, n_ind, &Mario, frameMax, &marioSpeedLeft, &marioSpeedRight, &isJumping, &isFalling, &jumpFrameCurrent, &lado, Botao, &apertado, SomPulo);
+                 UpdateMario(&hit_cooldown_current, hit_cooldown_max, &botao_current, cano_pos, Canos, Plts, n_ind, &Mario, frameMax, &marioSpeedLeft, &marioSpeedRight, &isJumping, &isFalling, &jumpFrameCurrent, &lado, Chao, Botao, &apertado, SomPulo);
 
-                // Atualizaos sprites da animação
+                // Atualizaos sprites da animaï¿½ï¿½o
                 Anima(&var_animaMa, &var_animaBo, isFalling, isJumping, &apertado);
-                    // Verifica se a animação do botão acabou
+                    // Verifica se a animaï¿½ï¿½o do botï¿½o acabou
                     if(!apert_anterior && apertado){
                         PlaySound(SomDano);
                         PlaySound(SomMoeda);
@@ -175,6 +193,7 @@ int main(void)
 
                 // Salva o jogo se a tecla A for apertada
                 SalvarJogo(n_fase, Mario, Jog_Princ);
+                UpdateTurtle(&apertado, &hit_cooldown_current, hit_cooldown_max, &turtle_atual, n_turtle, tempo_espera, &tempo_atual, &turtle, n_ind, Canos, cano_pos, Plts, Mario, Chao);
                             break;
 
             case N_CARREGAR_MAPA: UpdateMenuCarregar(opcoes_Mapas, &flag_n_txts, &n_arq, opcoes_cores, &n_fase, &prox_tela, SomSelecinaOpcao);
@@ -201,7 +220,7 @@ int main(void)
                 }
             //            break;
 
-            case N_CONTINUAR: DrawTela(Jog_Princ, sheet, Plts, n_ind, Botao, fonte_mario, cano_pos, &Mario, lado, n_fase, Canos, var_animaMa.x, var_animaBo.x, n_plat);
+            case N_CONTINUAR: DrawTela(turtle, n_turtle, Jog_Princ, sheet, Plts, n_ind, Botao, fonte_mario, cano_pos, &Mario, lado, n_fase, Canos, var_animaMa.x, var_animaBo.x, n_plat));
                             break;
 
             case N_CARREGAR_MAPA: DrawCarregar(opcoes_Mapas, n_arq, opcoes_cores);
@@ -216,12 +235,12 @@ int main(void)
             case N_SOBRE: DrawSobre(fonte_mario);
                             break;
 
-            case N_SAIR: flag_saida=true; // Verifica se o botão saida foi apertado
+            case N_SAIR: flag_saida=true; // Verifica se o botï¿½o saida foi apertado
                             break;
         }
     }
 
-    // Deinicialização
+    // Deinicializaï¿½ï¿½o
     //--------------------------------------------------------------------------------------
     UnloadTexture(textura_logo);                    // Texture unloading
     UnloadTexture(sheet);                          // Texture unloading

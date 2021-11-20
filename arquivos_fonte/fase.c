@@ -1,6 +1,7 @@
 #include "../headers/menu.h"
+#include <stdlib.h>
 
-Vector2 CarregaFase(int n_fase, Rectangle *Mario, Rectangle *Botao, Vector3 cano_pos[9], Rectangle Plts[10], Rectangle Canos[9]){
+Vector2 CarregaFase(int *n_turtle,int *n_crab, int *tempo_espera, int n_fase, Rectangle *Mario, Rectangle *Botao, Vector3 cano_pos[9], Rectangle Plts[10], Rectangle Canos[9]){
     FILE *fase;
     char fase_atual[19];
     char linha_atual[120];
@@ -15,7 +16,7 @@ Vector2 CarregaFase(int n_fase, Rectangle *Mario, Rectangle *Botao, Vector3 cano
         printf("Erro na abertura\n");
     else{
         // Carrega linha por linha do arquivo fase.txt
-        for(n_linha=0; n_linha<28; n_linha++){
+        for(n_linha=0; n_linha<29; n_linha++){
             // Guarda a linha inteira na variável linha_atual
             fscanf(fase,"%s\n", linha_atual);
 
@@ -95,9 +96,14 @@ Vector2 CarregaFase(int n_fase, Rectangle *Mario, Rectangle *Botao, Vector3 cano
                 }
 
             }
+            fgets(linha_atual, 120, fase); //Lê a última linha, guardando a quantidade de inimigos e tempo de espera
+            *n_turtle = linha_atual[0]-'0';
+            *n_crab = linha_atual[2]-'0';
+            *tempo_espera = linha_atual[4]-'0';
+            }
         }
 
-    }
+
 
     // Cria o retângulo de cada cano
     for(i=0; i<n_cano; i++){
@@ -108,7 +114,7 @@ Vector2 CarregaFase(int n_fase, Rectangle *Mario, Rectangle *Botao, Vector3 cano
                                 // Aqui ele desenha o cano de saída virado para esquerda
                                 Canos[i] = (Rectangle){cano_pos[i].x-10, cano_pos[i].y-60, 196, 120};
                         } else {
-                                // Aqui ele desenha o cano de entrada virado pra esquerca
+                                // Aqui ele desenha o cano de entrada virado pra esquerda
                                 Canos[i] = (Rectangle){cano_pos[i].x, cano_pos[i].y, 128, 72};
                         }
 

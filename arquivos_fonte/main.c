@@ -123,6 +123,7 @@ int main(void)
     Vector2 var_animaMa = {0,0};
     Vector2 var_animaBo = {0,0};
     Vector2 var_animaTar[20];
+    Vector2 var_animaCar[20];
     bool apertado = false; // Essa variável é usada para saber se o botão POW foi apertado
     bool apertado_anima = false;
     bool apert_anterior = false;
@@ -193,7 +194,7 @@ int main(void)
                  UpdateMario(&hit_cooldown_current, hit_cooldown_max, &botao_current, cano_pos, Canos, Plts, n_ind, &Mario, frameMax, &marioSpeedLeft, &marioSpeedRight, &isJumping, &isFalling, &jumpFrameCurrent, &lado, Botao, &apertado, &apertado_anima, SomPulo);
 
                 // Atualizaos sprites da animação
-                Anima(&var_animaMa, &var_animaBo, var_animaTar, isFalling, isJumping, &apertado_anima, n_turtle, turtle, &Mario, lado);
+                Anima(&var_animaMa, &var_animaBo, var_animaTar, var_animaCar, isFalling, isJumping, &apertado_anima, n_turtle, turtle, crab, n_crab, &Mario, lado);
                     // Verifica se a animação do botão acabou
                     if(!apert_anterior && apertado_anima){
                         PlaySound(SomDano);
@@ -238,7 +239,7 @@ int main(void)
             //            break;
 
             case N_CONTINUAR:
-                DrawTela(crab, n_crab, dano, mario_invun, turtle, n_turtle, Jog_Princ, sheet, Plts, n_ind, Botao, fonte_mario, cano_pos, &Mario, lado, n_fase, Canos, var_animaMa.x, var_animaBo.x, n_plat, var_animaTar);
+                DrawTela(var_animaCar, crab, n_crab, dano, mario_invun, turtle, n_turtle, Jog_Princ, sheet, Plts, n_ind, Botao, fonte_mario, cano_pos, &Mario, lado, n_fase, Canos, var_animaMa.x, var_animaBo.x, n_plat, var_animaTar);
                             break;
 
             case N_CARREGAR_MAPA: DrawCarregar(opcoes_Mapas, n_arq, opcoes_cores);
@@ -271,6 +272,9 @@ int main(void)
     UnloadSound(SomPulo);
     UnloadSound(SomDano);
     UnloadSound(SomMoeda);
+    UnloadSound(SomVirar);
+    UnloadSound(SomGameOver);
+    UnloadSound(SomMorte);
 
     CloseAudioDevice();            // Close audio device
     CloseWindow();                // Close window and OpenGL context

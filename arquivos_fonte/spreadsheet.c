@@ -19,7 +19,7 @@ void InitSpread(Texture2D sheet){
 }
 
 
-void DrawTela(CRAB crab[20], int n_crab, bool dano, int mario_invun, TURTLE turtle[20],int n_turtle, PLAYER jogador, Texture sheet, Rectangle Plts[10], Vector2 n_ind, Rectangle Botao, Font fonte, Vector3 cano_pos[9], Rectangle *Mario, bool lado, int n_fase, Rectangle Canos[9], int ind_animaMa, int ind_animaBo, int n_plat, Vector2 var_animaTar[20]){
+void DrawTela(Vector2 var_animaCar[20], CRAB crab[20], int n_crab, bool dano, int mario_invun, TURTLE turtle[20],int n_turtle, PLAYER jogador, Texture sheet, Rectangle Plts[10], Vector2 n_ind, Rectangle Botao, Font fonte, Vector3 cano_pos[9], Rectangle *Mario, bool lado, int n_fase, Rectangle Canos[9], int ind_animaMa, int ind_animaBo, int n_plat, Vector2 var_animaTar[20]){
         int i;
 
         BeginDrawing();
@@ -98,9 +98,15 @@ void DrawTela(CRAB crab[20], int n_crab, bool dano, int mario_invun, TURTLE turt
                 }
 
                 //Desenha os caranguejos
+                Rectangle car_atual;
+
                 for(int i=0; i<n_crab; i++){
-                    if(crab[i].isThere==true)
-                        DrawRectangleRec(crab[i].crabRec, RED);
+                    if(crab[i].isThere==true){
+                        car_atual = CarAnd[(int)var_animaCar[i].x];
+
+                        DrawTexturePro(sheet, car_atual, crab[i].crabRec, origem, 0, WHITE);
+
+                    }
                 }
 
                 //DrawRectangleLines(Mario->x, Mario->y, Mario->width, Mario->height, RED); // Desenha a colisão

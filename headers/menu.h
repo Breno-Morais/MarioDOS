@@ -48,7 +48,7 @@ typedef struct stc_crab{
     void UpdateMenu(Color cores_opcoes[], Rectangle posicao_opcoes[], int *prox, Sound SomOpcaoMenu, Sound SomSelecinaOpcao);
     void UpdateVoltar(int *prox);
     Vector2 CarregaFase(int *n_turtle,int *n_crab, int *tempo_espera, int n_fase, Rectangle *Mario, Rectangle *Botao, Vector3 cano_pos[9], Rectangle Plts[10], Rectangle Canos[9]);
-    void Anima(Vector2 *var_animaMa, Vector2 *var_animaBo, Vector2 var_animaTar[20], bool isFalling, bool isJumping, bool *apertado, int n_turtle, TURTLE turtle[20], Rectangle *Mario, bool lado);
+    void Anima(Vector2 *var_animaMa, Vector2 *var_animaBo, Vector2 var_animaTar[20], Vector2 var_animaCar[20], bool isFalling, bool isJumping, bool *apertado, int n_turtle, TURTLE turtle[20], CRAB crab[20], int n_crab, Rectangle *Mario, bool lado);
     void UpdateMenuCarregar(Rectangle opcoes[6], bool *flag, int *n_arq, Color opcoes_cores[6], int *n_fase, int *prox, Sound SomSelecinaOpcao);
     void InitEnemies(int *crab_atual, int *turtle_atual,int n_crab, int n_turtle, CRAB crab[20], TURTLE turtle[20], bool *flag_cano, int *cano_atual, Vector2 n_ind, Vector3 cano_pos[9], Rectangle Canos[9]);
     int UpdateTurtle(Sound SomMorte, Sound SomVirei, PLAYER *jogador, CRAB crab[20], int *crab_atual, int n_crab, bool *apertado, int *hit_cooldown_current, int hit_cooldown_max, int *turtle_atual, int n_turtle, int tempo_espera, int *tempo_atual, TURTLE turtle[20], Vector2 n_ind, Rectangle Canos[9], Vector3 cano_pos[9],Rectangle Plts[10], Rectangle Mario, bool *dano, int *mario_invun);
@@ -66,7 +66,7 @@ typedef struct stc_crab{
     void DrawMenu(Texture textura_logo, Vector2 posicao_logo, Font fonte, const char *opcoes[], Rectangle posicao_opcoes[], Color cores_opcoes[]);
     void DrawAjuda(Font fonte);
     void DrawSobre(Font fonte);
-    void DrawTela(CRAB crab[20], int n_crab, bool dano, int mario_invun, TURTLE turtle[20],int n_turtle, PLAYER jogador, Texture sheet, Rectangle Plts[10], Vector2 n_ind, Rectangle Botao, Font fonte, Vector3 cano_pos[9], Rectangle *Mario, bool lado, int n_fase, Rectangle Canos[9], int ind_animaMa, int ind_animaBo, int n_plat, Vector2 var_animaTar[20]);
+    void DrawTela(Vector2 var_animaCar[20], CRAB crab[20], int n_crab, bool dano, int mario_invun, TURTLE turtle[20],int n_turtle, PLAYER jogador, Texture sheet, Rectangle Plts[10], Vector2 n_ind, Rectangle Botao, Font fonte, Vector3 cano_pos[9], Rectangle *Mario, bool lado, int n_fase, Rectangle Canos[9], int ind_animaMa, int ind_animaBo, int n_plat, Vector2 var_animaTar[20]);
     void DrawScores(PLAYER melhores[5], Font fonte);
     void DrawEntrada(char nome[16], int letterCount);
     void DrawCarregar(Rectangle opcoes[6], int n_arq, Color opcoes_cores[6]);

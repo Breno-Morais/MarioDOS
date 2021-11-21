@@ -1,6 +1,6 @@
 #include "../headers/menu.h"
 
-void Anima(Vector2 *var_animaMa, Vector2 *var_animaBo, Vector2 var_animaTar[20], bool isFalling, bool isJumping, bool *apertado, int n_turtle, TURTLE turtle[20], Rectangle *Mario, bool lado){
+void Anima(Vector2 *var_animaMa, Vector2 *var_animaBo, Vector2 var_animaTar[20], Vector2 var_animaCar[20], bool isFalling, bool isJumping, bool *apertado, int n_turtle, TURTLE turtle[20], CRAB crab[20], int n_crab, Rectangle *Mario, bool lado){
     var_animaMa->y+=1;
     var_animaBo->y+=1;
 
@@ -50,6 +50,27 @@ void Anima(Vector2 *var_animaMa, Vector2 *var_animaBo, Vector2 var_animaTar[20],
 
                 if(var_animaTar[i].x == 5 || var_animaTar[i].x == 6) var_animaTar[i].x = 0;
             }
+        }
+    }
+
+    // Animação dos Caranguejos
+    for(int i = 0; i<n_crab; i++){
+        if(crab[i].estado != 3){
+            var_animaCar[i].y += 1;
+
+            if(crab[i].estado == 2){
+                var_animaCar[i].x = 5;
+            } else if(crab[i].estado == 1){
+                if(var_animaCar[i].y >= 5){
+                    var_animaCar[i].y = 0;
+                    var_animaCar[i].x = 2;
+                } else var_animaCar[i].x = 3;
+            } else if(crab[i].fall){
+                var_animaCar[i].x = 0;
+            } else if(var_animaCar[i].y >= 5){
+                var_animaCar[i].y = 0;
+                var_animaCar[i].x = 0;
+            } else var_animaCar[i].x = 1;
         }
     }
 }
@@ -219,6 +240,31 @@ void InitEnemies(int *crab_atual, int *turtle_atual,int n_crab, int n_turtle, CR
         turtle[i].estado = 0;
         turtle[i].isThere = false;
         turtle[i].fall = false;
+    }
+        //inicializa caranguejos
+    for(int i=0; i<n_crab; i++){
+        crab[i].crabRec.width = 48;
+        crab[i].crabRec.height = 48;
+        while(!(*flag_cano)){
+            *cano_atual = 0 + (rand() % ((int)n_ind.x - 0 + 1));
+            if(cano_pos[(int)*cano_atual].z==0){
+                if(Canos[(int)*cano_atual].x<LARGURA_TELA/2){
+                    crab[i].crabRec.x = Canos[0].x+Canos[0].width;
+                    crab[i].crabRec.y = Canos[0].y+15;
+                    crab[i].sentido = 1;
+                }
+                else{
+                    crab[i].crabRec.x = Canos[1].x-crab[i].crabRec.width;
+                    crab[i].crabRec.y = Canos[1].y+15;
+                    crab[i].sentido = -1;
+                }
+                *flag_cano = true;
+            }
+        }
+        *flag_cano = false;
+        crab[i].estado = 0;
+        crab[i].isThere = false;
+        crab[i].fall = false;
     }
 }
 

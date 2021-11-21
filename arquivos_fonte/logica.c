@@ -270,7 +270,7 @@ void InitEnemies(int *crab_atual, int *turtle_atual,int n_crab, int n_turtle, CR
     }
 }
 
-int UpdateTurtle(Sound SomMorte, Sound SomVirei, PLAYER *jogador, CRAB crab[20], int *crab_atual, int n_crab, bool *apertado, int *hit_cooldown_current, int hit_cooldown_max, int *turtle_atual, int n_turtle, int tempo_espera, int *tempo_atual, TURTLE turtle[20], Vector2 n_ind, Rectangle Canos[9], Vector3 cano_pos[9],Rectangle Plts[10], Rectangle Mario, bool *dano, int *mario_invun){
+int UpdateTurtle(int n_fase, Sound SomMorte, Sound SomVirei, PLAYER *jogador, CRAB crab[20], int *crab_atual, int n_crab, bool *apertado, int *hit_cooldown_current, int hit_cooldown_max, int *turtle_atual, int n_turtle, int tempo_espera, int *tempo_atual, TURTLE turtle[20], Vector2 n_ind, Rectangle Canos[9], Vector3 cano_pos[9],Rectangle Plts[10], Rectangle Mario, bool *dano, int *mario_invun){
     Rectangle Chao = {0, 666, 1300, 100};
     int mortos = 0, re = 0;
     int estado_anterior = 0;
@@ -335,6 +335,20 @@ int UpdateTurtle(Sound SomMorte, Sound SomVirei, PLAYER *jogador, CRAB crab[20],
                     }
                 }
             }
+            for(int j=0;j<*crab_atual;j++){
+                if(CheckCollisionRecs(turtle[i].turtleRec, crab[j].crabRec)){
+                    if(turtle[i].sentido==1){
+                        turtle[i].turtleRec.x = turtle[i].turtleRec.x-4;
+                        turtle[i].sentido=-1;
+                        crab[j].sentido=1;
+                    }
+                    else if(turtle[i].sentido==-1){
+                        turtle[i].turtleRec.x = turtle[i].turtleRec.x+4;
+                        turtle[i].sentido=1;
+                        crab[j].sentido=-1;
+                    }
+                }
+            }
             //passando da direita pra esquerda
             if(turtle[i].turtleRec.x+(turtle[i].turtleRec.width/2)>=LARGURA_TELA){
                 turtle[i].turtleRec.x = 0-(turtle[i].turtleRec.width/2);
@@ -359,6 +373,12 @@ int UpdateTurtle(Sound SomMorte, Sound SomVirei, PLAYER *jogador, CRAB crab[20],
                             *hit_cooldown_current = 0;
                         }
                     }
+                }//colisão com o lado esquerdo da plataforma
+                if(CheckCollisionPointRec((Vector2){Plts[j].x, Plts[j].y+Plts[j].height}, turtle[i].turtleRec)){
+                    turtle[i].fall = true;
+                }//colisão com o lado direito da plataforma
+                else if(CheckCollisionPointRec((Vector2){Plts[j].x+Plts[j].width, Plts[j].y+Plts[j].height}, turtle[i].turtleRec)){
+                    turtle[i].fall = true;
                 }
             }//atualiza o turtle.fall
             if(CheckCollisionRecs(turtle[i].turtleRec, Chao)){
@@ -366,7 +386,7 @@ int UpdateTurtle(Sound SomMorte, Sound SomVirei, PLAYER *jogador, CRAB crab[20],
             }
 
             if(turtle[i].estado==0){ //ESTADO INVULNERAVEL
-                turtle[i].speed = 2;
+                turtle[i].speed = 1+n_fase-1;
                 turtle[i].isThere = true;
                 if(!*dano){
                     if(CheckCollisionRecs(Mario, turtle[i].turtleRec)){
@@ -448,6 +468,20 @@ int UpdateTurtle(Sound SomMorte, Sound SomVirei, PLAYER *jogador, CRAB crab[20],
                     }
                 }
             }
+            for(int j=0;j<*turtle_atual;j++){
+                if(CheckCollisionRecs(crab[i].crabRec, turtle[j].turtleRec)){
+                    if(crab[i].sentido==1){
+                        crab[i].crabRec.x = crab[i].crabRec.x-4;
+                        crab[i].sentido=-1;
+                        turtle[j].sentido=1;
+                    }
+                    else if(crab[i].sentido==-1){
+                        crab[i].crabRec.x = crab[i].crabRec.x+4;
+                        crab[i].sentido=1;
+                        turtle[j].sentido=-1;
+                    }
+                }
+            }
             //passando da direita pra esquerda
             if(crab[i].crabRec.x+(crab[i].crabRec.width/2)>=LARGURA_TELA){
                 crab[i].crabRec.x = 0-(crab[i].crabRec.width/2);
@@ -479,7 +513,7 @@ int UpdateTurtle(Sound SomMorte, Sound SomVirei, PLAYER *jogador, CRAB crab[20],
             }
 
             if(crab[i].estado==0){ //ESTADO INVULNERAVEL
-                crab[i].speed = 2;
+                crab[i].speed = 2+n_fase-1;
                 crab[i].isThere = true;
                 if(CheckCollisionRecs(Mario, crab[i].crabRec)){
                     //MARIO PERDE VIDA
@@ -490,7 +524,7 @@ int UpdateTurtle(Sound SomMorte, Sound SomVirei, PLAYER *jogador, CRAB crab[20],
             }
             else if(crab[i].estado==1){//ESTADO FURIOSO
                 crab[i].isThere = true;
-                crab[i].speed = 4;
+                crab[i].speed = 4+n_fase-1;
                 if(CheckCollisionRecs(Mario, crab[i].crabRec)){
                     //MARIO PERDE VIDA
                 }

@@ -204,7 +204,7 @@ int main(void)
 
                 // Salva o jogo se a tecla A for apertada
                 SalvarJogo(n_fase, Mario, Jog_Princ, n_turtle, turtle);
-                vitoria = UpdateTurtle(SomMorte, SomVirar, &Jog_Princ, crab, &crab_atual, n_crab, &apertado, &hit_cooldown_current, hit_cooldown_max, &turtle_atual, n_turtle, tempo_espera, &tempo_atual, turtle, n_ind, Canos, cano_pos, Plts, Mario, &dano, &mario_invun);
+                vitoria = UpdateTurtle(n_fase, SomMorte, SomVirar, &Jog_Princ, crab, &crab_atual, n_crab, &apertado, &hit_cooldown_current, hit_cooldown_max, &turtle_atual, n_turtle, tempo_espera, &tempo_atual, turtle, n_ind, Canos, cano_pos, Plts, Mario, &dano, &mario_invun);
                 GanhouPerdeu(&Jog_Princ, &vitoria, &n_fase, &flag_nivel, &prox_tela, &perdeu);
                             break;
 

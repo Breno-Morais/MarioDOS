@@ -204,7 +204,7 @@ int main(void)
                 SalvarJogo(n_fase, Mario, Jog_Princ, n_turtle, turtle, n_crab, crab);
 
                 // Atualiza todos os inimigos
-                vitoria = UpdateTurtle(SomMorte, SomVirar, &Jog_Princ, crab, &crab_atual, n_crab, &apertado, &hit_cooldown_current, hit_cooldown_max, &turtle_atual, n_turtle, tempo_espera, &tempo_atual, turtle, n_ind, Canos, cano_pos, Plts, Mario, &dano, &mario_invun);
+                vitoria = UpdateTurtle(n_fase, SomMorte, SomVirar, &Jog_Princ, crab, &crab_atual, n_crab, &apertado, &hit_cooldown_current, hit_cooldown_max, &turtle_atual, n_turtle, tempo_espera, &tempo_atual, turtle, n_ind, Canos, cano_pos, Plts, Mario, &dano, &mario_invun);
 
                 // Verifica se o jogo acabou
                 GanhouPerdeu(&Jog_Princ, &vitoria, &n_fase, &flag_nivel, &prox_tela, &perdeu);

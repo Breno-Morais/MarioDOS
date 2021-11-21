@@ -623,7 +623,7 @@ void InitEnemiesSave(int n_crab, int n_turtle, CRAB crab[20], TURTLE turtle[20])
     }
 }
 
-int UpdateTurtleSave(Sound SomMorte, Sound SomVirei, PLAYER *jogador, CRAB crab[20], int *crab_atual, int n_crab, bool *apertado, int *hit_cooldown_current, int hit_cooldown_max, int *turtle_atual, int n_turtle, int tempo_espera, int *tempo_atual, TURTLE turtle[20], Vector2 n_ind, Rectangle Canos[9], Vector3 cano_pos[9],Rectangle Plts[10], Rectangle Mario, bool *dano, int *mario_invun){
+int UpdateTurtleSave(int n_fase, Sound SomMorte, Sound SomVirei, PLAYER *jogador, CRAB crab[20], int *crab_atual, int n_crab, bool *apertado, int *hit_cooldown_current, int hit_cooldown_max, int *turtle_atual, int n_turtle, int tempo_espera, int *tempo_atual, TURTLE turtle[20], Vector2 n_ind, Rectangle Canos[9], Vector3 cano_pos[9],Rectangle Plts[10], Rectangle Mario, bool *dano, int *mario_invun){
     Rectangle Chao = {0, 666, 1300, 100};
     int mortos = 0, re = 0;
     int estado_anterior = 0;
@@ -696,7 +696,7 @@ int UpdateTurtleSave(Sound SomMorte, Sound SomVirei, PLAYER *jogador, CRAB crab[
             }
 
             if(turtle[i].estado==0){ //ESTADO INVULNERAVEL
-                turtle[i].speed = 2;
+                turtle[i].speed = 2+n_fase-1;
                 turtle[i].isThere = true;
                 if(!*dano){
                     if(CheckCollisionRecs(Mario, turtle[i].turtleRec)){
@@ -810,7 +810,7 @@ int UpdateTurtleSave(Sound SomMorte, Sound SomVirei, PLAYER *jogador, CRAB crab[
             }
 
             if(crab[i].estado==0){ //ESTADO INVULNERAVEL
-                crab[i].speed = 2;
+                crab[i].speed = 2+n_fase-1;
                 crab[i].isThere = true;
                 if(!*dano){
                     if(CheckCollisionRecs(Mario, crab[i].crabRec)){

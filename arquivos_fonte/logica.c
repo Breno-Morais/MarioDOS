@@ -67,10 +67,12 @@ void Anima(Vector2 *var_animaMa, Vector2 *var_animaBo, Vector2 var_animaTar[20],
                 } else var_animaCar[i].x = 3;
             } else if(crab[i].fall){
                 var_animaCar[i].x = 0;
-            } else if(var_animaCar[i].y >= 5){
+            } else if(var_animaCar[i].y >= 10){
                 var_animaCar[i].y = 0;
-                var_animaCar[i].x = 0;
-            } else var_animaCar[i].x = 1;
+                var_animaCar[i].x += 1;
+
+                if(var_animaCar[i].x == 2) var_animaCar[i].x = 0;
+            }
         }
     }
 }

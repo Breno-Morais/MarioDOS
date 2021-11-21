@@ -1,24 +1,6 @@
 #include "../headers/sprites.h"
 #include "../headers/menu.h"
 
-
-void InitSpread(Texture2D sheet){
-        int i = 0, x = 20, y = 200;
-        Rectangle Plts[2] = {Plt_Azul, Plt_Marrom};
-
-        //----------------------------------------------------------------------------------
-        BeginDrawing();
-
-            // Limpa o background e coloque ele preto
-            ClearBackground(BLACK);
-
-            DrawTextureTiled(sheet, Plts[i], (Rectangle){x, y, Plts[i].width*escala*10, Plts[i].height*escala}, (Vector2){0,0}, 0, escala, WHITE);
-
-        EndDrawing();
-        //----------------------------------------------------------------------------------
-}
-
-
 void DrawTela(Vector2 var_animaCar[20], CRAB crab[20], int n_crab, bool dano, int mario_invun, TURTLE turtle[20],int n_turtle, PLAYER jogador, Texture sheet, Rectangle Plts[10], Vector2 n_ind, Rectangle Botao, Font fonte, Vector3 cano_pos[9], Rectangle *Mario, bool lado, int n_fase, Rectangle Canos[9], int ind_animaMa, int ind_animaBo, int n_plat, Vector2 var_animaTar[20]){
         int i;
 

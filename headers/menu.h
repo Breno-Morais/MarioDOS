@@ -55,6 +55,7 @@ typedef struct stc_crab{
     void UpdateMario(int *hit_cooldown_current, int hit_cooldown_max, int *botao_current, Vector3 cano_pos[9], Rectangle Canos[9], Rectangle Plts[10], Vector2 n_ind, Rectangle *Mario, float frameMax, float *marioSpeedLeft, float *marioSpeedRight, bool *isJumping, bool *isFalling, float *jumpFrameCurrent, bool *lado, Rectangle Botao, bool *apertado, bool *apertado_anima, Sound SomPulo);
     void GanhouPerdeu(PLAYER *jogador, int *vitoria, int *n_fase, bool *flag, int *prox, bool *perdeu);
     int UpdateTurtleSave(int n_fase, Sound SomMorte, Sound SomVirei, PLAYER *jogador, CRAB crab[20], int *crab_atual, int n_crab, bool *apertado, int *hit_cooldown_current, int hit_cooldown_max, int *turtle_atual, int n_turtle, int tempo_espera, int *tempo_atual, TURTLE turtle[20], Vector2 n_ind, Rectangle Canos[9], Vector3 cano_pos[9],Rectangle Plts[10], Rectangle Mario, bool *dano, int *mario_invun);
+    void InitEnemiesSave(int n_crab, int n_turtle, CRAB crab[20], TURTLE turtle[20]);
 
     // Fun��es de Arquivos
     void Highscores(PLAYER melhores[5], bool *flag);
@@ -71,7 +72,6 @@ typedef struct stc_crab{
     void DrawScores(PLAYER melhores[5], Font fonte);
     void DrawEntrada(char nome[16], int letterCount);
     void DrawCarregar(Rectangle opcoes[6], int n_arq, Color opcoes_cores[6]);
-    void InitSpread(Texture2D sheet);
     void DrawFinal(Texture sheet, int *counter, int *prox, bool perdeu);
     void UpdateGameOver(PLAYER *jogador, PLAYER melhores[5], bool *flag_arq, bool *flag_final);
 

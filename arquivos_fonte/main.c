@@ -90,7 +90,7 @@ int main(void)
     CRAB crab[20];
 
     //-------------------------------------------------------------------------------------
-    PLAYER Jog_Princ = {"", 10000, 3};
+    PLAYER Jog_Princ = {"", 0, 3};
 
     //-----------------------------------------------------------------------------------
     // Variáveis dos Arquivos
@@ -291,7 +291,7 @@ int main(void)
             case N_RANKING: DrawScores(melhores, fonte_pixel);
                             break;
 
-            case N_AJUDA: DrawAjuda(fonte_mario);
+            case N_AJUDA: DrawAjuda(fonte_pixel);
                             break;
 
             case N_SOBRE: DrawSobre(fonte_mario);

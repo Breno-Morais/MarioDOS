@@ -4,12 +4,11 @@
 void copiaJogador(PLAYER *jogador1, PLAYER jogador2);
 
 void DrawAjuda(Font fonte){
-        char *texto_base="Texto base apenas para eu saber como ficara formatado";
+        char *texto_base[50]= {"Entre na opção 'Novo Jogo' e insira o seu nome, então, use as setas do teclado para movimentar o Mario e a", "tecla D para pular. Tente acertar a parte debaixo dos inimigos através da plataforma, e, quando eles estiverem ", "vulneráveis, ande até eles para derruba-los. Elimine todos os inimigos para passar de fase.", "", "Quando você for acertado, o Mario terá um pequeno momento de invulnerabilidade, para que ele possa sair da si-", "tuação arriscada. Esse momento será demarcado pelo Mario ficar piscando.", "" ,"Use a tecla A para salvar o jogo a qualquer momento, você poderá acessar esse jogo salvo, através da opção", "'Continuar'. Caso você queria acessar alguma fase, entre na opção 'Carregar Mapa'", "", "Ao fim de qualquer jogo, a sua pontuação será salva, para ver o ranking dos melhores jogadores, vá até", "a opção 'Ranking' no menu.", "", "Bom Jogo"};
         Vector2 posicao_texto;
         // Apenas formatação
         //----------------------------------------------------------------------------------
-        posicao_texto.x = (LARGURA_TELA - MeasureTextEx(fonte, texto_base, 20, 2).x)/2;
-        posicao_texto.y = (ALTURA_TELA - MeasureTextEx(fonte, texto_base, 20, 2).y)/2;
+
         //----------------------------------------------------------------------------------
         BeginDrawing();
 
@@ -17,7 +16,10 @@ void DrawAjuda(Font fonte){
             ClearBackground(BLACK);
 
             // Desenha o texto
-            DrawTextEx(fonte, texto_base, posicao_texto, 20, 2, WHITE);
+            DrawText("Como jogar:", 600-114, 10, 40, WHITE);
+            for(int i=0; i<15; i++){
+                DrawText(texto_base[i], 10, 100+25*i, 20, WHITE);
+            }
 
 
         EndDrawing();
@@ -25,10 +27,10 @@ void DrawAjuda(Font fonte){
 }
 
 void DrawSobre(Font fonte){
-        char *texto_base="Texto base apenas para eu saber como ficara formatado";
+        char *texto_base1="Trabalho feito por Arthur Donessa e Breno Morais";
         Vector2 posicao_texto;
-        posicao_texto.x = (LARGURA_TELA - MeasureTextEx(fonte, texto_base, 20, 2).x)/2;
-        posicao_texto.y = (ALTURA_TELA - MeasureTextEx(fonte, texto_base, 20, 2).y)/2;
+        posicao_texto.x = (LARGURA_TELA - MeasureTextEx(fonte, texto_base1, 30, 2).x)/2;
+        posicao_texto.y = (ALTURA_TELA - 35 - MeasureTextEx(fonte, texto_base1, 30, 2).y)/2;
         //----------------------------------------------------------------------------------
         BeginDrawing();
 
@@ -36,7 +38,13 @@ void DrawSobre(Font fonte){
             ClearBackground(BLACK);
 
             // Desenha o texto
-            DrawTextEx(fonte, texto_base, posicao_texto, 20, 2, WHITE);
+            DrawTextEx(fonte, texto_base1, posicao_texto, 30, 2, WHITE);
+
+            char *texto_base2="Trabalho Final - Algoritmos e Programacao - INFO1202";
+            posicao_texto.x = (LARGURA_TELA - MeasureTextEx(fonte, texto_base2, 20, 2).x)/2;
+            posicao_texto.y = (ALTURA_TELA + 20 - MeasureTextEx(fonte, texto_base2, 20, 2).y)/2;
+
+            DrawTextEx(fonte, texto_base2, posicao_texto, 20, 2, WHITE);
 
 
         EndDrawing();

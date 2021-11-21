@@ -62,7 +62,7 @@ void DrawTela(Vector2 var_animaCar[20], CRAB crab[20], int n_crab, bool dano, in
             // Desenha Mario
                 Rectangle mario_atual;
 
-                if(dano && mario_invun % 4 == 0){
+                if(dano && mario_invun % 5 == 0){
                     mario_atual = M_And_Dir[5];
                 } else if(ind_animaMa<6){
                     if(lado){
@@ -92,6 +92,10 @@ void DrawTela(Vector2 var_animaCar[20], CRAB crab[20], int n_crab, bool dano, in
                             tar_atual = TartAndEsq[(int)var_animaTar[i].x];
                         }
 
+                        if((int)var_animaTar[i].x == 5){
+                        turtle[i].turtleRec = (Rectangle){turtle[i].turtleRec.x, turtle[i].turtleRec.y, 35, 35};
+                        }
+
                         DrawTexturePro(sheet, tar_atual, turtle[i].turtleRec, origem, 0, WHITE);
 
                     }
@@ -108,8 +112,6 @@ void DrawTela(Vector2 var_animaCar[20], CRAB crab[20], int n_crab, bool dano, in
 
                     }
                 }
-
-                //DrawRectangleLines(Mario->x, Mario->y, Mario->width, Mario->height, RED); // Desenha a colisão
 
             // Desenha os Canos
                 for(i=0; i<n_ind.x; i++){

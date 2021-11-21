@@ -139,7 +139,7 @@ void DrawScores(PLAYER melhores[5], Font fonte){
         //----------------------------------------------------------------------------------
 }
 
-void SalvarJogo(int n_fase, Rectangle Mario, PLAYER jogador, int n_turtle, TURTLE turtle[20]){
+void SalvarJogo(int n_fase, Rectangle Mario, PLAYER jogador, int n_turtle, TURTLE turtle[20], int n_crab, CRAB crab[20]){
     // Salva apenas se a tecla A for apertada
     if(IsKeyPressed(KEY_A)){
             // Inicialização das variáveis
@@ -203,11 +203,6 @@ void SalvarJogo(int n_fase, Rectangle Mario, PLAYER jogador, int n_turtle, TURTL
                     // Guarda as informações dos inimigos
                     fputs(TextFormat("Tartarugas:%d\n", n_turtle), save);
                     for(int i=0; i<n_turtle; i++){
-                        Rectangle turtleRec;
-                        int sentido, estado, level; //estado:1-inativo; 2-invulneravel; 3-vulneravel; 4-morto.
-                        float speed;
-                        bool fall, isThere;
-
                         int tx = (int)turtle[i].turtleRec.x;
                         int ty = (int)turtle[i].turtleRec.y;
                         int ts = turtle[i].sentido;
@@ -219,13 +214,26 @@ void SalvarJogo(int n_fase, Rectangle Mario, PLAYER jogador, int n_turtle, TURTL
                         fputs(TurtleString, save);
                     }
 
+                    fputs(TextFormat("Caranguejos:%d\n", n_crab), save);
+                    for(int i=0; i<n_crab; i++){
+                        int cx = (int)crab[i].crabRec.x;
+                        int cy = (int)crab[i].crabRec.y;
+                        int cs = crab[i].sentido;
+                        int ce = crab[i].estado;
+                        //int cl = crab[i].level;
+                        float csp = crab[i].speed;
+
+                        const char *CrabString = TextFormat("%d;%d;%d;%d;%f\n", cx, cy, cs, ce, csp);
+                        fputs(CrabString, save);
+                    }
+
                     fclose(fase);
                     fclose(save);
                 }
             }
 }
 
-Vector2 CarregaSave(Rectangle *Mario, Rectangle *Botao, Vector3 cano_pos[9], Rectangle Plts[10], Rectangle Canos[9], PLAYER *jogador, TURTLE turtle[20], int *n_turtle){
+Vector2 CarregaSave(Rectangle *Mario, Rectangle *Botao, Vector3 cano_pos[9], Rectangle Plts[10], Rectangle Canos[9], PLAYER *jogador, TURTLE turtle[20], int *n_turtle, CRAB crab[20], int *n_crab){
     FILE *save;
     char linha_atual[120];
     int coluna, n_linha, x, y, i, n_cano=0, n_plt=0;
@@ -373,6 +381,19 @@ Vector2 CarregaSave(Rectangle *Mario, Rectangle *Botao, Vector3 cano_pos[9], Rec
         turtle[i].estado = atoi(linhas[3]);
         turtle[i].speed = atoi(linhas[4]);
     }
+
+    fscanf(save, "Caranguejos:%s\n", linha_atual);
+    *n_crab = atoi(linha_atual);
+    for(i=0; i<*n_crab; i++){
+        fscanf(save, "%s\n", linha_atual);
+        linhas = TextSplit(linha_atual, ';', &conta);
+
+        crab[i].crabRec = (Rectangle){atoi(linhas[0]), atoi(linhas[1]), 48, 48};
+        crab[i].sentido = atoi(linhas[2]);
+        crab[i].estado = atoi(linhas[3]);
+        crab[i].speed = atoi(linhas[4]);
+    }
+
 
     fclose(save);
 

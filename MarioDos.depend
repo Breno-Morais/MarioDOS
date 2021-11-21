@@ -14,24 +14,24 @@
 	<stdio.h>
 	"../headers/menu.h"
 
-1637523366 c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\headers\menu.h
+1637529614 c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\headers\menu.h
 	"raylib.h"
 	<unistd.h>
 	<stdio.h>
 	<stdlib.h>
 	<time.h>
 
-1637523302 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\main.c
+1637529068 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\main.c
 	"../headers/menu.h"
 
 1637266394 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\menu.c
 	"../headers/menu.h"
 
-1637515306 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\outros.c
+1637529632 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\outros.c
 	"../headers/menu.h"
 	<math.h>
 
-1637524406 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\spreadsheet.c
+1637529906 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\spreadsheet.c
 	"../headers/sprites.h"
 	"../headers/menu.h"
 
@@ -78,6 +78,6 @@
 	"../headers/menu.h"
 	<time.h>
 
-1637524603 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\logica.c
+1637529847 source:c:\users\bnero\desktop\projetos e atividades ufrgs\algoritmos e programação\mariodos\arquivos_fonte\logica.c
 	"../headers/menu.h"
 

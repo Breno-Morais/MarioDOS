@@ -178,15 +178,33 @@ int main(void)
                     PlaySound(SomInicia);
                     flag_som = true;
                 }
-    //                        break;
+
+                // Atualiza o Mario e suas colis�es
+                    apert_anterior = apertado_anima;
+                 UpdateMario(&hit_cooldown_current, hit_cooldown_max, &botao_current, cano_pos, Canos, Plts, n_ind, &Mario, frameMax, &marioSpeedLeft, &marioSpeedRight, &isJumping, &isFalling, &jumpFrameCurrent, &lado, Botao, &apertado, &apertado_anima, SomPulo);
+
+                // Atualizaos sprites da animação
+                Anima(&var_animaMa, &var_animaBo, var_animaTar, var_animaCar, isFalling, isJumping, &apertado_anima, n_turtle, turtle, crab, n_crab, &Mario, lado);
+                    // Verifica se a animação do botão acabou
+                    if(!apert_anterior && apertado_anima){
+                        PlaySound(SomDano);
+                        PlaySound(SomMoeda);
+                        n_apertos++;
+                    }
+
+                // Salva o jogo se a tecla A for apertada
+                SalvarJogo(n_fase, Mario, Jog_Princ, n_turtle, turtle, n_crab, crab);
+                vitoria = UpdateTurtle(SomMorte, SomVirar, &Jog_Princ, crab, &crab_atual, n_crab, &apertado, &hit_cooldown_current, hit_cooldown_max, &turtle_atual, n_turtle, tempo_espera, &tempo_atual, turtle, n_ind, Canos, cano_pos, Plts, Mario, &dano, &mario_invun);
+                GanhouPerdeu(&Jog_Princ, &vitoria, &n_fase, &flag_nivel, &prox_tela, &perdeu);
+                            break;
 
             case N_CONTINUAR:
                 // Verifica se o save já foi carregado
                 if(!flag_nivel){
-                    n_ind = CarregaSave(&Mario, &Botao, cano_pos, Plts, Canos, &Jog_Princ, turtle, &n_turtle);
+                    n_ind = CarregaSave(&Mario, &Botao, cano_pos, Plts, Canos, &Jog_Princ, turtle, &n_turtle, crab, &n_crab);
                     PlaySound(SomInicia);
                     flag_nivel = true;
-                    InitEnemies(&crab_atual, &turtle_atual, n_crab, n_turtle, crab, turtle, &flag_cano, &cano_atual, n_ind, cano_pos, Canos);
+                    InitEnemiesSave(n_crab, n_turtle, crab, turtle);
                 }
 
                 // Atualiza o Mario e suas colis�es
@@ -203,8 +221,8 @@ int main(void)
                     }
 
                 // Salva o jogo se a tecla A for apertada
-                SalvarJogo(n_fase, Mario, Jog_Princ, n_turtle, turtle);
-                vitoria = UpdateTurtle(SomMorte, SomVirar, &Jog_Princ, crab, &crab_atual, n_crab, &apertado, &hit_cooldown_current, hit_cooldown_max, &turtle_atual, n_turtle, tempo_espera, &tempo_atual, turtle, n_ind, Canos, cano_pos, Plts, Mario, &dano, &mario_invun);
+                SalvarJogo(n_fase, Mario, Jog_Princ, n_turtle, turtle, n_crab, crab);
+                vitoria = UpdateTurtleSave(SomMorte, SomVirar, &Jog_Princ, crab, &crab_atual, n_crab, &apertado, &hit_cooldown_current, hit_cooldown_max, &turtle_atual, n_turtle, tempo_espera, &tempo_atual, turtle, n_ind, Canos, cano_pos, Plts, Mario, &dano, &mario_invun);
                 GanhouPerdeu(&Jog_Princ, &vitoria, &n_fase, &flag_nivel, &prox_tela, &perdeu);
                             break;
 

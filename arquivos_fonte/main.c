@@ -78,12 +78,12 @@ int main(void)
 
     //Variáveis dos inimigos
     int n_turtle, turtle_atual=0;
-    int n_crab;
+    int n_crab, crab_atual=0;
     int tempo_espera, tempo_atual=0;
     int hit_cooldown_current = 0, hit_cooldown_max = 10;
 
     TURTLE turtle[20];
-    CRAB crab[10];
+    CRAB crab[20];
 
     //-------------------------------------------------------------------------------------
     PLAYER Jog_Princ = {"Breno", 5000, 3};
@@ -130,7 +130,7 @@ int main(void)
                     n_ind = CarregaFase(&n_turtle, &n_crab, &tempo_espera, n_fase, &Mario, &Botao, cano_pos, Plts, Canos);
                     PlaySound(SomInicia);
                     flag_nivel = true;
-                    InitTurtle(&turtle_atual, n_turtle, turtle, &flag_cano, &cano_atual, n_ind, cano_pos, Canos);
+                    InitEnemies(&crab_atual, &turtle_atual, n_crab, n_turtle, crab, turtle, &flag_cano, &cano_atual, n_ind, cano_pos, Canos);
             }
 
     //                        break;
@@ -143,7 +143,7 @@ int main(void)
                 Anima(&framesCounter, &ind_animaMa, &ind_animaBo, isFalling, isJumping);
                 UpdateVoltar(&prox_tela);
                 SalvarJogo(n_fase, Mario, Jog_Princ);
-                UpdateTurtle(&apertado, &hit_cooldown_current, hit_cooldown_max, &turtle_atual, n_turtle, tempo_espera, &tempo_atual, &turtle, n_ind, Canos, cano_pos, Plts, Mario, Chao);
+                UpdateTurtle(&crab, &crab_atual, n_crab, &apertado, &hit_cooldown_current, hit_cooldown_max, &turtle_atual, n_turtle, tempo_espera, &tempo_atual, &turtle, n_ind, Canos, cano_pos, Plts, Mario, Chao);
                             break;
             case N_CARREGAR_MAPA:
     //                        break;
@@ -162,7 +162,7 @@ int main(void)
                             break;
             case N_NOVO:
             //            break;
-            case N_CONTINUAR: DrawTela(turtle, n_turtle, Jog_Princ, sheet, Plts, n_ind, Botao, fonte_mario, cano_pos, &Mario, lado, n_fase, Canos, ind_animaMa, ind_animaBo);
+            case N_CONTINUAR: DrawTela(crab, n_crab, turtle, n_turtle, Jog_Princ, sheet, Plts, n_ind, Botao, fonte_mario, cano_pos, &Mario, lado, n_fase, Canos, ind_animaMa, ind_animaBo);
                             break;
             case N_CARREGAR_MAPA:
             //                break;

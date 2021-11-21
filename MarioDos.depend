@@ -45,7 +45,7 @@
 	"../headers/menu.h"
 	<stdlib.h>
 
-1637344957 c:\users\user\documents\github\mariodos\headers\menu.h
+1637515733 c:\users\user\documents\github\mariodos\headers\menu.h
 	"raylib.h"
 	<unistd.h>
 	<stdio.h>
@@ -59,20 +59,20 @@
 	"../headers/menu.h"
 	<stdlib.h>
 
-1637332040 source:c:\users\user\documents\github\mariodos\arquivos_fonte\spreadsheet.c
+1637517398 source:c:\users\user\documents\github\mariodos\arquivos_fonte\spreadsheet.c
 	"../headers/sprites.h"
 	"../headers/menu.h"
 
 1637332040 c:\users\user\documents\github\mariodos\headers\sprites.h
 	"raylib.h"
 
-1637344957 source:c:\users\user\documents\github\mariodos\arquivos_fonte\main.c
+1637515733 source:c:\users\user\documents\github\mariodos\arquivos_fonte\main.c
 	"../headers/menu.h"
 
 1636496841 shed changes
 	"../headers/menu.h"
 
-1637335521 source:c:\users\user\documents\github\mariodos\arquivos_fonte\logica.c
+1637517137 source:c:\users\user\documents\github\mariodos\arquivos_fonte\logica.c
 	"../headers/menu.h"
 	<time.h>
 

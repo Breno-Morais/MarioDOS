@@ -146,9 +146,13 @@ void UpdateMario(int *hit_cooldown_current, int hit_cooldown_max, int *botao_cur
     }
 }
 
-void InitTurtle(int *turtle_atual, int n_turtle, TURTLE turtle[20], bool *flag_cano, int *cano_atual, Vector2 n_ind, Vector3 cano_pos[9], Rectangle Canos[9]){
+void InitEnemies(int *crab_atual, int *turtle_atual,int n_crab, int n_turtle, CRAB crab[20], TURTLE turtle[20], bool *flag_cano, int *cano_atual, Vector2 n_ind, Vector3 cano_pos[9], Rectangle Canos[9]){
+    //se houver tartarugas, o primeiro inimigo a sair é tartaruga, senao é caranguejo
     if(*turtle_atual<n_turtle)
         *turtle_atual = 1;
+    else if(*crab_atual<n_turtle)
+        *crab_atual = 1;
+    //inicializa tartarugas
     for(int i=0; i<n_turtle; i++){
         turtle[i].turtleRec.width = 48;
         turtle[i].turtleRec.height = 48;
@@ -169,16 +173,40 @@ void InitTurtle(int *turtle_atual, int n_turtle, TURTLE turtle[20], bool *flag_c
             }
         }
         *flag_cano = false;
-
         turtle[i].estado = 0;
         turtle[i].isThere = false;
         turtle[i].fall = false;
     }
+        //inicializa caranguejos
+    for(int i=0; i<n_crab; i++){
+        crab[i].crabRec.width = 48;
+        crab[i].crabRec.height = 48;
+        while(!(*flag_cano)){
+            *cano_atual = 0 + (rand() % ((int)n_ind.x - 0 + 1));
+            if(cano_pos[(int)*cano_atual].z==0){
+                if(Canos[(int)*cano_atual].x<LARGURA_TELA/2){
+                    crab[i].crabRec.x = Canos[0].x+Canos[0].width;
+                    crab[i].crabRec.y = Canos[0].y+15;
+                    crab[i].sentido = 1;
+                }
+                else{
+                    crab[i].crabRec.x = Canos[1].x-crab[i].crabRec.width;
+                    crab[i].crabRec.y = Canos[1].y+15;
+                    crab[i].sentido = -1;
+                }
+                *flag_cano = true;
+            }
+        }
+        *flag_cano = false;
+        crab[i].estado = 0;
+        crab[i].isThere = false;
+        crab[i].fall = false;
+    }
 }
 
-void UpdateTurtle(bool *apertado, int *hit_cooldown_current, int hit_cooldown_max, int *turtle_atual, int n_turtle, int tempo_espera, int *tempo_atual, TURTLE turtle[20], Vector2 n_ind, Rectangle Canos[9], Vector3 cano_pos[9],Rectangle Plts[10], Rectangle Mario, Rectangle Chao){
+void UpdateTurtle(CRAB crab[20], int *crab_atual, int n_crab, bool *apertado, int *hit_cooldown_current, int hit_cooldown_max, int *turtle_atual, int n_turtle, int tempo_espera, int *tempo_atual, TURTLE turtle[20], Vector2 n_ind, Rectangle Canos[9], Vector3 cano_pos[9],Rectangle Plts[10], Rectangle Mario, Rectangle Chao){
 
-    //vai spawnando os inimigos a cada "tempo_espera" segundos (ou a cada 30 frames, como foi escrito)
+    //vai spawnando os tartarugas a cada "tempo_espera" segundos (ou a cada 30 frames, como foi escrito)
     if(*turtle_atual<n_turtle){
         if((*tempo_atual)<30*tempo_espera){
             *tempo_atual = (*tempo_atual)+1;
@@ -188,6 +216,17 @@ void UpdateTurtle(bool *apertado, int *hit_cooldown_current, int hit_cooldown_ma
             *tempo_atual = 0;
         }
     }
+    //vai spawnando os caranguejos a cada "tempo_espera" segundos (ou a cada 30 frames, como foi escrito)
+    if(*turtle_atual>=n_turtle && *crab_atual<n_crab){
+        if((*tempo_atual)<30*tempo_espera){
+            *tempo_atual = (*tempo_atual)+1;
+        }
+        else{
+            *crab_atual = (*crab_atual)+1;
+            *tempo_atual = 0;
+        }
+    }
+    DrawText(TextFormat("%d", *crab_atual), 600, 100, 30, RED);
 
     for(int i=0; i<*turtle_atual; i++){
             //DrawText(TextFormat("%d", (int)n_ind.x), 600, 100, 30, RED);
@@ -243,7 +282,7 @@ void UpdateTurtle(bool *apertado, int *hit_cooldown_current, int hit_cooldown_ma
                 if(CheckCollisionRecs(turtle[i].turtleRec, Plts[j])){
                     turtle[i].fall = false;
                     //atualiza o turtle.estado
-                    if(CheckCollisionPointRec((Vector2){Mario.x+(Mario.width/2), Mario.y-20}, turtle[i].turtleRec)){
+                    if(CheckCollisionPointRec((Vector2){Mario.x+(Mario.width/2), Mario.y-20}, turtle[i].turtleRec) && turtle[i].estado==0){
                         if((*hit_cooldown_current)>=hit_cooldown_max){
                             turtle[i].estado = turtle[i].estado+1;
                             *hit_cooldown_current = 0;
@@ -281,6 +320,111 @@ void UpdateTurtle(bool *apertado, int *hit_cooldown_current, int hit_cooldown_ma
             }
             else{
                 turtle[i].estado = 2;
+            }
+        }
+        //---------------------------------------CARANGUEJOS------------------------------------------------------
+        for(int i=0; i<*crab_atual; i++){
+            //DrawText(TextFormat("%d", (int)n_ind.x), 600, 100, 30, RED);
+            //atualiza o crabRec.x
+            crab[i].crabRec.x = crab[i].crabRec.x + (crab[i].speed*crab[i].sentido);
+            //logica dos canos de retorno
+            for(int j=0;j<(int)n_ind.x;j++){
+                if(CheckCollisionRecs(Canos[j], crab[i].crabRec) && cano_pos[j].z!=0){
+                    if(cano_pos[j].x<600){
+                        crab[i].crabRec.x = Canos[0].x+Canos[0].width;
+                        crab[i].crabRec.y = Canos[0].y+15;
+                    }
+                    else{
+                        crab[i].crabRec.x = Canos[1].x-crab[i].crabRec.width;
+                        crab[i].crabRec.y = Canos[1].y+15;
+                    }
+                    if(crab[i].sentido==1)
+                        crab[i].sentido=-1;
+                    else if(crab[i].sentido==-1)
+                        crab[i].sentido=1;
+                }
+            }
+            //rebate nos inimigos e muda de direção
+            for(int j=0;j<*crab_atual;j++){
+                if(CheckCollisionRecs(crab[i].crabRec, crab[j].crabRec) && i!=j){
+                    if(crab[i].sentido==1){
+                        crab[i].crabRec.x = crab[i].crabRec.x-4;
+                        crab[i].sentido=-1;
+                        crab[j].sentido=1;
+                    }
+                    else if(crab[i].sentido==-1){
+                        crab[i].crabRec.x = crab[i].crabRec.x+4;
+                        crab[i].sentido=1;
+                        crab[j].sentido=-1;
+                    }
+                }
+            }
+            //passando da direita pra esquerda
+            if(crab[i].crabRec.x+(crab[i].crabRec.width/2)>=LARGURA_TELA){
+                crab[i].crabRec.x = 0-(crab[i].crabRec.width/2);
+            }//passando da esquerda pra direita
+            else if(crab[i].crabRec.x+(crab[i].crabRec.width/2)<0){
+                crab[i].crabRec.x = LARGURA_TELA-(crab[i].crabRec.width/2);
+            }
+            //atualiza o crabRec.y
+            if(crab[i].fall==true){
+                crab[i].crabRec.y = crab[i].crabRec.y+4;
+            }
+
+            //atualiza o crab.fall
+            crab[i].fall = true;
+            for(int j=0; j<n_ind.y;j++){
+                if(CheckCollisionRecs(crab[i].crabRec, Plts[j])){
+                    crab[i].fall = false;
+                    //atualiza o crab.estado
+                    if(CheckCollisionPointRec((Vector2){Mario.x+(Mario.width/2), Mario.y-20}, crab[i].crabRec) && crab[i].estado<2){
+                        if((*hit_cooldown_current)>=hit_cooldown_max){
+                            crab[i].estado = crab[i].estado+1;
+                            *hit_cooldown_current = 0;
+                        }
+                    }
+                }
+            }//atualiza o crab.fall
+            if(CheckCollisionRecs(crab[i].crabRec, Chao)){
+                crab[i].fall = false;
+            }
+
+            if(crab[i].estado==0){ //ESTADO INVULNERAVEL
+                crab[i].speed = 2;
+                crab[i].isThere = true;
+                if(CheckCollisionRecs(Mario, crab[i].crabRec)){
+                    //MARIO PERDE VIDA
+                }
+                if(*apertado && crab[i].isThere){
+                    crab[i].estado += 1;
+                }
+            }
+            else if(crab[i].estado==1){//ESTADO FURIOSO
+                crab[i].isThere = true;
+                crab[i].speed = 4;
+                if(CheckCollisionRecs(Mario, crab[i].crabRec)){
+                    //MARIO PERDE VIDA
+                }
+                if(*apertado && crab[i].isThere){
+                    crab[i].estado += 1;
+                }
+            }
+            else if(crab[i].estado==2){//ESTADO VULNERAVEL
+                crab[i].isThere = true;
+                crab[i].speed = 0;
+                if(CheckCollisionRecs(Mario, crab[i].crabRec)){
+                    crab[i].estado += 1;
+                }
+                if(*apertado && crab[i].isThere){
+                    crab[i].estado += 1;
+                }
+            }
+            else if(crab[i].estado==3){//ESTADO MORTO
+                crab[i].isThere = false;//para de desenhar o inimigo
+                crab[i].crabRec.y = ALTURA_TELA;//joga ele pra fora da tela (embaixo)
+            }
+            else{
+                crab[i].estado = 3;
             }
         }
         *apertado = false;

@@ -531,6 +531,7 @@ int UpdateTurtle(Sound SomMorte, Sound SomVirei, PLAYER *jogador, CRAB crab[20],
             else if(crab[i].estado==3){//ESTADO MORTO
                 crab[i].isThere = false;//para de desenhar o inimigo
                 crab[i].crabRec.y = ALTURA_TELA;//joga ele pra fora da tela (embaixo)
+                mortos+=1;
             }
             else{
                 crab[i].estado = 3;
@@ -540,7 +541,7 @@ int UpdateTurtle(Sound SomMorte, Sound SomVirei, PLAYER *jogador, CRAB crab[20],
         *apertado = false;
         *hit_cooldown_current = *hit_cooldown_current+1;
 
-        if(mortos == n_turtle){
+        if(mortos == (n_turtle+n_crab)){
             re = 1;
         }
 

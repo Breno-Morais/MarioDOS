@@ -160,9 +160,11 @@ int main(void)
     {
         // Update
         //----------------------------------------------------------------------------------
+        // Carrega o update do menu, está aqui para que não ocorra um Draw antes do Update
         if(prox_tela == N_MENU) UpdateMenu(cores_opcoes, posicao_opcoes, &prox_tela, SomOpcaoMenu, SomSelecinaOpcao);
         switch(prox_tela){
             case N_NOVO:
+                //-----------------------------------------------------------------------------------
                 // Verifica se a fase já foi carregada
                 if(!flag_nivel){
                     n_ind = CarregaFase(&n_turtle, &n_crab, &tempo_espera, n_fase, &Mario, &Botao, cano_pos, Plts, Canos);
@@ -170,20 +172,25 @@ int main(void)
                     InitEnemies(&crab_atual, &turtle_atual, n_crab, n_turtle, crab, turtle, &flag_cano, &cano_atual, n_ind, cano_pos, Canos);
                 }
 
+                //-----------------------------------------------------------------------------------
                 // Verifica se o nome já foi inserido
                 if(!flag_entrada){
                     flag_entrada = Entrada(&Jog_Princ, nome, &letterCount);
                     break;
+                // Se o nome já tiver sido inserido e o som não tenha tocado, toca a música inicial
                 } else if(!flag_som){
                     PlaySound(SomInicia);
                     flag_som = true;
                 }
 
-                // Atualiza o Mario e suas colis�es
+                //-----------------------------------------------------------------------------------
+                // Guarda o estado anterior do botão
                     apert_anterior = apertado_anima;
+
+                // Atualiza o Mario e suas colisões
                  UpdateMario(&hit_cooldown_current, hit_cooldown_max, &botao_current, cano_pos, Canos, Plts, n_ind, &Mario, frameMax, &marioSpeedLeft, &marioSpeedRight, &isJumping, &isFalling, &jumpFrameCurrent, &lado, Botao, &apertado, &apertado_anima, SomPulo);
 
-                // Atualizaos sprites da animação
+                // Atualiza os sprites da animação
                 Anima(&var_animaMa, &var_animaBo, var_animaTar, var_animaCar, isFalling, isJumping, &apertado_anima, n_turtle, turtle, crab, n_crab, &Mario, lado);
                     // Verifica se a animação do botão acabou
                     if(!apert_anterior && apertado_anima){
@@ -192,13 +199,19 @@ int main(void)
                         n_apertos++;
                     }
 
+                //-----------------------------------------------------------------------------------
                 // Salva o jogo se a tecla A for apertada
                 SalvarJogo(n_fase, Mario, Jog_Princ, n_turtle, turtle, n_crab, crab);
+
+                // Atualiza todos os inimigos
                 vitoria = UpdateTurtle(SomMorte, SomVirar, &Jog_Princ, crab, &crab_atual, n_crab, &apertado, &hit_cooldown_current, hit_cooldown_max, &turtle_atual, n_turtle, tempo_espera, &tempo_atual, turtle, n_ind, Canos, cano_pos, Plts, Mario, &dano, &mario_invun);
+
+                // Verifica se o jogo acabou
                 GanhouPerdeu(&Jog_Princ, &vitoria, &n_fase, &flag_nivel, &prox_tela, &perdeu);
                             break;
-
+                //-----------------------------------------------------------------------------------
             case N_CONTINUAR:
+                //-----------------------------------------------------------------------------------
                 // Verifica se o save já foi carregado
                 if(!flag_nivel){
                     n_ind = CarregaSave(&Mario, &Botao, cano_pos, Plts, Canos, &Jog_Princ, turtle, &n_turtle, crab, &n_crab);
@@ -207,11 +220,14 @@ int main(void)
                     InitEnemiesSave(n_crab, n_turtle, crab, turtle);
                 }
 
-                // Atualiza o Mario e suas colis�es
-                    apert_anterior = apertado_anima;
+                //-----------------------------------------------------------------------------------
+                // Guarda o estado anterior do botão
+                apert_anterior = apertado_anima;
+
+                // Atualiza o Mario e suas colisões
                  UpdateMario(&hit_cooldown_current, hit_cooldown_max, &botao_current, cano_pos, Canos, Plts, n_ind, &Mario, frameMax, &marioSpeedLeft, &marioSpeedRight, &isJumping, &isFalling, &jumpFrameCurrent, &lado, Botao, &apertado, &apertado_anima, SomPulo);
 
-                // Atualizaos sprites da animação
+                // Atualiza os sprites da animação
                 Anima(&var_animaMa, &var_animaBo, var_animaTar, var_animaCar, isFalling, isJumping, &apertado_anima, n_turtle, turtle, crab, n_crab, &Mario, lado);
                     // Verifica se a animação do botão acabou
                     if(!apert_anterior && apertado_anima){
@@ -220,19 +236,28 @@ int main(void)
                         n_apertos++;
                     }
 
+                //-----------------------------------------------------------------------------------
                 // Salva o jogo se a tecla A for apertada
                 SalvarJogo(n_fase, Mario, Jog_Princ, n_turtle, turtle, n_crab, crab);
+
+                // Atualiza todos os inimigos
                 vitoria = UpdateTurtleSave(SomMorte, SomVirar, &Jog_Princ, crab, &crab_atual, n_crab, &apertado, &hit_cooldown_current, hit_cooldown_max, &turtle_atual, n_turtle, tempo_espera, &tempo_atual, turtle, n_ind, Canos, cano_pos, Plts, Mario, &dano, &mario_invun);
+
+                // Verifica se o jogo acabou
                 GanhouPerdeu(&Jog_Princ, &vitoria, &n_fase, &flag_nivel, &prox_tela, &perdeu);
                             break;
-
-            case N_CARREGAR_MAPA: UpdateMenuCarregar(opcoes_Mapas, &flag_n_txts, &n_arq, opcoes_cores, &n_fase, &prox_tela, SomSelecinaOpcao);
+                //-----------------------------------------------------------------------------------
+            case N_CARREGAR_MAPA:
+                //-----------------------------------------------------------------------------------
+                // Verifica as colisões e a escolha da opção
+                UpdateMenuCarregar(opcoes_Mapas, &flag_n_txts, &n_arq, opcoes_cores, &n_fase, &prox_tela, SomSelecinaOpcao);
+                // Verifica se a tecla BACKSPACE foi apertada, e se foi, para que volte para o menu
                 UpdateVoltar(&prox_tela);
                             break;
 
-            case N_RANKING: Highscores(melhores, &flag_arq);
+            case N_RANKING: Highscores(melhores, &flag_arq); // Abre o arquivo highscores.bin, ele grava seu conteúdo na lista melhores
             case N_AJUDA:
-            case N_SOBRE: UpdateVoltar(&prox_tela);
+            case N_SOBRE: UpdateVoltar(&prox_tela); // Verifica se a tecla BACKSPACE foi apertada, e se foi, para que volte para o menu
                             break;
             case N_OVER: if(!flag_final){
                 UpdateGameOver(&Jog_Princ, melhores, &flag_arq, &flag_final);

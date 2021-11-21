@@ -1,6 +1,8 @@
 #include "../headers/menu.h"
 #include <math.h>
 
+void copiaJogador(PLAYER *jogador1, PLAYER jogador2);
+
 void DrawAjuda(Font fonte){
         char *texto_base="Texto base apenas para eu saber como ficara formatado";
         Vector2 posicao_texto;
@@ -67,6 +69,8 @@ void Highscores(PLAYER melhores[5], bool *flag){
                 jogador.nome[strlen(nomes[i])] = '\0';
                 jogador.pontuacao = pontuacoes[i];
 
+                copiaJogador(&melhores[i], jogador);
+
                 if(fwrite(&jogador, sizeof(PLAYER), 1, arq) != 1){
                     printf("\nErro de escrita\n");
                 }
@@ -93,6 +97,7 @@ void Highscores(PLAYER melhores[5], bool *flag){
                     i++;
                 }
             }
+
             fclose(arq);
             //----------------------------------------------------------------------------------
         }
@@ -134,7 +139,7 @@ void DrawScores(PLAYER melhores[5], Font fonte){
         //----------------------------------------------------------------------------------
 }
 
-void SalvarJogo(int n_fase, Rectangle Mario, PLAYER jogador){
+void SalvarJogo(int n_fase, Rectangle Mario, PLAYER jogador, int n_turtle, TURTLE turtle[20]){
     // Salva apenas se a tecla A for apertada
     if(IsKeyPressed(KEY_A)){
             // Inicialização das variáveis
@@ -189,13 +194,30 @@ void SalvarJogo(int n_fase, Rectangle Mario, PLAYER jogador){
                     //----------------------------------------------------------------------------------
 
                     // Guarda as informações do jogador
-                    const char *MarioString = TextFormat("%s;%d;%d", jogador.nome, jogador.pontuacao, jogador.vidas);;
+                    const char *MarioString = TextFormat("%s;%d;%d\n", jogador.nome, jogador.pontuacao, jogador.vidas);;
                     fputs(MarioString, save);
 
                     // Guarda as informações do Mario
 
 
                     // Guarda as informações dos inimigos
+                    fputs(TextFormat("Tartarugas:%d\n", n_turtle), save);
+                    for(int i=0; i<n_turtle; i++){
+                        Rectangle turtleRec;
+                        int sentido, estado, level; //estado:1-inativo; 2-invulneravel; 3-vulneravel; 4-morto.
+                        float speed;
+                        bool fall, isThere;
+
+                        int tx = (int)turtle[i].turtleRec.x;
+                        int ty = (int)turtle[i].turtleRec.y;
+                        int ts = turtle[i].sentido;
+                        int te = turtle[i].estado;
+                        //int tl = turtle[i].level;
+                        float tsp = turtle[i].speed;
+
+                        const char *TurtleString = TextFormat("%d;%d;%d;%d;%f\n", tx, ty, ts, te, tsp);
+                        fputs(TurtleString, save);
+                    }
 
                     fclose(fase);
                     fclose(save);
@@ -203,7 +225,7 @@ void SalvarJogo(int n_fase, Rectangle Mario, PLAYER jogador){
             }
 }
 
-Vector2 CarregaSave(Rectangle *Mario, Rectangle *Botao, Vector3 cano_pos[9], Rectangle Plts[10], Rectangle Canos[9], PLAYER *jogador){
+Vector2 CarregaSave(Rectangle *Mario, Rectangle *Botao, Vector3 cano_pos[9], Rectangle Plts[10], Rectangle Canos[9], PLAYER *jogador, TURTLE turtle[20], int *n_turtle){
     FILE *save;
     char linha_atual[120];
     int coluna, n_linha, x, y, i, n_cano=0, n_plt=0;
@@ -331,14 +353,26 @@ Vector2 CarregaSave(Rectangle *Mario, Rectangle *Botao, Vector3 cano_pos[9], Rec
         }
     }
 
+    // Pega as informações do jogador do save
     fscanf(save,"%s\n", linha_atual);
-    printf("%s\n", linha_atual);
-    int conta;
-    const char **linhas = TextSplit(linha_atual, ';', &conta);
-    printf("%s\n%s\n%s\n", linhas[0], linhas[1], linhas[2]);
-    strcpy(jogador->nome, linhas[0]);
-    jogador->pontuacao = atoi(linhas[1]);
-    jogador->vidas = atoi(linhas[2]);
+        int conta;
+        const char **linhas = TextSplit(linha_atual, ';', &conta);
+        strcpy(jogador->nome, linhas[0]);
+        jogador->pontuacao = atoi(linhas[1]);
+        jogador->vidas = atoi(linhas[2]);
+
+    // Pega as informações dos inimigos do save
+    fscanf(save, "Tartarugas:%s\n", linha_atual);
+    *n_turtle = atoi(linha_atual);
+    for(i=0; i<*n_turtle; i++){
+        fscanf(save, "%s\n", linha_atual);
+        linhas = TextSplit(linha_atual, ';', &conta);
+
+        turtle[i].turtleRec = (Rectangle){atoi(linhas[0]), atoi(linhas[1]), 48, 48};
+        turtle[i].sentido = atoi(linhas[2]);
+        turtle[i].estado = atoi(linhas[3]);
+        turtle[i].speed = atoi(linhas[4]);
+    }
 
     fclose(save);
 
@@ -425,5 +459,50 @@ void UpdateMenuCarregar(Rectangle opcoes[6], bool *flag, int *n_arq, Color opcoe
         } else opcoes_cores[i] = BLACK;
     }
 
+}
+
+void UpdateGameOver(PLAYER *jogador, PLAYER melhores[5], bool *flag_arq, bool *flag_final){
+    if(!*flag_arq){
+        Highscores(melhores, flag_arq);
+    }
+
+    FILE *arq;
+    PLAYER aux1;
+    copiaJogador(&aux1, *jogador);
+    PLAYER aux2;
+    for(int i=0; i<5; i++){
+        if(aux1.pontuacao>melhores[i].pontuacao){
+                printf("%s\n", melhores[i].nome);
+
+            copiaJogador(&aux2, melhores[i]);
+
+            copiaJogador(&melhores[i],aux1);
+
+            copiaJogador(&aux1, aux2);
+        }
+    }
+
+    if(!(arq = fopen("highscores.bin", "wb"))){
+            printf("\nErro criacao\n");
+        } else {
+        // Se o arquivo highscores.bin existe, então podemos guardar todos os seus elemento em um array, para mais fácil manipulação
+                //----------------------------------------------------------------------------------
+                // Leia cada jogador do arquivo e os armazene no array dos melhores jogadores
+                for(int i=0; i<5; i++){
+                    if(fwrite(&melhores[i], sizeof(PLAYER), 1, arq) != 1){
+                            printf("Erro na escrita numero: %d", i);
+                    }
+                }
+            }
+            fclose(arq);
+            //----------------------------------------------------------------------------------
+
+    *flag_final = true;
+}
+
+void copiaJogador(PLAYER *jogador1, PLAYER jogador2){
+    jogador1->pontuacao = jogador2.pontuacao;
+    strncpy(jogador1->nome, jogador2.nome, 15);
+    jogador1->nome[strlen(jogador2.nome)] = '\0';
 }
 

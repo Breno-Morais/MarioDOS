@@ -1,5 +1,4 @@
 #include "../headers/menu.h"
-#include <stdlib.h>
 
 Vector2 CarregaFase(int *n_turtle,int *n_crab, int *tempo_espera, int n_fase, Rectangle *Mario, Rectangle *Botao, Vector3 cano_pos[9], Rectangle Plts[10], Rectangle Canos[9]){
     FILE *fase;
@@ -127,7 +126,7 @@ Vector2 CarregaFase(int *n_turtle,int *n_crab, int *tempo_espera, int n_fase, Re
                                 // Aqui ele desenha o cano de entrada virado para direita
                                 Canos[i] = (Rectangle){cano_pos[i].x-118, cano_pos[i].y, 128, 72};
                         }
-        }
+            }
 
     }
 

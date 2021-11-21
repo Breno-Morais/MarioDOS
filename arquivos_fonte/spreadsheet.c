@@ -19,7 +19,7 @@ void InitSpread(Texture2D sheet){
 }
 
 
-void DrawTela(TURTLE turtle[10],int n_turtle, PLAYER jogador, Texture sheet, Rectangle Plts[10], Vector2 n_ind, Rectangle Botao, Font fonte, Vector3 cano_pos[9], Rectangle *Mario, bool lado, int n_fase, Rectangle Canos[9], int ind_animaMa, int ind_animaBo, int n_plat){
+void DrawTela(CRAB crab[20], int n_crab, bool dano, int mario_invun, TURTLE turtle[20],int n_turtle, PLAYER jogador, Texture sheet, Rectangle Plts[10], Vector2 n_ind, Rectangle Botao, Font fonte, Vector3 cano_pos[9], Rectangle *Mario, bool lado, int n_fase, Rectangle Canos[9], int ind_animaMa, int ind_animaBo, int n_plat, Vector2 var_animaTar[20]){
         int i;
 
         BeginDrawing();
@@ -27,7 +27,6 @@ void DrawTela(TURTLE turtle[10],int n_turtle, PLAYER jogador, Texture sheet, Rec
 
             // Limpa o background e coloque ele preto
                 ClearBackground(BLACK);
-;
             // Desenha os simbolos da vida
                 for(i=0; i<jogador.vidas; i++){
                     DrawTexturePro(sheet, Mario_Vida, (Rectangle){10+(Mario_Vida.width*escala)*i, 10, Mario_Vida.width*escala, Mario_Vida.height*escala}, origem, 0, WHITE);
@@ -63,7 +62,9 @@ void DrawTela(TURTLE turtle[10],int n_turtle, PLAYER jogador, Texture sheet, Rec
             // Desenha Mario
                 Rectangle mario_atual;
 
-                if(ind_animaMa<6){
+                if(dano && mario_invun % 4 == 0){
+                    mario_atual = M_And_Dir[5];
+                } else if(ind_animaMa<6){
                     if(lado){
                         mario_atual = M_And_Dir[ind_animaMa];
                     } else mario_atual = M_And_Esq[ind_animaMa];
@@ -81,9 +82,25 @@ void DrawTela(TURTLE turtle[10],int n_turtle, PLAYER jogador, Texture sheet, Rec
                 DrawTexturePro(sheet, mario_atual, *Mario, origem, 0, WHITE);
 
                 //Desenha as tartarugas
+                Rectangle tar_atual;
+
                 for(int i=0; i<n_turtle; i++){
-                    if(turtle[i].isThere==true)
-                        DrawRectangleRec(turtle[i].turtleRec, WHITE);
+                    if(turtle[i].isThere==true){
+                        if(turtle[i].sentido==1){
+                            tar_atual = TartAndDir[(int)var_animaTar[i].x];
+                        } else {
+                            tar_atual = TartAndEsq[(int)var_animaTar[i].x];
+                        }
+
+                        DrawTexturePro(sheet, tar_atual, turtle[i].turtleRec, origem, 0, WHITE);
+
+                    }
+                }
+
+                //Desenha os caranguejos
+                for(int i=0; i<n_crab; i++){
+                    if(crab[i].isThere==true)
+                        DrawRectangleRec(crab[i].crabRec, RED);
                 }
 
                 //DrawRectangleLines(Mario->x, Mario->y, Mario->width, Mario->height, RED); // Desenha a colisão
@@ -160,6 +177,27 @@ void DrawCarregar(Rectangle opcoes[6], int n_arq, Color opcoes_cores[6]){
 
                 DrawText(TextFormat("Nível %d", i+1), opcoes[i].x+10, opcoes[i].y+12, 25, opcoes_cores[i]);
             }
+
+        EndDrawing();
+        //----------------------------------------------------------------------------------
+}
+
+void DrawFinal(Texture sheet, int *counter, int *prox, bool perdeu){
+        //----------------------------------------------------------------------------------
+        BeginDrawing();
+
+            // Limpa o background e coloque ele preto
+            ClearBackground(BLACK);
+
+            if(perdeu){
+                DrawTexturePro(sheet, GAME_OVER, (Rectangle){(600 - (GAME_OVER.width*10)/2), (350 - (GAME_OVER.height*10)/2), GAME_OVER.width*10, GAME_OVER.height*10}, origem, 0, WHITE);
+            } else DrawText("Parabéns", 420, 310, 40, WHITE);
+
+            *counter += 1;
+            if(*counter>150){
+                *prox = N_MENU;
+            }
+
 
         EndDrawing();
         //----------------------------------------------------------------------------------

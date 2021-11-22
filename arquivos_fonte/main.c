@@ -1,21 +1,21 @@
 /*
-O objetivo desse programa � rodar o jogo Mario Bros
-O programa � organizado da seguinte maneira:
-    1- A declara��o das vari�veis e o loop principal do jogo ocorre no arquivo principal main.c
-    2- Todas as fun��es usadas para atualizar vari�veis ou desenhar artefatos na tela est� divido entre
+O objetivo desse programa é rodar o jogo Mario Bros
+O programa é organizado da seguinte maneira:
+    1- A declaração das variáveis e o loop principal do jogo ocorre no arquivo principal main.c
+    2- Todas as funções usadas para atualizar variáveis ou desenhar artefatos na tela está divido entre
         os outros arquivos fontes com menu.c, spritesheet.c, etc.
 
-Todas as constantes s�o guardadas nos arquivos .h
+Todas as constantes são guardadas nos arquivos .h
 
-Especificamente, o arquivo main.c est� divido em 3 partes, a primeira � a inicializa��o de tudo, isso inclui
-a declara��o de vari�veis, inicializar a tela, abrir texturas e sons, calcular posi��es, etc.
+Especificamente, o arquivo main.c está divido em 3 partes, a primeira é a inicialização de tudo, isso inclui
+a declaração de variáveis, inicializar a tela, abrir texturas e sons, calcular posições, etc.
 A segunda e terceira parte fazem parte da mesma etapa, o loop principal do jogo.
 
-O loop principal do jogo envolve tudo que tem que ser atualizado 1 vez por frame, ent�o posi��es de elementos,
-colis�es, etc. O loop � divido em 2, a segunda e terceira etapa do main.c.
+O loop principal do jogo envolve tudo que tem que ser atualizado 1 vez por frame, então posições de elementos,
+colisões, etc. O loop é divido em 2, a segunda e terceira etapa do main.c.
 
-A segunda etapa do main envolve a atualiza��o de vari�veis, aqui ocorre a parte de verificar as teclas digitadas,
-a colis�es de elementos e o movimento de tudo. J� a terceira etapa envolve mostrar isso na tela.
+A segunda etapa do main envolve a atualização de variáveis, aqui ocorre a parte de verificar as teclas digitadas,
+a colisões de elementos e o movimento de tudo. Já a terceira etapa envolve mostrar isso na tela.
 */
 
 #include "../headers/menu.h"
@@ -25,8 +25,8 @@ int main(void)
     // Inicialização
     //--------------------------------------------------------------------------------------
     Vector2 Tela = {LARGURA_TELA, ALTURA_TELA};
-    int i, prox_tela=N_MENU; // O prox_tela � o n�mero que ser� usado como o indicador do pr�ximo passo
-    bool flag_saida; // flag usada quando a op��o sair for utilizada e quando for necess�rio abrir o arquivo highscores.bin
+    int i, prox_tela=N_MENU; // O prox_tela é o número que será usado como o indicador do próximo passo
+    bool flag_saida; // flag usada quando a opção sair for utilizada e quando for necessário abrir o arquivo highscores.bin
 
     InitWindow(Tela.x, Tela.y, "MARIO DOS");
 
@@ -95,11 +95,11 @@ int main(void)
     //-----------------------------------------------------------------------------------
     // Variáveis dos Arquivos
     PLAYER melhores[5];
-    bool flag_arq = false; // Essa flag � usada para que a abertura do arquivo .bin seja feita apenas uma vez
+    bool flag_arq = false; // Essa flag é usada para que a abertura do arquivo .bin seja feita apenas uma vez
 
     //-----------------------------------------------------------------------------------
     // Variáveis do Nível
-    bool flag_nivel = false; // Essa flag � usada para que o arquivo .txt seja feita apenas uma vez
+    bool flag_nivel = false; // Essa flag é usada para que o arquivo .txt seja feita apenas uma vez
     bool flag_som = false;
     int botao_current = 0;
     Rectangle Botao;
@@ -107,7 +107,7 @@ int main(void)
     Rectangle Canos[9];
     bool flag_cano = false;
     int cano_atual;
-    Vector2 n_ind; // E um vector que cont�m a quantidade de canos e plataformas na fase, nessa ordem
+    Vector2 n_ind; // E um vector que contém a quantidade de canos e plataformas na fase, nessa ordem
     Rectangle Plts[10];
     int n_fase = 1;
     int vitoria = 0;
@@ -127,7 +127,7 @@ int main(void)
     bool apertado = false; // Essa variável é usada para saber se o botão POW foi apertado
     bool apertado_anima = false;
     bool apert_anterior = false;
-    int n_apertos = 0; // O n�mero de vezes que o Botao POW foi apertado
+    int n_apertos = 0; // O número de vezes que o Botao POW foi apertado
 
     //-----------------------------------------------------------------------------------
     // Variáveis da Tela de Entrada
@@ -204,10 +204,10 @@ int main(void)
                 SalvarJogo(n_fase, Mario, Jog_Princ, n_turtle, turtle, n_crab, crab);
 
                 // Atualiza todos os inimigos
-                vitoria = UpdateTurtle(n_fase, SomMorte, SomVirar, &Jog_Princ, crab, &crab_atual, n_crab, &apertado, &hit_cooldown_current, hit_cooldown_max, &turtle_atual, n_turtle, tempo_espera, &tempo_atual, turtle, n_ind, Canos, cano_pos, Plts, Mario, &dano, &mario_invun);
+                vitoria = UpdateEnemies(n_fase, SomMoeda, SomVirar, &Jog_Princ, crab, &crab_atual, n_crab, &apertado, &hit_cooldown_current, hit_cooldown_max, &turtle_atual, n_turtle, tempo_espera, &tempo_atual, turtle, n_ind, Canos, cano_pos, Plts, Mario, &dano, &mario_invun);
 
                 // Verifica se o jogo acabou
-                GanhouPerdeu(&Jog_Princ, &vitoria, &n_fase, &flag_nivel, &prox_tela, &perdeu);
+                GanhouPerdeu(&Jog_Princ, &vitoria, &n_fase, &flag_nivel, &prox_tela, &perdeu, SomGameOver, SomMorte);
                             break;
                 //-----------------------------------------------------------------------------------
             case N_CONTINUAR:
@@ -241,10 +241,10 @@ int main(void)
                 SalvarJogo(n_fase, Mario, Jog_Princ, n_turtle, turtle, n_crab, crab);
 
                 // Atualiza todos os inimigos
-                vitoria = UpdateTurtleSave(n_fase, SomMorte, SomVirar, &Jog_Princ, crab, &crab_atual, n_crab, &apertado, &hit_cooldown_current, hit_cooldown_max, &turtle_atual, n_turtle, tempo_espera, &tempo_atual, turtle, n_ind, Canos, cano_pos, Plts, Mario, &dano, &mario_invun);
+                vitoria = UpdateEnemiesSave(n_fase, SomMorte, SomVirar, &Jog_Princ, crab, &crab_atual, n_crab, &apertado, &hit_cooldown_current, hit_cooldown_max, &turtle_atual, n_turtle, tempo_espera, &tempo_atual, turtle, n_ind, Canos, cano_pos, Plts, Mario, &dano, &mario_invun);
 
                 // Verifica se o jogo acabou
-                GanhouPerdeu(&Jog_Princ, &vitoria, &n_fase, &flag_nivel, &prox_tela, &perdeu);
+                GanhouPerdeu(&Jog_Princ, &vitoria, &n_fase, &flag_nivel, &prox_tela, &perdeu, SomGameOver, SomMorte);
                             break;
                 //-----------------------------------------------------------------------------------
             case N_CARREGAR_MAPA:

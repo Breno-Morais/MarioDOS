@@ -2,6 +2,7 @@
 #include "../headers/menu.h"
 
 void DrawTela(Vector2 var_animaCar[20], CRAB crab[20], int n_crab, bool dano, int mario_invun, TURTLE turtle[20],int n_turtle, PLAYER jogador, Texture sheet, Rectangle Plts[10], Vector2 n_ind, Rectangle Botao, Font fonte, Vector3 cano_pos[9], Rectangle *Mario, bool lado, int n_fase, Rectangle Canos[9], int ind_animaMa, int ind_animaBo, int n_plat, Vector2 var_animaTar[20]){
+    // Desenha a tela do jogo, incluindo o Mario, as Plataformas, os Canos, o Botão Power e os inimigos
         int i;
 
         BeginDrawing();
@@ -125,6 +126,7 @@ void DrawTela(Vector2 var_animaCar[20], CRAB crab[20], int n_crab, bool dano, in
 }
 
 void DrawEntrada(char nome[16], int letterCount){
+    // Desenha a tela de entrada do nome do novo jogador
     Vector2 larg = {MeasureText(TextFormat("Número de Letras: %i/15", letterCount), 30), MeasureText("Aperte BACKSPACE para deletar uma letra...", 30)};
 
         BeginDrawing();
@@ -152,6 +154,7 @@ void DrawEntrada(char nome[16], int letterCount){
 }
 
 void DrawCarregar(Rectangle opcoes[6], int n_arq, Color opcoes_cores[6]){
+    // Desenhas as opções de fases a serem escolhidas
     int i;
         //----------------------------------------------------------------------------------
         BeginDrawing();
@@ -173,6 +176,7 @@ void DrawCarregar(Rectangle opcoes[6], int n_arq, Color opcoes_cores[6]){
 }
 
 void DrawFinal(Texture sheet, int *counter, int *prox, bool perdeu){
+    // Desenha a tela final, dependendo se o jogador venceu ou perdeu
         //----------------------------------------------------------------------------------
         BeginDrawing();
 
@@ -181,7 +185,7 @@ void DrawFinal(Texture sheet, int *counter, int *prox, bool perdeu){
 
             if(perdeu){
                 DrawTexturePro(sheet, GAME_OVER, (Rectangle){(600 - (GAME_OVER.width*10)/2), (350 - (GAME_OVER.height*10)/2), GAME_OVER.width*10, GAME_OVER.height*10}, origem, 0, WHITE);
-            } else DrawText("Parabéns", 420, 310, 40, WHITE);
+            } else DrawText("Parabéns", 600-96, 310, 40, WHITE);
 
             *counter += 1;
             if(*counter>150){

@@ -30,6 +30,7 @@ void UpdateMenu(Color cores_opcoes[], Rectangle posicao_opcoes[], int *prox, Sou
 }
 
 void DrawMenu(Texture textura_logo, Vector2 posicao_logo, Font fonte, const char *opcoes[], Rectangle posicao_opcoes[], Color cores_opcoes[]){
+    // Desenha o menu
         int i;
         BeginDrawing();
 

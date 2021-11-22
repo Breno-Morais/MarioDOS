@@ -1,9 +1,16 @@
 #include "../headers/menu.h"
 
 void Anima(Vector2 *var_animaMa, Vector2 *var_animaBo, Vector2 var_animaTar[20], Vector2 var_animaCar[20], bool isFalling, bool isJumping, bool *apertado, int n_turtle, TURTLE turtle[20], CRAB crab[20], int n_crab, Rectangle *Mario, bool lado){
+    /*
+    Função Anima:
+    Calcula o próximo sprite do Mario, do Botão Power, das Tartarugas e dos Caranguejos
+    */
+    //--------------------------------------------------------------------------------------
+    // Incrementação do contador do mario e do botão
     var_animaMa->y+=1;
     var_animaBo->y+=1;
 
+    //--------------------------------------------------------------------------------------
     // Animação Mario
     // Se o mario estiver pulando
     if(isJumping){
@@ -35,15 +42,19 @@ void Anima(Vector2 *var_animaMa, Vector2 *var_animaBo, Vector2 var_animaTar[20],
         }
     }
 
+    //--------------------------------------------------------------------------------------
     // Animação das Tartarugas
     for(int i = 0; i<n_turtle; i++){
         if(turtle[i].estado != 2){
             var_animaTar[i].y += 1;
 
+            // Se a tartaruga estiver vulnerável
             if(turtle[i].estado == 1){
                 var_animaTar[i].x = 5;
+            // Se a tartaruga estiver caindo
             } else if(turtle[i].fall){
                 var_animaTar[i].x = 0;
+            // Se a tartaruga estiver andando
             } else if(var_animaTar[i].y >= 3){
                 var_animaTar[i].y = 0;
                 var_animaTar[i].x += 1;
@@ -53,20 +64,25 @@ void Anima(Vector2 *var_animaMa, Vector2 *var_animaBo, Vector2 var_animaTar[20],
         }
     }
 
+    //--------------------------------------------------------------------------------------
     // Animação dos Caranguejos
     for(int i = 0; i<n_crab; i++){
         if(crab[i].estado != 3){
             var_animaCar[i].y += 1;
 
+            // Se o caranguejo estiver vulnerável
             if(crab[i].estado == 2){
                 var_animaCar[i].x = 5;
+            // Se o caranguejo estiver furioso
             } else if(crab[i].estado == 1){
                 if(var_animaCar[i].y >= 5){
                     var_animaCar[i].y = 0;
                     var_animaCar[i].x = 2;
                 } else var_animaCar[i].x = 3;
+            // Se o caranguejo estiver caindo
             } else if(crab[i].fall){
                 var_animaCar[i].x = 0;
+            // Se o caranguejo estiver andando
             } else if(var_animaCar[i].y >= 10){
                 var_animaCar[i].y = 0;
                 var_animaCar[i].x += 1;
@@ -78,6 +94,10 @@ void Anima(Vector2 *var_animaMa, Vector2 *var_animaBo, Vector2 var_animaTar[20],
 }
 
 void UpdateMario(int *hit_cooldown_current, int hit_cooldown_max, int *botao_current, Vector3 cano_pos[9], Rectangle Canos[9], Rectangle Plts[10], Vector2 n_ind, Rectangle *Mario, float frameMax, float *marioSpeedLeft, float *marioSpeedRight, bool *isJumping, bool *isFalling, float *jumpFrameCurrent, bool *lado, Rectangle Botao, bool *apertado, bool *apertado_anima, Sound SomPulo){
+    /*
+    Atualiza a posição do Mario e seu estado de acordo com a sua velocidade, a interação do usuário e das colisões
+    */
+
     Rectangle Chao = {0, 666, 1300, 100};
     *isFalling = true;
     *marioSpeedLeft = 8.0;
@@ -85,7 +105,7 @@ void UpdateMario(int *hit_cooldown_current, int hit_cooldown_max, int *botao_cur
     bool PuloAnterior = *isJumping;
 
 
-    //Testa colis�o com o ch�o e base da plataforma
+    //Testa colisão com o chão e base da plataforma
     if(CheckCollisionPointRec((Vector2){(*Mario).x+1, (*Mario).y+(*Mario).height}, Chao) || CheckCollisionPointRec((Vector2){(*Mario).x+(*Mario).width-1, (*Mario).y+(*Mario).height}, Chao)){
         *isFalling = false;
         (*Mario).y = Chao.y-(*Mario).height+5;
@@ -98,14 +118,14 @@ void UpdateMario(int *hit_cooldown_current, int hit_cooldown_max, int *botao_cur
         }
     }
 
-    //Testa colis�o com o teto
+    //Testa colisão com o teto
     for(int i = 0; i<n_ind.y; i++){
         if(CheckCollisionPointRec((Vector2){(*Mario).x+(*Mario).width, (*Mario).y}, Plts[i]) || CheckCollisionPointRec((Vector2){(*Mario).x, (*Mario).y}, Plts[i])){
             *isJumping = false;
         }
     }
 
-    //Testa colis�o com o bot�o por baixo
+    //Testa colisão com o botão por baixo
     if(CheckCollisionPointRec((Vector2){(*Mario).x+(*Mario).width-5, (*Mario).y}, Botao) || CheckCollisionPointRec((Vector2){(*Mario).x+5, (*Mario).y}, Botao)){
         *isJumping = false;
         if((*botao_current)<3 && (*hit_cooldown_current)>=hit_cooldown_max){
@@ -116,19 +136,19 @@ void UpdateMario(int *hit_cooldown_current, int hit_cooldown_max, int *botao_cur
         }
     }
 
-    //Testa colis�o com a parede pela esquerda. Se colidir, n�o pode ir pra esquerda
+    //Testa colisão com a parede pela esquerda. Se colidir, não pode ir pra esquerda
     for(int i = 0; i<n_ind.y; i++){
         if(((!(*lado)) && (CheckCollisionPointRec((Vector2){Plts[i].x+Plts[i].width, Plts[i].y+1}, *Mario))) || (CheckCollisionPointRec((Vector2){Plts[i].x+Plts[i].width, Plts[i].y+Plts[i].height-1}, *Mario))){
             *marioSpeedLeft = 0;
         }
     }
 
-    //Testa colis�o com o bot�o pela esquerda. Se colidir, n�o pode ir pra esquerda.
-    if(!(*lado) && CheckCollisionPointRec((Vector2){(*Mario).x, (*Mario).y}, Botao) || CheckCollisionPointRec((Vector2){(*Mario).x, (*Mario).y+(*Mario).height}, Botao) || CheckCollisionPointRec((Vector2){(*Mario).x, (*Mario).y+((*Mario).height/2)}, Botao)){
+    //Testa colisão com o botão pela esquerda. Se colidir, não pode ir pra esquerda.
+    if((!(*lado)) && (CheckCollisionPointRec((Vector2){(*Mario).x, (*Mario).y}, Botao)) || ((CheckCollisionPointRec((Vector2){(*Mario).x, (*Mario).y+(*Mario).height}, Botao)) || (CheckCollisionPointRec((Vector2){(*Mario).x, (*Mario).y+((*Mario).height/2)}, Botao)))){
         *marioSpeedLeft = 0;
     }
 
-    //Testa colis�o com os canos pela esquerda
+    //Testa colisão com os canos pela esquerda
     for(int i=0; i<n_ind.x; i++){
         if(cano_pos[i].z==0){
             if(!(*lado) && CheckCollisionRecs((Rectangle){Canos[i].x,0,Canos[i].width,Canos[i].y+Canos[i].height}, *Mario)){
@@ -141,7 +161,7 @@ void UpdateMario(int *hit_cooldown_current, int hit_cooldown_max, int *botao_cur
             }
         }
     }
-    //Testa colis�o com os canos pela direita
+    //Testa colisão com os canos pela direita
     for(int i=0; i<n_ind.x; i++){
         if(cano_pos[i].z==0){
             if((*lado) && CheckCollisionRecs((Rectangle){Canos[i].x,0,Canos[i].width,Canos[i].y+Canos[i].height}, *Mario)){
@@ -154,13 +174,13 @@ void UpdateMario(int *hit_cooldown_current, int hit_cooldown_max, int *botao_cur
             }
         }
     }
-    //Testa colis�o com a parede pela direita. Se colidir, n�o pode ir pra direita.
+    //Testa colisão com a parede pela direita. Se colidir, não pode ir pra direita.
     for(int i = 0; i<n_ind.y; i++){
         if(*lado && CheckCollisionPointRec((Vector2){Plts[i].x, Plts[i].y+1}, *Mario) || CheckCollisionPointRec((Vector2){Plts[i].x, Plts[i].y+Plts[i].height-1}, *Mario)){
             *marioSpeedRight = 0;
         }
     }
-    //Testa colis�o com o bot�o pela direita. Se colidir, n�o pode ir pra direita.
+    //Testa colisão com o botão pela direita. Se colidir, não pode ir pra direita.
     if(*lado && CheckCollisionPointRec((Vector2){(*Mario).x+(*Mario).width, (*Mario).y}, Botao) || CheckCollisionPointRec((Vector2){(*Mario).x+(*Mario).width, (*Mario).y+(*Mario).height}, Botao) || CheckCollisionPointRec((Vector2){(*Mario).x+(*Mario).width, (*Mario).y+((*Mario).height/2)}, Botao)){
         *marioSpeedRight = 0;
     }
@@ -175,7 +195,7 @@ void UpdateMario(int *hit_cooldown_current, int hit_cooldown_max, int *botao_cur
         (*Mario).x -= *marioSpeedLeft;
         *lado = false;
     }
-    //Se aperta D e n�o tiver caindo, pula
+    //Se aperta D e não tiver caindo, pula
     if(IsKeyPressed(KEY_D)){
         if(*isFalling==false)
             *isJumping = true;
@@ -212,6 +232,9 @@ void UpdateMario(int *hit_cooldown_current, int hit_cooldown_max, int *botao_cur
 }
 
 void InitEnemies(int *crab_atual, int *turtle_atual,int n_crab, int n_turtle, CRAB crab[20], TURTLE turtle[20], bool *flag_cano, int *cano_atual, Vector2 n_ind, Vector3 cano_pos[9], Rectangle Canos[9]){
+    /*
+    Inicializa os inimigos de acordo com a fase, os colocando no cano, pronto para sair
+    */
     //se houver tartarugas, o primeiro inimigo a sair é tartaruga, senao é caranguejo
     if(*turtle_atual<n_turtle)
         *turtle_atual = 1;
@@ -270,13 +293,13 @@ void InitEnemies(int *crab_atual, int *turtle_atual,int n_crab, int n_turtle, CR
     }
 }
 
-int UpdateTurtle(int n_fase, Sound SomMorte, Sound SomVirei, PLAYER *jogador, CRAB crab[20], int *crab_atual, int n_crab, bool *apertado, int *hit_cooldown_current, int hit_cooldown_max, int *turtle_atual, int n_turtle, int tempo_espera, int *tempo_atual, TURTLE turtle[20], Vector2 n_ind, Rectangle Canos[9], Vector3 cano_pos[9],Rectangle Plts[10], Rectangle Mario, bool *dano, int *mario_invun){
+int UpdateEnemies(int n_fase, Sound SomMorte, Sound SomVirei, PLAYER *jogador, CRAB crab[20], int *crab_atual, int n_crab, bool *apertado, int *hit_cooldown_current, int hit_cooldown_max, int *turtle_atual, int n_turtle, int tempo_espera, int *tempo_atual, TURTLE turtle[20], Vector2 n_ind, Rectangle Canos[9], Vector3 cano_pos[9],Rectangle Plts[10], Rectangle Mario, bool *dano, int *mario_invun){
+    /*
+    Checa as colisões dos inimigos e atualiza suas variáveiss
+    */
     Rectangle Chao = {0, 666, 1300, 100};
     int mortos = 0, re = 0;
     int estado_anterior = 0;
-
-    //printf("Rec: %d %d %d %d, sentido: %d, estado: %d, level: %d, speed: %f, fall: %d, isThere: %d\n", (int)turtle[0].turtleRec.x, (int)turtle[0].turtleRec.y, (int)turtle[0].turtleRec.width, (int)turtle[0].turtleRec.height, turtle[0].sentido, turtle[0].estado, turtle[0].level, turtle[0].speed, turtle[0].fall, turtle[0].isThere);
-
 
     //vai spawnando os tartarugas a cada "tempo_espera" segundos (ou a cada 30 frames, como foi escrito)
     if(*turtle_atual<n_turtle){
@@ -430,14 +453,14 @@ int UpdateTurtle(int n_fase, Sound SomMorte, Sound SomVirei, PLAYER *jogador, CR
             if(estado_anterior != turtle[i].estado){
                 if(turtle[i].estado == 1)
                     PlaySound(SomVirei);
-                //if(turtle[i].estado == 2)
-                    //PlaySound(SomMorte);
+                if(turtle[i].estado == 2)
+                    PlaySound(SomMorte);
             }
         }
 
         //---------------------------------------CARANGUEJOS------------------------------------------------------
         for(int i=0; i<*crab_atual; i++){
-            //DrawText(TextFormat("%d", (int)n_ind.x), 600, 100, 30, RED);
+            estado_anterior = crab[i].estado;
             //atualiza o crabRec.x
             crab[i].crabRec.x = crab[i].crabRec.x + (crab[i].speed*crab[i].sentido);
             //logica dos canos de retorno
@@ -574,6 +597,13 @@ int UpdateTurtle(int n_fase, Sound SomMorte, Sound SomVirei, PLAYER *jogador, CR
             else{
                 crab[i].estado = 3;
             }
+
+            if(estado_anterior != crab[i].estado){
+                if(crab[i].estado == 1)
+                    PlaySound(SomVirei);
+                if(crab[i].estado == 3)
+                    PlaySound(SomMorte);
+            }
         }
 
         *apertado = false;
@@ -586,7 +616,10 @@ int UpdateTurtle(int n_fase, Sound SomMorte, Sound SomVirei, PLAYER *jogador, CR
         return re;
 }
 
-void GanhouPerdeu(PLAYER *jogador, int *vitoria, int *n_fase, bool *flag, int *prox, bool *perdeu){
+void GanhouPerdeu(PLAYER *jogador, int *vitoria, int *n_fase, bool *flag, int *prox, bool *perdeu, Sound SomGameOver, Sound SomMorte){
+    /*
+    Verifica se o jogo acabou e se o jogador ganhou ou perdeu
+    */
     if(*vitoria == 1){
         *n_fase += 1;
         jogador->vidas = 3;
@@ -603,15 +636,20 @@ void GanhouPerdeu(PLAYER *jogador, int *vitoria, int *n_fase, bool *flag, int *p
 
         if(*n_fase == (n_arq+1)){
                 *prox = N_OVER;
+                PlaySound(SomGameOver);
                 *n_fase = 0;
         } else *flag = false;
     } else if(jogador->vidas == 0){
         *prox = N_OVER;
         *perdeu = true;
+        PlaySound(SomMorte);
     }
 }
 
 void InitEnemiesSave(int n_crab, int n_turtle, CRAB crab[20], TURTLE turtle[20]){
+    /*
+    Inicializa as variáveis restantes dos inimigos (as que não foram inicializadas com a leitura do save)
+    */
     //inicializa tartarugas
     for(int i=0; i<n_turtle; i++){
         turtle[i].level = 1;
@@ -627,7 +665,8 @@ void InitEnemiesSave(int n_crab, int n_turtle, CRAB crab[20], TURTLE turtle[20])
     }
 }
 
-int UpdateTurtleSave(int n_fase, Sound SomMorte, Sound SomVirei, PLAYER *jogador, CRAB crab[20], int *crab_atual, int n_crab, bool *apertado, int *hit_cooldown_current, int hit_cooldown_max, int *turtle_atual, int n_turtle, int tempo_espera, int *tempo_atual, TURTLE turtle[20], Vector2 n_ind, Rectangle Canos[9], Vector3 cano_pos[9],Rectangle Plts[10], Rectangle Mario, bool *dano, int *mario_invun){
+int UpdateEnemiesSave(int n_fase, Sound SomMorte, Sound SomVirei, PLAYER *jogador, CRAB crab[20], int *crab_atual, int n_crab, bool *apertado, int *hit_cooldown_current, int hit_cooldown_max, int *turtle_atual, int n_turtle, int tempo_espera, int *tempo_atual, TURTLE turtle[20], Vector2 n_ind, Rectangle Canos[9], Vector3 cano_pos[9],Rectangle Plts[10], Rectangle Mario, bool *dano, int *mario_invun){
+    // Atualiza os inimigos
     Rectangle Chao = {0, 666, 1300, 100};
     int mortos = 0, re = 0;
     int estado_anterior = 0;
@@ -740,8 +779,8 @@ int UpdateTurtleSave(int n_fase, Sound SomMorte, Sound SomVirei, PLAYER *jogador
             if(estado_anterior != turtle[i].estado){
                 if(turtle[i].estado == 1)
                     PlaySound(SomVirei);
-                //if(turtle[i].estado == 2)
-                    //PlaySound(SomMorte);
+                if(turtle[i].estado == 2)
+                    PlaySound(SomMorte);
             }
         }
 
@@ -876,12 +915,20 @@ int UpdateTurtleSave(int n_fase, Sound SomMorte, Sound SomVirei, PLAYER *jogador
                     //PlaySound(SomMorte);
             }
 
+            if(estado_anterior != crab[i].estado){
+                if(crab[i].estado == 1)
+                    PlaySound(SomVirei);
+                if(crab[i].estado == 3)
+                    PlaySound(SomMorte);
+            }
+
         }
 
         *apertado = false;
         *hit_cooldown_current = *hit_cooldown_current+1;
 
-        if(mortos == n_turtle){
+        // Se o número de mortos for igual a soma do número de inimigos, a fase acabou
+        if(mortos == (n_turtle+n_crab)){
             re = 1;
         }
 

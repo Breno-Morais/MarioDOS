@@ -4,12 +4,8 @@
 void copiaJogador(PLAYER *jogador1, PLAYER jogador2);
 
 void DrawAjuda(Font fonte){
+    //Desenha a tela de ajuda
         char *texto_base[50]= {"Entre na opção 'Novo Jogo' e insira o seu nome, então, use as setas do teclado para movimentar o Mario e a", "tecla D para pular. Tente acertar a parte debaixo dos inimigos através da plataforma, e, quando eles estiverem ", "vulneráveis, ande até eles para derruba-los. Elimine todos os inimigos para passar de fase.", "", "Quando você for acertado, o Mario terá um pequeno momento de invulnerabilidade, para que ele possa sair da si-", "tuação arriscada. Esse momento será demarcado pelo Mario ficar piscando.", "" ,"Use a tecla A para salvar o jogo a qualquer momento, você poderá acessar esse jogo salvo, através da opção", "'Continuar'. Caso você queria acessar alguma fase, entre na opção 'Carregar Mapa'", "", "Ao fim de qualquer jogo, a sua pontuação será salva, para ver o ranking dos melhores jogadores, vá até", "a opção 'Ranking' no menu.", "", "Bom Jogo"};
-        Vector2 posicao_texto;
-        // Apenas formatação
-        //----------------------------------------------------------------------------------
-
-        //----------------------------------------------------------------------------------
         BeginDrawing();
 
             // Limpa o background e coloque ele preto
@@ -27,7 +23,8 @@ void DrawAjuda(Font fonte){
 }
 
 void DrawSobre(Font fonte){
-        char *texto_base1="Trabalho feito por Arthur Donessa e Breno Morais";
+    // Desenha a tela Sobre
+        char *texto_base1="Trabalho feito por Arthur Dossena e Breno Morais";
         Vector2 posicao_texto;
         posicao_texto.x = (LARGURA_TELA - MeasureTextEx(fonte, texto_base1, 30, 2).x)/2;
         posicao_texto.y = (ALTURA_TELA - 35 - MeasureTextEx(fonte, texto_base1, 30, 2).y)/2;
@@ -52,12 +49,17 @@ void DrawSobre(Font fonte){
 }
 
 void UpdateVoltar(int *prox){
+    // Verifica se o botão BACKSPACE foi apertado, e se foi, ele volta pro menu
     if(IsKeyPressed(KEY_BACKSPACE)){
         *prox = N_MENU;
     }
 }
 
 void Highscores(PLAYER melhores[5], bool *flag){
+    /*
+    Verifica o arquivo highscores.bin, se ele não existe, cria ele com nomes e pontuações fictícias.
+    Se ele existir, lê o seu conteudo e guarda na lista melhores.
+    */
     FILE *arq;
     if( access("highscores.bin", F_OK) != 0){
         // Se o arquivo highscores.bin não existe, crie um novo arquivo com nomes ficticios
@@ -115,6 +117,7 @@ void Highscores(PLAYER melhores[5], bool *flag){
 }
 
 void DrawScores(PLAYER melhores[5], Font fonte){
+    // Desenhas o nome e a pontuação dos melhores
     int i;
         //----------------------------------------------------------------------------------
         BeginDrawing();
@@ -242,6 +245,7 @@ void SalvarJogo(int n_fase, Rectangle Mario, PLAYER jogador, int n_turtle, TURTL
 }
 
 Vector2 CarregaSave(Rectangle *Mario, Rectangle *Botao, Vector3 cano_pos[9], Rectangle Plts[10], Rectangle Canos[9], PLAYER *jogador, TURTLE turtle[20], int *n_turtle, CRAB crab[20], int *n_crab){
+    // Carrega um jogo salvo e atribuí os objetos lidos à variáveis
     FILE *save;
     char linha_atual[120];
     int coluna, n_linha, x, y, i, n_cano=0, n_plt=0;
@@ -409,6 +413,7 @@ Vector2 CarregaSave(Rectangle *Mario, Rectangle *Botao, Vector3 cano_pos[9], Rec
 }
 
 bool Entrada(PLAYER *jogador, char *nome, int *letterCount){
+    // Averigua o nome do jogador e permiti a escrita
     bool flag_retorno = false;
 
             // Pega o caractere pressionado da fila
@@ -446,6 +451,10 @@ bool Entrada(PLAYER *jogador, char *nome, int *letterCount){
 }
 
 void UpdateMenuCarregar(Rectangle opcoes[6], bool *flag, int *n_arq, Color opcoes_cores[6], int *n_fase, int *prox, Sound SomSelecinaOpcao){
+    /*
+    Primeiramente, verifica se os níveis já foram atualizados, senão, vê quantos níveis tem nos arquivos
+    Depois, verifica qual opção o usuário interage.
+    */
     int i;
     char nivel[19];
 
@@ -491,6 +500,7 @@ void UpdateMenuCarregar(Rectangle opcoes[6], bool *flag, int *n_arq, Color opcoe
 }
 
 void UpdateGameOver(PLAYER *jogador, PLAYER melhores[5], bool *flag_arq, bool *flag_final){
+    // Faz a organização dos melhores, incluindo o jogador
     if(!*flag_arq){
         Highscores(melhores, flag_arq);
     }
@@ -530,6 +540,7 @@ void UpdateGameOver(PLAYER *jogador, PLAYER melhores[5], bool *flag_arq, bool *f
 }
 
 void copiaJogador(PLAYER *jogador1, PLAYER jogador2){
+    // Copia os dados de um jogador para o outro
     jogador1->pontuacao = jogador2.pontuacao;
     strncpy(jogador1->nome, jogador2.nome, 15);
     jogador1->nome[strlen(jogador2.nome)] = '\0';

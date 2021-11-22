@@ -1,6 +1,7 @@
 #include "../headers/menu.h"
 
 Vector2 CarregaFase(int *n_turtle,int *n_crab, int *tempo_espera, int n_fase, Rectangle *Mario, Rectangle *Botao, Vector3 cano_pos[9], Rectangle Plts[10], Rectangle Canos[9]){
+    // Carrega um núvel
     FILE *fase;
     char fase_atual[19];
     char linha_atual[120];
